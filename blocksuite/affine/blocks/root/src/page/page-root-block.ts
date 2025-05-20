@@ -70,20 +70,21 @@ export class PageRootBlockComponent extends BlockComponent<
       flex-direction: column;
       width: 100%;
       height: 100%;
-      font-family: var(--affine-font-family);
+      //font-family: var(--affine-font-family);
       font-size: var(--affine-font-base);
       line-height: var(--affine-line-height);
       color: var(--affine-text-primary-color);
       font-weight: 400;
       max-width: var(--affine-editor-width);
       margin: 0 auto;
+      padding-inline: 24px;
 
       /* Leave a place for drag-handle */
       /* Do not use prettier format this style, or it will be broken */
       /* prettier-ignore */
-      padding-left: var(--affine-editor-side-padding, ${DOC_BLOCK_CHILD_PADDING}px);
+      //padding-left: var(--affine-editor-side-padding, ${DOC_BLOCK_CHILD_PADDING}px);
       /* prettier-ignore */
-      padding-right: var(--affine-editor-side-padding, ${DOC_BLOCK_CHILD_PADDING}px);
+      //padding-right: var(--affine-editor-side-padding, ${DOC_BLOCK_CHILD_PADDING}px);
       /* prettier-ignore */
       padding-bottom: var(--affine-editor-bottom-padding, ${DOC_BOTTOM_PADDING}px);
     }

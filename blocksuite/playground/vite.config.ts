@@ -58,12 +58,12 @@ export default defineConfig(({ mode }) => {
       ),
     },
     plugins: [
-      hmrPlugin,
-      sourcemapExclude(),
+      //hmrPlugin,
+      /*sourcemapExclude(),
       enableIstanbul &&
         istanbul({
           cwd: fileURLToPath(new URL('../..', import.meta.url)),
-          include: ['packages/**/src/*'],
+          include: ['packages/!**!/src/!*'],
           exclude: [
             'node_modules',
             'tests',
@@ -72,8 +72,9 @@ export default defineConfig(({ mode }) => {
           forceBuildInstrument: true,
         }),
       wasm(),
+
+      clearSiteDataPlugin(),*/
       vanillaExtractPlugin(),
-      clearSiteDataPlugin(),
     ],
     esbuild: {
       target: 'es2018',
@@ -81,7 +82,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       extensions: ['.ts', '.js'],
     },
-    build: {
+    /*build: {
       target: 'es2022',
       sourcemap: true,
       rollupOptions: {
@@ -109,6 +110,6 @@ export default defineConfig(({ mode }) => {
           },
         },
       },
-    },
+    },*/
   };
 });

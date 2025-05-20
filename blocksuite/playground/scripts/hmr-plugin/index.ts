@@ -16,7 +16,7 @@ const include = ['../blocks/src/**/*'];
 const exclude = ['**/*/node_modules/**/*'];
 
 // https://vitejs.dev/config/
-export const hmrPlugin = process.env.WC_HMR
+export const hmrPlugin = process.env.WC_HMR || true
   ? [
       wcHmrPlugin({
         include,
