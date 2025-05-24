@@ -258,7 +258,6 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
         class="affine-paragraph-block-container"
         data-has-collapsed-siblings="${collapsedSiblings.length > 0}"
       >
-        yyyy
         <div
           class=${classMap({
             'affine-paragraph-rich-text-wrapper': true,
