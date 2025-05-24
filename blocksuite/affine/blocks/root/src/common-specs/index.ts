@@ -36,8 +36,10 @@ import { dragHandleWidget } from '@blocksuite/affine-widget-drag-handle';
 import { linkedDocWidget } from '@blocksuite/affine-widget-linked-doc';
 import { docRemoteSelectionWidget } from '@blocksuite/affine-widget-remote-selection';
 import { scrollAnchoringWidget } from '@blocksuite/affine-widget-scroll-anchoring';
-import { SlashMenuExtension } from '@blocksuite/affine-widget-slash-menu';
-import { toolbarWidget } from '@blocksuite/affine-widget-toolbar';
+//import { SlashMenuExtension } from '@blocksuite/affine-widget-slash-menu';
+import { SlashMenuExtension } from '@blocksuite/mahdaad-widget-slash-menu';
+//import { toolbarWidget } from '@blocksuite/affine-widget-toolbar';
+import { toolbarWidget } from '@blocksuite/mahdaad-widget-toolbar';
 import { BlockFlavourIdentifier, FlavourExtension } from '@blocksuite/std';
 import type { ExtensionType } from '@blocksuite/store';
 
@@ -85,6 +87,7 @@ export const CommonSpecs: ExtensionType[] = [
   ...EdgelessElementViews,
   ...EdgelessElementRendererExtension,
   SlashMenuExtension,
+  //todo ali ghasami for comment
   linkedDocWidget,
   dragHandleWidget,
   docRemoteSelectionWidget,
