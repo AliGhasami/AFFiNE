@@ -1,21 +1,13 @@
 import type {
-  SlashMenuActionItem,
   SlashMenuConfig,
   SlashMenuContext,
   SlashMenuItem,
   SlashMenuSubMenu,
 } from './types';
 
-export function isActionItem(item: SlashMenuItem): item is SlashMenuActionItem {
-  return 'action' in item;
-}
 
 export function isSubMenuItem(item: SlashMenuItem): item is SlashMenuSubMenu {
   return 'subMenu' in item;
-}
-
-export function slashItemClassName({ name }: SlashMenuItem) {
-  return name.split(' ').join('-').toLocaleLowerCase();
 }
 
 export function parseGroup(group: NonNullable<SlashMenuItem['group']>) {

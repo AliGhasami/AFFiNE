@@ -176,7 +176,6 @@ export class AffineSlashMenuWidget extends WidgetComponent {
 
   override connectedCallback() {
     super.connectedCallback();
-
     // this.handleEvent('beforeInput', this._onBeforeInput);
     this.handleEvent('keyDown', this._onKeyDown);
     this.handleEvent('compositionEnd', this._onCompositionEnd);

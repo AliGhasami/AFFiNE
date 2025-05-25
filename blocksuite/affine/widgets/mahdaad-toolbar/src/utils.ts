@@ -79,7 +79,7 @@ export function autoUpdatePosition(
         ],
       }
     : {
-        strategy:"fixed",
+        //strategy:"fixed",
         //placement,
         middleware: [
           offset(10),
@@ -124,7 +124,7 @@ export function autoUpdatePosition(
     ]);
 
     if (signal.aborted) return;
-    console.log("this is config ",config,referenceElement)
+    console.log("this is config ",config,referenceElement.getClientRects(),referenceElement.getBoundingClientRect())
     const result = await computePosition(referenceElement, toolbar, config);
 
     const { x,middlewareData, placement: currentPlacement } = result;
@@ -133,7 +133,7 @@ export function autoUpdatePosition(
       (currentPlacement.includes('top') ? 0 : offsetTop + offsetBottom);
 
     //toolbar.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-    toolbar.style.position = 'fixed';
+    toolbar.style.position = 'absolute';
     toolbar.style.top = `${y}px`;
     toolbar.style.left = `${x}px`;
 

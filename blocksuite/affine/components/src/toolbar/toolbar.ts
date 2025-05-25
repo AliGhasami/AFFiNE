@@ -4,7 +4,7 @@ import { WithDisposable } from '@blocksuite/global/lit';
 import { css, html, LitElement } from 'lit';
 
 export class EditorToolbar extends WithDisposable(LitElement) {
-  static override styles = css`
+  /*static override styles = css`
     ${panelBaseStyle(':host')}
     :host {
       height: 36px;
@@ -26,7 +26,7 @@ export class EditorToolbar extends WithDisposable(LitElement) {
       color: var(--affine-text-primary-color);
       fill: currentColor;
     }
-  `;
+  `;*/
 
   override connectedCallback() {
     super.connectedCallback();

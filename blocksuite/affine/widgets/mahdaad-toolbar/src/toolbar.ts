@@ -277,7 +277,6 @@ export class AffineToolbarWidget extends WidgetComponent {
     // Selects text in note.
     disposables.add(
       std.selection.find$(TextSelection).subscribe(result => {
-        debugger
         const range = std.range.value ?? null;
         const activated = Boolean(
           context.activated &&
@@ -305,7 +304,6 @@ export class AffineToolbarWidget extends WidgetComponent {
     // Formatting
     // Selects `native` text in database's cell or in table.
     disposables.addFromEvent(document, 'selectionchange', () => {
-      debugger
       const range = std.range.value ?? null;
       let activated = context.activated && Boolean(range && !range.collapsed);
       let isNative = false;
@@ -356,7 +354,6 @@ export class AffineToolbarWidget extends WidgetComponent {
     // Selects blocks in note.
     disposables.add(
       std.selection.filter$(BlockSelection).subscribe(selections => {
-        debugger
         const blockIds = selections.map(s => s.blockId);
         const count = blockIds.length;
         let flavour = 'affine:note';
@@ -411,7 +408,6 @@ export class AffineToolbarWidget extends WidgetComponent {
     // Triggered only when not in editing state.
     disposables.add(
       context.gfx.selection.slots.updated.subscribe(selections => {
-        debugger
         // Should remove selections when clicking on frame navigator
         if (context.isPageMode) {
           if (
@@ -435,7 +431,6 @@ export class AffineToolbarWidget extends WidgetComponent {
 
     disposables.add(
       std.selection.slots.changed.subscribe(selections => {
-        debugger
         if (!context.activated) return;
 
         const value = flags.value$.peek();
@@ -466,7 +461,6 @@ export class AffineToolbarWidget extends WidgetComponent {
     // `card view` or `embed view`
     disposables.add(
       std.view.viewUpdated.subscribe(record => {
-        debugger
         const hasAdded = record.type === 'block' && record.method === 'add';
         if (!hasAdded) return;
 
@@ -499,7 +493,6 @@ export class AffineToolbarWidget extends WidgetComponent {
     disposables.add(
       // TODO(@fundon): use rxjs' filter
       std.store.slots.blockUpdated.subscribe(record => {
-        debugger
         const hasUpdated = record.type === 'update';
         if (!hasUpdated) return;
 
@@ -536,7 +529,6 @@ export class AffineToolbarWidget extends WidgetComponent {
     // Handles elements when updating
     disposables.add(
       context.gfx.surface$.subscribe(surface => {
-        debugger
         if (!surface) return;
 
         const subscription = surface.elementUpdated.subscribe(() => {
@@ -597,8 +589,6 @@ export class AffineToolbarWidget extends WidgetComponent {
     // Handles elements when hovering
     disposables.add(
       message$.subscribe(data => {
-        console.log("4")
-        debugger
         if (
           !context.activated ||
           flags.contains(Flag.Text | Flag.Native | Flag.Block)
@@ -645,19 +635,16 @@ export class AffineToolbarWidget extends WidgetComponent {
 
     disposables.add(
       effect(() => {
-        console.log("2")
 
         const value = flags.value$.value;
 
         // Hides toolbar
         if (Flag.None === value || flags.check(Flag.Hiding, value)) {
           if (toolbar.dataset.open) delete toolbar.dataset.open;
-          console.log("aaaaa")
           // Closes dropdown menus
-          /*toolbar
+          toolbar
             .querySelector<EditorMenuButton>('editor-menu-button[data-open]')
-            ?.hide();*/
-
+            ?.hide();
           return;
         }
 
@@ -677,8 +664,6 @@ export class AffineToolbarWidget extends WidgetComponent {
 
     disposables.add(
       effect(() => {
-        debugger
-        console.log("1")
         if (!abortController.signal.aborted) {
           abortController.abort();
         }
