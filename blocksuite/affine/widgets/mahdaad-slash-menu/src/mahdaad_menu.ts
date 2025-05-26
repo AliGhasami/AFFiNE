@@ -1,3 +1,4 @@
+/*
 import { insertContent } from '@blocksuite/affine-rich-text';
 import { getInlineEditorByModel } from '@blocksuite/affine-rich-text';
 import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts';
@@ -9,19 +10,19 @@ import type { InlineEditor } from "@blocksuite/inline";
 import { type BlockModel, uuidv4 } from '@blocksuite/store';
 import type { DirectiveResult } from 'lit/directive.js';
 
-import { objectTriggerKey } from '/@/claytapEditor/uitls/index.js'
+import { objectTriggerKey } from '../../../../../../src/claytapEditor/utils/index'
 import type { RootBlockComponent } from '../../types.js';
 //import { REFERENCE_NODE } from '../../../_common/inline/presets/nodes/consts.js';
-import { closeMentionMenu, showMentionMenu } from '../mahdaad-mention/index.js';
+//import { closeMentionMenu, showMentionMenu } from '../mahdaad-mention/index.js';
 import type { AffineMahdaadObjectPickerWidget } from '../mahdaad-object-picker/index.js';
 import type { IObjectType } from '../mahdaad-object-picker/type.js';
 //import link from './icons/link.svg?raw';
 import type { SlashMenuContext } from './types';
-/*import accordion_h1 from './icons/accordion_h1.svg?raw';
+/!*import accordion_h1 from './icons/accordion_h1.svg?raw';
 import accordion_h2 from './icons/accordion_h2.svg?raw';
 import accordion_h3 from './icons/accordion_h3.svg?raw';
 import audio from './icons/audio.svg?raw';
-import bread_crumb from './icons/bread_crumb.svg?raw';*/
+import bread_crumb from './icons/bread_crumb.svg?raw';*!/
 //import button_link from './icons/button_link.svg?raw';
 //import divider from './icons/divider.svg?raw';
 //import empty_title from './icons/empty_title.svg?raw';
@@ -32,7 +33,8 @@ import bread_crumb from './icons/bread_crumb.svg?raw';*/
 //import table_view from './icons/table_view.svg?raw';
 //import tabler_files from './icons/tabler_files.svg?raw';
 //import video from './icons/video.svg?raw';
-import { tryRemoveEmptyLine } from './utils.js';
+//todo ali ghasami
+//import { tryRemoveEmptyLine } from './utils.js';
 export interface ClayTapSlashMenuGroup {
   groupName: DirectiveResult;
   children: ClayTapSlashMenu[];
@@ -63,13 +65,13 @@ export const actionsMenu: MahdaadActionMenu[] = [
           count:2
         })
         .run();
-       /* rootComponent.std.command
+       /!* rootComponent.std.command
         .chain()
         .updateBlockType({
           flavour:'affine:mahdaad-multi-column',
           props: {  },
         })
-        .run();*/
+        .run();*!/
     },
   },
   {
@@ -82,13 +84,13 @@ export const actionsMenu: MahdaadActionMenu[] = [
           count:3
         })
         .run();
-        /*rootComponent.std.command
+        /!*rootComponent.std.command
         .chain()
         .updateBlockType({
           flavour:'affine:mahdaad-multi-column',
           props: {  },
         })
-        .run();*/
+        .run();*!/
     },
   },
   {
@@ -101,13 +103,13 @@ export const actionsMenu: MahdaadActionMenu[] = [
           count:4
         })
         .run();
-        /*rootComponent.std.command
+        /!*rootComponent.std.command
         .chain()
         .updateBlockType({
           flavour:'affine:mahdaad-multi-column',
           props: {  },
         })
-        .run();*/
+        .run();*!/
     },
   },
   {
@@ -125,14 +127,14 @@ export const actionsMenu: MahdaadActionMenu[] = [
         .run();
 
       //runCommand(rootComponent, 'affine:mahdaad-callout', 'info');
-      /*const aa =  rootComponent.std.command
+      /!*const aa =  rootComponent.std.command
         .chain()
         .updateBlockType({
           flavour:'affine:mahdaad-callout',
           props: { type:'info' },
         })
         .run();
-      console.log('aa',aa);*/
+      console.log('aa',aa);*!/
 
 
 
@@ -186,17 +188,17 @@ export const actionsMenu: MahdaadActionMenu[] = [
       runCommand(rootComponent, 'affine:paragraph', 'quote');
     },
   },
-  /*{
+  /!*{
     key: 'quote',
     action: ({ rootComponent }) => {
       runCommand(rootComponent, 'affine:paragraph', 'quote');
     },
-  },*/
+  },*!/
   {
     key: 'mention',
     action: ({ std, model }) => {
       const { host } = std;
-      /*const triggerKey = '@';
+      /!*const triggerKey = '@';
       insertContent(rootComponent.host, model, triggerKey);
       assertExists(model.doc.root);
       //console.log('|11111', rootElement.widgetElements);
@@ -215,16 +217,16 @@ export const actionsMenu: MahdaadActionMenu[] = [
         assertExists(inlineEditor);
         mentionWidget.showMention(inlineEditor, triggerKey);
         //linkedDocWidget.showLinkedDoc(inlineEditor, triggerKey);
-      });*/
+      });*!/
 
       const triggerKey = '@';
       insertContent(host, model, triggerKey);
       //return;
-      /*insertContent(rootComponent.host, model, REFERENCE_NODE, {
+      /!*insertContent(rootComponent.host, model, REFERENCE_NODE, {
         date: temp,
-      });*/
-      if (!model.doc.root) return;     /* const widgetEle =
-        rootComponent.widgetComponents['mahdaad-mention-menu-widget'];*/
+      });*!/
+      if (!model.doc.root) return;     /!* const widgetEle =
+        rootComponent.widgetComponents['mahdaad-mention-menu-widget'];*!/
       //if (!widgetEle) return;
       // We have checked the existence of showLinkedDoc method in the showWhen
       //const mentionWidget = widgetEle as MahdaadMentionMenuWidget;
@@ -257,10 +259,10 @@ export const actionsMenu: MahdaadActionMenu[] = [
         time: null,
         id: uuidv4(),
       };
-      /*{
+      /!*{
         const triggerKey = '$';
         insertContent(rootComponent.host, model, triggerKey);
-      }*/
+      }*!/
       insertContent(rootComponent.host, model, REFERENCE_NODE, {
         date: temp,
       });
@@ -285,10 +287,10 @@ export const actionsMenu: MahdaadActionMenu[] = [
         id: uuidv4(),
       };
       window.focusedDateTime = temp.id
-      /*{
+      /!*{
         const triggerKey = '$';
         insertContent(rootComponent.host, model, triggerKey);
-      }*/
+      }*!/
       insertContent(rootComponent.host, model, REFERENCE_NODE, {
         date: temp,
       });
@@ -307,7 +309,7 @@ export const actionsMenu: MahdaadActionMenu[] = [
         })
         .run();
       //old method
-      /*const parent = rootComponent.doc.getParent(model);
+      /!*const parent = rootComponent.doc.getParent(model);
       if (!parent) return;
       const index = parent.children.indexOf(model);
       const id = rootComponent.doc.addBlock(
@@ -324,8 +326,8 @@ export const actionsMenu: MahdaadActionMenu[] = [
         ) as DataViewBlockComponent | null;
         dataView?.dataSource.viewManager.viewAdd('table');
       });
-      tryRemoveEmptyLine(model);*/
-     /* //return;
+      tryRemoveEmptyLine(model);*!/
+     /!* //return;
       const parent = rootComponent.doc.getParent(model);
       assertExists(parent);
       const index = parent.children.indexOf(model);
@@ -343,7 +345,7 @@ export const actionsMenu: MahdaadActionMenu[] = [
         id,
         viewPresets.tableViewConfig,
         false
-      );*/
+      );*!/
       tryRemoveEmptyLine(model);
     },
   },
@@ -353,7 +355,7 @@ export const actionsMenu: MahdaadActionMenu[] = [
       runCommand(rootComponent, 'affine:divider', 'divider');
     },
   },
-  /*{
+  /!*{
     key: 'attachment',
     action: async ({ rootComponent, model }) => {
       const file = await openFileOrFiles();
@@ -371,7 +373,7 @@ export const actionsMenu: MahdaadActionMenu[] = [
       );
       tryRemoveEmptyLine(model);
     },
-  },*/
+  },*!/
   {
     key: 'page',
     action: ({ std, model }) => {
@@ -458,7 +460,7 @@ export const actionsMenu: MahdaadActionMenu[] = [
   },
 ];
 
-/*export const clayTapGroupMenu: ClayTapSlashMenuGroup[] = [
+/!*export const clayTapGroupMenu: ClayTapSlashMenuGroup[] = [
   {
     groupName: t('basic'),
     children: [
@@ -1108,7 +1110,7 @@ export const actionsMenu: MahdaadActionMenu[] = [
       },*!/
     ],
   },
-];*/
+];*!/
 
 function openObjectPicker(
   rootComponent: RootBlockComponent,
@@ -1117,7 +1119,7 @@ function openObjectPicker(
   triggerKey:string
 ) {
   //console.log('111', rootComponent.host);
-  /*rootComponent.host.std.command
+  /!*rootComponent.host.std.command
     .chain()
     .updateBlockType({
       flavour: 'affine:code',
@@ -1147,7 +1149,7 @@ function openObjectPicker(
     })
     .run();
 
-  return;*/
+  return;*!/
 
   //const triggerKey = 'templates/';
   const widgetEle =
@@ -1168,11 +1170,11 @@ function openObjectPicker(
     );
   });
 
-  /*setTimeout(() => {
+  /!*setTimeout(() => {
     const inlineEditor = getInlineEditorByModel(rootElement.host, model);
     assertExists(inlineEditor);
     linkedDocWidget.showLinkedDoc(inlineEditor, triggerKey);
-  });*/
+  });*!/
 }
 
 function runCommand(
@@ -1191,17 +1193,17 @@ function runCommand(
   //const temp1=doc.addBlock('affine:mahdaad-callout', {}, noteId)
   //doc.addBlock('affine:paragraph', {}, temp1)
 
-  /* rootElement.host.std.command
+  /!* rootElement.host.std.command
     .chain()
     .updateBlockType({
       flavour,
       props: { type },
     })
     .inline((ctx, next) => (ctx.updatedBlocks ? next() : false))
-    .run();*/
+    .run();*!/
 
   //console.log('this is root element', rootElement);
- /* rootComponent.host.std.command
+ /!* rootComponent.host.std.command
     .chain()
     .updateBlockType({
       flavour,
@@ -1228,5 +1230,6 @@ function runCommand(
       //console.log('next - change inline menu');
       return next();
     })
-    .run();*/
+    .run();*!/
 }
+*/

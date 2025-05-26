@@ -10,6 +10,7 @@ export * from './frame/index.js';
 export * from './image/index.js';
 export * from './latex/index.js';
 export * from './list/index.js';
+export * from  './mahdaad-object/index.js'
 export * from './note/index.js';
 export * from './paragraph/index.js';
 export * from './root/index.js';

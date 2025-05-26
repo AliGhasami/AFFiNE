@@ -47,7 +47,7 @@ const showSlashMenu = debounce(
       context,
       configItemTransform
     );
-
+    //console.log("aaaaaa",slashMenu,slashMenu.items)
     // FIXME(Flrande): It is not a best practice,
     // but merely a temporary measure for reusing previous components.
     // Mount

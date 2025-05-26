@@ -59,6 +59,7 @@ import { effects as widgetFrameTitleEffects } from '@blocksuite/affine-widget-fr
 import { effects as widgetRemoteSelectionEffects } from '@blocksuite/affine-widget-remote-selection/effects';
 import { effects as widgetScrollAnchoringEffects } from '@blocksuite/affine-widget-scroll-anchoring/effects';
 import { effects as dataViewEffects } from '@blocksuite/data-view/effects';
+import { effects as blockMahdaadObjectEffects } from '@blocksuite/mahdaad-object-block/effects';
 //import { effects as widgetSlashMenuEffects } from '@blocksuite/affine-widget-slash-menu/effects';
 import { effects as widgetSlashMenuEffects } from '@blocksuite/mahdaad-widget-slash-menu/effects';
 //import { effects as widgetToolbarEffects } from '@blocksuite/affine-widget-toolbar/effects';
@@ -112,7 +113,8 @@ export declare const _GLOBAL_:
   | typeof widgetSlashMenuEffects
   | typeof fragmentDocTitleEffects
   | typeof fragmentFramePanelEffects
-  | typeof fragmentOutlineEffects;
+  | typeof fragmentOutlineEffects
+  | typeof blockMahdaadObjectEffects;
 
 export function effects() {
   registerBlockSpecs();
@@ -181,6 +183,10 @@ export function effects() {
   //todo ali ghasami for comment
   fragmentFramePanelEffects();
   fragmentOutlineEffects();
+
+
+  /** Mahdaad Blocks */
+  blockMahdaadObjectEffects();
 
   customElements.define('icon-button', IconButton);
   customElements.define('smooth-corner', SmoothCorner);

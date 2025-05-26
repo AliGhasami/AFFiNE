@@ -63,6 +63,7 @@
     "@blocksuite/affine-widget-toolbar": "workspace:*",
     "@blocksuite/data-view": "workspace:*",
     "@blocksuite/global": "workspace:*",
+    "@blocksuite/mahdaad-object-block": "workspace:*",
     "@blocksuite/std": "workspace:*",
     "@blocksuite/store": "workspace:*",
     "@blocksuite/sync": "workspace:*",

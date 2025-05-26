@@ -26,7 +26,7 @@ import { prefixCls } from '../../../../../../src/claytapEditor/const'
 import {
   AFFINE_SLASH_MENU_TRIGGER_KEY,
 } from './consts.js';
-import { actionsMenu } from './mahdaad_menu'
+//import { actionsMenu } from './mahdaad_menu'
 import {  styles } from './styles.js';
 import type {
   SlashMenuActionItem,
@@ -355,17 +355,19 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
       >
         <mahdaad-slash-menu
           search-text="${this._query}"
-
           .inline-editor="${this.inlineEditor}"
           deny-keys="${JSON.stringify(denyKeys)}"
           allow-keys="${JSON.stringify(allowKeys)}"
           @select="${(event: CustomEvent) => {
-      //console.log("11111",event);
       const key = event.detail;
+            //console.log("1111",key)
       //todo ali ghasami
-      const item = actionsMenu.find(i => i.key == key);
-      if (item) {
-        this._handleClickItem(item);
+      const temp = this.actionMap[key] //actionsMenu.find(i => i.key == key);
+      if (temp) {
+        const item=this.items.find(i=>i.group==temp)
+        if(item){
+          this._handleClickItem(item);
+        }
       }
       this.abortController.abort();
     }}"
@@ -375,6 +377,37 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
         ></mahdaad-slash-menu>
       </div>`;
   }
+
+
+
+  private accessor actionMap={
+    'text':'0_Basic@0',
+    'h1':'0_Basic@1',
+    'h2':'0_Basic@2',
+    'h3':'0_Basic@3',
+    'bullet_list':'1_List@0',
+    'number_list':'1_List@1',
+    'check_list':'1_List@2',
+    'quote':'0_Basic@6',
+    'callout':'',
+    'two_columns':'',
+    'three_columns':'',
+    'four_columns':'',
+    'table_of_content':'',
+    'mention':'',
+    'template':'',
+    'date':'',
+    'time':'',
+    'table':'7_Database@0',
+    'divider':'0_Basic@7',
+    'page':'',
+    'file':'',
+    'image':'',
+    'weblink':'',
+    'tag':'',
+  }
+
+
 
   @state()
   private accessor _filteredItems: (SlashMenuActionItem | SlashMenuSubMenu)[] =

@@ -628,7 +628,6 @@ export class AffineToolbarWidget extends WidgetComponent {
     // Updates layout when placement changing to `inner`
     disposables.add(
       effect(() => {
-        console.log("3")
         toolbar.dataset.placement = placement$.value;
       })
     );
