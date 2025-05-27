@@ -6,20 +6,8 @@ import {
 
 import type { BlockMeta } from '../../utils/types';
 
-/*export type ParagraphType =
-  | 'text'
-  | 'quote'
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'h4'
-  | 'h5'
-  | 'h6';*/
 
 export type MahdaadObjectProps = {
-  //type: ParagraphType;
-  //text: Text;
-  //collapsed: boolean;
   object_id: undefined | string,
   link_id: undefined | string,
   type: undefined | string,
@@ -30,12 +18,11 @@ export type MahdaadObjectProps = {
 } & BlockMeta;
 
 export const MahdaadObjectBlockSchema = defineBlockSchema({
-  flavour: 'affine:paragraph',
+  flavour: 'affine:mahdaad-object',
   props: (): MahdaadObjectProps => ({
     object_id: undefined,
     link_id: undefined,
     type: undefined,
-    //id:undefined,
     show_type: 'inline',
     meta:{},
     dir:null,
@@ -47,15 +34,7 @@ export const MahdaadObjectBlockSchema = defineBlockSchema({
   metadata: {
     version: 1,
     role: 'content',
-    parent: [
-      'affine:note',
-      'affine:database',
-      'affine:paragraph',
-      'affine:list',
-      'affine:edgeless-text',
-      'affine:callout',
-      'affine:transcription',
-    ],
+    //parent: [],
   },
   toModel: () => new MahdaadObjectBlockModel(),
 });

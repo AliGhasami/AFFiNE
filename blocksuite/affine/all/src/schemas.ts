@@ -20,13 +20,14 @@ import {
   ImageBlockSchema,
   LatexBlockSchema,
   ListBlockSchema,
+  MahdaadCalloutBlockSchema,
+  MahdaadObjectBlockSchema,
   NoteBlockSchema,
   ParagraphBlockSchema,
   RootBlockSchema,
   SurfaceRefBlockSchema,
   TableBlockSchema,
-  TranscriptionBlockSchema,
-} from '@blocksuite/affine-model';
+  TranscriptionBlockSchema} from '@blocksuite/affine-model';
 import type { BlockSchema } from '@blocksuite/store';
 import type { z } from 'zod';
 
@@ -58,4 +59,6 @@ export const AffineSchemas: z.infer<typeof BlockSchema>[] = [
   TableBlockSchema,
   CalloutBlockSchema,
   TranscriptionBlockSchema,
+  MahdaadObjectBlockSchema,
+  MahdaadCalloutBlockSchema
 ];

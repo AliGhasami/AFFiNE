@@ -1,6 +1,6 @@
 {
-  "name": "@blocksuite/mahdaad-object-block",
-  "description": "Mahdaad Object block for BlockSuite.",
+  "name": "@blocksuite/mahdaad-callout-block",
+  "description": "Mahdaad Callout block for BlockSuite.",
   "type": "module",
   "scripts": {
     "build": "tsc"

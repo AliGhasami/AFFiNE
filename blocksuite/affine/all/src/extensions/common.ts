@@ -58,6 +58,8 @@ import {
   EditPropsStore,
   FontLoaderService,
 } from '@blocksuite/affine-shared/services';
+import { MahdaadCalloutBlockSpec } from '@blocksuite/mahdaad-callout-block';
+import { MahdaadObjectBlockSpec } from '@blocksuite/mahdaad-object-block';
 import type { ExtensionType } from '@blocksuite/store';
 
 const elementToPlainTextAdapterMatchers = [
@@ -98,6 +100,8 @@ export const CommonBlockSpecs: ExtensionType[] = [
   FontLoaderService,
   CalloutBlockSpec,
   FrameBlockSpec,
+  MahdaadObjectBlockSpec,
+  MahdaadCalloutBlockSpec,
 
   elementToPlainTextAdapterMatchers,
   elementToMarkdownAdapterMatchers,

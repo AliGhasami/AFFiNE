@@ -1,5 +1,5 @@
 {
-  "name": "@blocksuite/mahdaad-object-block",
+  "name": "@blocksuite/mahdaad-empty-template-for-block",
   "description": "Mahdaad Object block for BlockSuite.",
   "type": "module",
   "scripts": {

@@ -24,6 +24,8 @@ import {
   ImageBlockSchemaExtension,
   LatexBlockSchemaExtension,
   ListBlockSchemaExtension,
+  MahdaadCalloutBlockSchemaExtension,
+  MahdaadObjectBlockSchemaExtension,
   NoteBlockSchemaExtension,
   ParagraphBlockSchemaExtension,
   RootBlockSchemaExtension,
@@ -86,7 +88,8 @@ export const StoreExtensions: ExtensionType[] = [
   TableBlockSchemaExtension,
   CalloutBlockSchemaExtension,
   TranscriptionBlockSchemaExtension,
-
+  MahdaadObjectBlockSchemaExtension,
+  MahdaadCalloutBlockSchemaExtension,
   BlockSelectionExtension,
   TextSelectionExtension,
   SurfaceSelectionExtension,
