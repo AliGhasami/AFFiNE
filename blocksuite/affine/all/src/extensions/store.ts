@@ -25,6 +25,7 @@ import {
   LatexBlockSchemaExtension,
   ListBlockSchemaExtension,
   MahdaadCalloutBlockSchemaExtension,
+  MahdaadMultiColumnBlockSchemaExtension,
   MahdaadObjectBlockSchemaExtension,
   NoteBlockSchemaExtension,
   ParagraphBlockSchemaExtension,
@@ -32,7 +33,7 @@ import {
   SurfaceRefBlockSchemaExtension,
   TableBlockSchemaExtension,
   TranscriptionBlockSchemaExtension,
-} from '@blocksuite/affine-model';
+} from '@blocksuite/affine-model'
 import {
   HighlightSelectionExtension,
   ImageSelectionExtension,
@@ -90,6 +91,7 @@ export const StoreExtensions: ExtensionType[] = [
   TranscriptionBlockSchemaExtension,
   MahdaadObjectBlockSchemaExtension,
   MahdaadCalloutBlockSchemaExtension,
+  MahdaadMultiColumnBlockSchemaExtension,
   BlockSelectionExtension,
   TextSelectionExtension,
   SurfaceSelectionExtension,

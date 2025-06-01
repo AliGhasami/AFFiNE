@@ -46,6 +46,7 @@ export const ParagraphBlockSchema = defineBlockSchema({
       'affine:callout',
       'affine:transcription',
       'affine:mahdaad-callout',
+      'affine:mahdaad-multi-column'
     ],
   },
   toModel: () => new ParagraphBlockModel(),

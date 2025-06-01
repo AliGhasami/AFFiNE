@@ -60,6 +60,7 @@ import { effects as widgetRemoteSelectionEffects } from '@blocksuite/affine-widg
 import { effects as widgetScrollAnchoringEffects } from '@blocksuite/affine-widget-scroll-anchoring/effects';
 import { effects as dataViewEffects } from '@blocksuite/data-view/effects';
 import { effects as blockMahdaadCalloutEffects } from '@blocksuite/mahdaad-callout-block/effects';
+import { effects as blockMahdaadMultiColumnEffects } from '@blocksuite/mahdaad-multi-column-block/effects';
 import { effects as blockMahdaadObjectEffects } from '@blocksuite/mahdaad-object-block/effects';
 //import { effects as widgetSlashMenuEffects } from '@blocksuite/affine-widget-slash-menu/effects';
 import { effects as widgetSlashMenuEffects } from '@blocksuite/mahdaad-widget-slash-menu/effects';
@@ -116,7 +117,8 @@ export declare const _GLOBAL_:
   | typeof fragmentFramePanelEffects
   | typeof fragmentOutlineEffects
   | typeof blockMahdaadObjectEffects
-  | typeof blockMahdaadCalloutEffects;
+  | typeof blockMahdaadCalloutEffects
+  | typeof blockMahdaadMultiColumnEffects;
 
 export function effects() {
   registerBlockSpecs();
@@ -187,9 +189,10 @@ export function effects() {
   fragmentOutlineEffects();
 
 
-  /** Mahdaad Blocks */
+  /** Mahdaad effects */
   blockMahdaadObjectEffects();
   blockMahdaadCalloutEffects();
+  blockMahdaadMultiColumnEffects()
 
   customElements.define('icon-button', IconButton);
   customElements.define('smooth-corner', SmoothCorner);

@@ -59,6 +59,7 @@ import {
   FontLoaderService,
 } from '@blocksuite/affine-shared/services';
 import { MahdaadCalloutBlockSpec } from '@blocksuite/mahdaad-callout-block';
+import { MahdaadMultiColumnBlockSpec  } from '@blocksuite/mahdaad-multi-column-block';
 import { MahdaadObjectBlockSpec } from '@blocksuite/mahdaad-object-block';
 import type { ExtensionType } from '@blocksuite/store';
 
@@ -102,7 +103,7 @@ export const CommonBlockSpecs: ExtensionType[] = [
   FrameBlockSpec,
   MahdaadObjectBlockSpec,
   MahdaadCalloutBlockSpec,
-
+  MahdaadMultiColumnBlockSpec,
   elementToPlainTextAdapterMatchers,
   elementToMarkdownAdapterMatchers,
 ].flat();

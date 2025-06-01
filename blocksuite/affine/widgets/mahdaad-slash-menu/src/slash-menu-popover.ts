@@ -175,6 +175,8 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
   override connectedCallback() {
     super.connectedCallback();
 
+    console.log("this is slash menu ",this.items)
+
     this._innerSlashMenuContext = {
       ...this.context,
       onClickItem: this._handleClickItem,
@@ -389,10 +391,10 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
     'number_list':'1_List@1',
     'check_list':'1_List@2',
     'quote':'0_Basic@6',
-    'callout':'',
-    'two_columns':'',
-    'three_columns':'',
-    'four_columns':'',
+    'callout':'0_mahdaad@0',
+    'two_columns':'0_mahdaad_multi_column@2',
+    'three_columns':'0_mahdaad_multi_column@3',
+    'four_columns':'0_mahdaad_multi_column@4',
     'table_of_content':'',
     'mention':'',
     'template':'',
