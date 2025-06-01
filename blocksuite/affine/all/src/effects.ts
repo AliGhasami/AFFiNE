@@ -60,6 +60,7 @@ import { effects as widgetRemoteSelectionEffects } from '@blocksuite/affine-widg
 import { effects as widgetScrollAnchoringEffects } from '@blocksuite/affine-widget-scroll-anchoring/effects';
 import { effects as dataViewEffects } from '@blocksuite/data-view/effects';
 import { effects as blockMahdaadCalloutEffects } from '@blocksuite/mahdaad-callout-block/effects';
+import { effects as inlineMahdaadMentionEffects } from '@blocksuite/mahdaad-inline-mention';
 import { effects as blockMahdaadMultiColumnEffects } from '@blocksuite/mahdaad-multi-column-block/effects';
 import { effects as blockMahdaadObjectEffects } from '@blocksuite/mahdaad-object-block/effects';
 import { effects as blockMahdaadTableOfContentEffects } from '@blocksuite/mahdaad-table-of-content-block/effects';
@@ -196,6 +197,9 @@ export function effects() {
   blockMahdaadCalloutEffects();
   blockMahdaadMultiColumnEffects()
   blockMahdaadTableOfContentEffects()
+
+  /** Mahdaad inline effects */
+  inlineMahdaadMentionEffects()
 
   customElements.define('icon-button', IconButton);
   customElements.define('smooth-corner', SmoothCorner);

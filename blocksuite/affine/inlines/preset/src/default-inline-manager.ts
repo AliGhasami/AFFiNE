@@ -4,6 +4,7 @@ import { LinkInlineSpecExtension } from '@blocksuite/affine-inline-link';
 import { MentionInlineSpecExtension } from '@blocksuite/affine-inline-mention';
 import { ReferenceInlineSpecExtension } from '@blocksuite/affine-inline-reference';
 import type { AffineTextAttributes } from '@blocksuite/affine-shared/types';
+import { MahdaadMentionInlineSpecExtension } from '@blocksuite/mahdaad-inline-mention';
 import { InlineManagerExtension } from '@blocksuite/std/inline';
 
 import {
@@ -32,5 +33,6 @@ export const DefaultInlineManagerExtension =
       LinkInlineSpecExtension.identifier,
       FootNoteInlineSpecExtension.identifier,
       MentionInlineSpecExtension.identifier,
+      MahdaadMentionInlineSpecExtension.identifier,
     ],
   });

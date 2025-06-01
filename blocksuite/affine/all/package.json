@@ -64,6 +64,7 @@
     "@blocksuite/data-view": "workspace:*",
     "@blocksuite/global": "workspace:*",
     "@blocksuite/mahdaad-callout-block": "workspace:*",
+    "@blocksuite/mahdaad-inline-mention": "workspace:*",
     "@blocksuite/mahdaad-multi-column-block": "workspace:*",
     "@blocksuite/mahdaad-object-block": "workspace:*",
     "@blocksuite/mahdaad-table-of-content-block": "workspace:*",
