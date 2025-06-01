@@ -395,7 +395,7 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
     'two_columns':'0_mahdaad_multi_column@2',
     'three_columns':'0_mahdaad_multi_column@3',
     'four_columns':'0_mahdaad_multi_column@4',
-    'table_of_content':'',
+    'table_of_content':'0_mahdaad@1',
     'mention':'',
     'template':'',
     'date':'',

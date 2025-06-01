@@ -62,6 +62,7 @@ import { effects as dataViewEffects } from '@blocksuite/data-view/effects';
 import { effects as blockMahdaadCalloutEffects } from '@blocksuite/mahdaad-callout-block/effects';
 import { effects as blockMahdaadMultiColumnEffects } from '@blocksuite/mahdaad-multi-column-block/effects';
 import { effects as blockMahdaadObjectEffects } from '@blocksuite/mahdaad-object-block/effects';
+import { effects as blockMahdaadTableOfContentEffects } from '@blocksuite/mahdaad-table-of-content-block/effects';
 //import { effects as widgetSlashMenuEffects } from '@blocksuite/affine-widget-slash-menu/effects';
 import { effects as widgetSlashMenuEffects } from '@blocksuite/mahdaad-widget-slash-menu/effects';
 //import { effects as widgetToolbarEffects } from '@blocksuite/affine-widget-toolbar/effects';
@@ -118,6 +119,7 @@ export declare const _GLOBAL_:
   | typeof fragmentOutlineEffects
   | typeof blockMahdaadObjectEffects
   | typeof blockMahdaadCalloutEffects
+  | typeof blockMahdaadTableOfContentEffects
   | typeof blockMahdaadMultiColumnEffects;
 
 export function effects() {
@@ -193,6 +195,7 @@ export function effects() {
   blockMahdaadObjectEffects();
   blockMahdaadCalloutEffects();
   blockMahdaadMultiColumnEffects()
+  blockMahdaadTableOfContentEffects()
 
   customElements.define('icon-button', IconButton);
   customElements.define('smooth-corner', SmoothCorner);

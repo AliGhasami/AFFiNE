@@ -23,6 +23,7 @@ import {
   MahdaadCalloutBlockSchema,
   MahdaadMultiColumnBlockSchema,
   MahdaadObjectBlockSchema,
+  MahdaadTableOfContentBlockSchema,
   NoteBlockSchema,
   ParagraphBlockSchema,
   RootBlockSchema,
@@ -62,5 +63,6 @@ export const AffineSchemas: z.infer<typeof BlockSchema>[] = [
   TranscriptionBlockSchema,
   MahdaadObjectBlockSchema,
   MahdaadCalloutBlockSchema,
-  MahdaadMultiColumnBlockSchema
+  MahdaadMultiColumnBlockSchema,
+  MahdaadTableOfContentBlockSchema
 ];

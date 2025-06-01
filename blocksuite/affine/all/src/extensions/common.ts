@@ -61,6 +61,7 @@ import {
 import { MahdaadCalloutBlockSpec } from '@blocksuite/mahdaad-callout-block';
 import { MahdaadMultiColumnBlockSpec  } from '@blocksuite/mahdaad-multi-column-block';
 import { MahdaadObjectBlockSpec } from '@blocksuite/mahdaad-object-block';
+import { MahdaadTableOfContentBlockSpec } from '@blocksuite/mahdaad-table-of-content-block';
 import type { ExtensionType } from '@blocksuite/store';
 
 const elementToPlainTextAdapterMatchers = [
@@ -104,6 +105,7 @@ export const CommonBlockSpecs: ExtensionType[] = [
   MahdaadObjectBlockSpec,
   MahdaadCalloutBlockSpec,
   MahdaadMultiColumnBlockSpec,
+  MahdaadTableOfContentBlockSpec,
   elementToPlainTextAdapterMatchers,
   elementToMarkdownAdapterMatchers,
 ].flat();

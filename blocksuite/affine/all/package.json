@@ -66,6 +66,7 @@
     "@blocksuite/mahdaad-callout-block": "workspace:*",
     "@blocksuite/mahdaad-multi-column-block": "workspace:*",
     "@blocksuite/mahdaad-object-block": "workspace:*",
+    "@blocksuite/mahdaad-table-of-content-block": "workspace:*",
     "@blocksuite/std": "workspace:*",
     "@blocksuite/store": "workspace:*",
     "@blocksuite/sync": "workspace:*",

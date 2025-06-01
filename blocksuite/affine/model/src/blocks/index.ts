@@ -13,6 +13,7 @@ export * from './list/index.js';
 export * from  './mahdaad-callout/index.js'
 export * from './mahdaad-multi-column/index';
 export * from  './mahdaad-object/index.js'
+export * from './mahdaad-table-of-content/index';
 export * from './note/index.js';
 export * from './paragraph/index.js';
 export * from './root/index.js';
