@@ -5,10 +5,10 @@ import { html } from 'lit';
 import { z } from 'zod';
 
 export const MahdaadMentionInlineSpecExtension =
-  InlineSpecExtension<AffineTextAttributes>('mention_1', provider => {
+  InlineSpecExtension<AffineTextAttributes>('mahdaadMention', provider => {
     const std = provider.get(StdIdentifier);
     return {
-      name: 'mention_1',
+      name: 'mention',
       schema: z
         .object({
           user_id: z.string(),

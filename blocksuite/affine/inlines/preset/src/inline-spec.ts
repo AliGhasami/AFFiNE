@@ -4,7 +4,9 @@ import { inlineLinkExtensions } from '@blocksuite/affine-inline-link';
 import { inlineMentionExtensions } from '@blocksuite/affine-inline-mention';
 import { inlineReferenceExtensions } from '@blocksuite/affine-inline-reference';
 import type { AffineTextAttributes } from '@blocksuite/affine-shared/types';
+import { inlineMahdaadDateTimeExtensions } from '@blocksuite/mahdaad-inline-date-time';
 import { inlineMahdaadMentionExtensions } from '@blocksuite/mahdaad-inline-mention';
+import { inlineMahdaadObjectExtensions } from '@blocksuite/mahdaad-inline-object';
 import {
   type InlineRootElement,
   InlineSpecExtension,
@@ -113,4 +115,6 @@ export const InlineSpecExtensions: ExtensionType[] = [
   ...inlineFootnoteExtensions,
   ...inlineMentionExtensions,
   ...inlineMahdaadMentionExtensions,
+  ...inlineMahdaadObjectExtensions,
+  ...inlineMahdaadDateTimeExtensions,
 ];
