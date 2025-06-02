@@ -1,10 +1,11 @@
 import { inlineFootnoteExtensions } from '@blocksuite/affine-inline-footnote';
 import { inlineLatexExtensions } from '@blocksuite/affine-inline-latex';
-import { inlineLinkExtensions } from '@blocksuite/affine-inline-link';
+//import { inlineLinkExtensions } from '@blocksuite/affine-inline-link';
 import { inlineMentionExtensions } from '@blocksuite/affine-inline-mention';
 import { inlineReferenceExtensions } from '@blocksuite/affine-inline-reference';
 import type { AffineTextAttributes } from '@blocksuite/affine-shared/types';
 import { inlineMahdaadDateTimeExtensions } from '@blocksuite/mahdaad-inline-date-time';
+import { inlineMahdaadLinkExtensions } from '@blocksuite/mahdaad-inline-link';
 import { inlineMahdaadMentionExtensions } from '@blocksuite/mahdaad-inline-mention';
 import { inlineMahdaadObjectExtensions } from '@blocksuite/mahdaad-inline-object';
 import {
@@ -109,7 +110,8 @@ export const InlineSpecExtensions: ExtensionType[] = [
   CodeInlineSpecExtension,
   BackgroundInlineSpecExtension,
   ColorInlineSpecExtension,
-  ...inlineLinkExtensions,
+  /** comment for Mahdaad */
+  //...inlineLinkExtensions,
   ...inlineReferenceExtensions,
   ...inlineLatexExtensions,
   ...inlineFootnoteExtensions,
@@ -117,4 +119,5 @@ export const InlineSpecExtensions: ExtensionType[] = [
   ...inlineMahdaadMentionExtensions,
   ...inlineMahdaadObjectExtensions,
   ...inlineMahdaadDateTimeExtensions,
+  ...inlineMahdaadLinkExtensions
 ];

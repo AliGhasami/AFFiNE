@@ -48,7 +48,7 @@ import { effects as fragmentFramePanelEffects } from '@blocksuite/affine-fragmen
 import { effects as fragmentOutlineEffects } from '@blocksuite/affine-fragment-outline/effects';
 import { effects as inlineFootnoteEffects } from '@blocksuite/affine-inline-footnote/effects';
 import { effects as inlineLatexEffects } from '@blocksuite/affine-inline-latex/effects';
-import { effects as inlineLinkEffects } from '@blocksuite/affine-inline-link/effects';
+//import { effects as inlineLinkEffects } from '@blocksuite/affine-inline-link/effects';
 import { effects as inlineMentionEffects } from '@blocksuite/affine-inline-mention';
 import { effects as inlinePresetEffects } from '@blocksuite/affine-inline-preset/effects';
 import { effects as inlineReferenceEffects } from '@blocksuite/affine-inline-reference/effects';
@@ -61,6 +61,7 @@ import { effects as widgetScrollAnchoringEffects } from '@blocksuite/affine-widg
 import { effects as dataViewEffects } from '@blocksuite/data-view/effects';
 import { effects as blockMahdaadCalloutEffects } from '@blocksuite/mahdaad-callout-block/effects';
 import { effects as inlineMahdaadDateTimeEffects } from '@blocksuite/mahdaad-inline-date-time';
+import { effects as inlineMahdaadLinkEffects } from '@blocksuite/mahdaad-inline-link';
 import { effects as inlineMahdaadMentionEffects } from '@blocksuite/mahdaad-inline-mention';
 import { effects as inlineMahdaadObjectEffects } from '@blocksuite/mahdaad-inline-object';
 import { effects as blockMahdaadMultiColumnEffects } from '@blocksuite/mahdaad-multi-column-block/effects';
@@ -134,7 +135,8 @@ export function effects() {
 
   inlineReferenceEffects();
   inlinePresetEffects();
-  inlineLinkEffects();
+  /** comment for Mahdaad */
+  //inlineLinkEffects();
   inlineFootnoteEffects();
   inlineLatexEffects();
   inlineMentionEffects();
@@ -204,6 +206,7 @@ export function effects() {
   inlineMahdaadMentionEffects()
   inlineMahdaadObjectEffects()
   inlineMahdaadDateTimeEffects()
+  inlineMahdaadLinkEffects()
 
   customElements.define('icon-button', IconButton);
   customElements.define('smooth-corner', SmoothCorner);

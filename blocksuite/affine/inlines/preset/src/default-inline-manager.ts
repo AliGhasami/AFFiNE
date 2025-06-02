@@ -1,10 +1,11 @@
 import { FootNoteInlineSpecExtension } from '@blocksuite/affine-inline-footnote';
 import { LatexInlineSpecExtension } from '@blocksuite/affine-inline-latex';
-import { LinkInlineSpecExtension } from '@blocksuite/affine-inline-link';
+//import { LinkInlineSpecExtension } from '@blocksuite/affine-inline-link';
 import { MentionInlineSpecExtension } from '@blocksuite/affine-inline-mention';
 import { ReferenceInlineSpecExtension } from '@blocksuite/affine-inline-reference';
 import type { AffineTextAttributes } from '@blocksuite/affine-shared/types';
 import { MahdaadDateTimeInlineSpecExtension } from '@blocksuite/mahdaad-inline-date-time';
+import { MahdaadLinkInlineSpecExtension } from '@blocksuite/mahdaad-inline-link';
 import { MahdaadMentionInlineSpecExtension } from '@blocksuite/mahdaad-inline-mention';
 import { MahdaadObjectInlineSpecExtension } from '@blocksuite/mahdaad-inline-object';
 import { InlineManagerExtension } from '@blocksuite/std/inline';
@@ -32,11 +33,13 @@ export const DefaultInlineManagerExtension =
       ColorInlineSpecExtension.identifier,
       LatexInlineSpecExtension.identifier,
       ReferenceInlineSpecExtension.identifier,
-      LinkInlineSpecExtension.identifier,
+      /** comment for Mahdaad */
+      //LinkInlineSpecExtension.identifier,
       FootNoteInlineSpecExtension.identifier,
       MentionInlineSpecExtension.identifier,
       MahdaadMentionInlineSpecExtension.identifier,
       MahdaadObjectInlineSpecExtension.identifier,
       MahdaadDateTimeInlineSpecExtension.identifier,
+      MahdaadLinkInlineSpecExtension.identifier
     ],
   });
