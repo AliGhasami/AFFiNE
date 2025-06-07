@@ -58,13 +58,13 @@ export function autoUpdatePosition(
   sideOptions: Partial<SideObject> | null,
   options: AutoUpdateOptions = { elementResize: false, animationFrame: true }
 ) {
-  console.log("autoUpdatePosition",placement)
+  //console.log("autoUpdatePosition",placement)
   const isInline = flavour === 'affine:note';
-  const hasSurfaceScope = flavour.includes('surface');
+  //const hasSurfaceScope = flavour.includes('surface');
   const isInner = placement === 'inner';
   const offsetTop = sideOptions?.top ?? 0;
   const offsetBottom = sideOptions?.bottom ?? 0;
-  const offsetY = offsetTop + (hasSurfaceScope ? 2 : 0);
+  //const offsetY = offsetTop + (hasSurfaceScope ? 2 : 0);
   const config: Partial<ComputePositionConfig> = isInner
     ? {
         placement: 'top-start',
@@ -124,7 +124,7 @@ export function autoUpdatePosition(
     ]);
 
     if (signal.aborted) return;
-    console.log("this is config ",config,referenceElement.getClientRects(),referenceElement.getBoundingClientRect())
+    //console.log("this is config ",config,referenceElement.getClientRects(),referenceElement.getBoundingClientRect())
     const result = await computePosition(referenceElement, toolbar, config);
 
     const { x,middlewareData, placement: currentPlacement } = result;

@@ -175,7 +175,7 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
   override connectedCallback() {
     super.connectedCallback();
 
-    console.log("this is slash menu ",this.items)
+    //console.log("this is slash menu ",this.items)
 
     this._innerSlashMenuContext = {
       ...this.context,
@@ -346,6 +346,7 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
       </inner-slash-menu>`;*/
 // .tools-list="${this._toolsList()}"
     //vue-block-board-editor-popover ${Prefix}-slash-menu
+    //console.log("1111111",this.inlineEditor)
     return html`${html` <div
         class="overlay-mask"
         @click="${() => this.abortController.abort()}"

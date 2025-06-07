@@ -1,9 +1,9 @@
 import { textKeymap } from '@blocksuite/affine-inline-preset';
 import {
-  CalloutBlockModel,
+  CalloutBlockModel, MahdaadCalloutBlockSchema,
   ParagraphBlockModel,
   ParagraphBlockSchema,
-} from '@blocksuite/affine-model';
+} from '@blocksuite/affine-model'
 import {
   focusTextModel,
   getInlineEditorByModel,
@@ -44,7 +44,9 @@ export const ParagraphKeymapExtension = KeymapExtension(
         if (
           !model ||
           !matchModels(model, [ParagraphBlockModel]) ||
-          matchModels(model.parent, [CalloutBlockModel])
+          matchModels(model.parent, [CalloutBlockModel]) ||
+          /** for Mahdaad callout */
+          (model.parent?.flavour==MahdaadCalloutBlockSchema.model.flavour && model.parent.children.length==1)
         )
           return;
 
@@ -88,6 +90,30 @@ export const ParagraphKeymapExtension = KeymapExtension(
         if (!inlineRange || !inlineEditor) return;
         const raw = ctx.get('keyboardState').raw;
         raw.preventDefault();
+
+
+        //for check enter in callout
+        const isLastInCallout= model.parent?.flavour==MahdaadCalloutBlockSchema.model.flavour &&
+          model.parent.children.length &&
+          model.parent.children[model.parent.children.length-1]==model
+        if(isLastInCallout) {
+          const textStr = model.text.toString();
+          const endWithTwoBlankLines =
+            textStr === '\n' || textStr.endsWith('\n');
+          if (!textStr || endWithTwoBlankLines) {
+            raw.preventDefault();
+            store.captureSync();
+            const [paragraphId] = store.addSiblingBlocks(model.parent, [
+              { flavour: 'affine:paragraph' },
+            ]);
+            focusTextModel(std, paragraphId);
+            store.deleteBlock(model)
+            return true
+          }
+        }
+
+
+
         if (model.props.type === 'quote') {
           store.captureSync();
           inlineEditor.insertText(inlineRange, '\n');
@@ -118,6 +144,28 @@ export const ParagraphKeymapExtension = KeymapExtension(
 
         const raw = ctx.get('keyboardState').raw;
         const isEnd = model.props.text.length === inlineRange.index;
+
+
+        const isLastInCallout= model.parent?.flavour==MahdaadCalloutBlockSchema.model.flavour &&
+          model.parent.children.length &&
+          model.parent.children[model.parent.children.length-1]==model
+        if(isLastInCallout) {
+          const textStr = model.text.toString();
+          const endWithTwoBlankLines =
+            textStr === '\n' || textStr.endsWith('\n');
+          if (!textStr || endWithTwoBlankLines) {
+            raw.preventDefault();
+            store.captureSync();
+            const [paragraphId] = store.addSiblingBlocks(model.parent, [
+              { flavour: 'affine:paragraph' },
+            ]);
+            focusTextModel(std, paragraphId);
+            store.deleteBlock(model)
+            return true
+          }
+        }
+
+
 
         if (model.props.type === 'quote') {
           const textStr = model.props.text.toString();

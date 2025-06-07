@@ -7,8 +7,9 @@ import {
   DividerBlockModel,
   ImageBlockModel,
   ListBlockModel,
-  ParagraphBlockModel,
-} from '@blocksuite/affine-model';
+  MahdaadCalloutBlockModel,
+  MahdaadMultiColumnBlockModel,
+  ParagraphBlockModel} from '@blocksuite/affine-model';
 import { EMBED_BLOCK_MODEL_LIST } from '@blocksuite/affine-shared/consts';
 import {
   getNextContentBlock,
@@ -48,6 +49,8 @@ export function forwardDelete(std: BlockStdScope) {
       ImageBlockModel,
       DividerBlockModel,
       ...EMBED_BLOCK_MODEL_LIST,
+      MahdaadCalloutBlockModel,
+      MahdaadMultiColumnBlockModel
     ] as const)
   ) {
     std.selection.setGroup('note', [
@@ -69,6 +72,18 @@ export function forwardDelete(std: BlockStdScope) {
   }
 
   const nextBlock = getNextContentBlock(host, model);
+
+
+  const blockComponent= std.view.getBlock(model.id)
+  const nextBlockComponent=std.view.getBlock(nextBlock?.id)
+  //check for callout block
+  const outSideCallout=blockComponent && blockComponent.closest('.nest-editor') && nextBlockComponent && !nextBlockComponent.closest('.nest-editor')
+  if(outSideCallout) {
+    return true;
+  }
+
+
+
   if (nextBlock?.text) {
     model.props.text.join(nextBlock.text);
     if (nextBlock.children) {

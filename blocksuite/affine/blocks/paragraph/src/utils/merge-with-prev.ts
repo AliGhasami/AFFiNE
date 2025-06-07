@@ -8,9 +8,9 @@ import {
   EdgelessTextBlockModel,
   ImageBlockModel,
   ListBlockModel,
+  MahdaadCalloutBlockModel,MahdaadObjectBlockModel,
   ParagraphBlockModel,
-  type RootBlockModel,
-} from '@blocksuite/affine-model';
+  type RootBlockModel} from '@blocksuite/affine-model';
 import {
   asyncSetInlineRange,
   focusTextModel,
@@ -54,6 +54,12 @@ export function mergeWithPrev(editorHost: EditorHost, model: BlockModel) {
     return handleNoPreviousSibling(editorHost, model);
   }
 
+  const blockComponent= editorHost.std.view.getBlock(model.id)
+  const prevBlockComponent=editorHost.std.view.getBlock(prevBlock.id)
+  //check for callout block
+  const insideCallout= blockComponent && !blockComponent.closest('.nest-editor') && prevBlockComponent && prevBlockComponent.closest('.nest-editor')
+
+
   const modelIndex = parent.children.indexOf(model);
   const prevSibling = doc.getPrev(model);
   if (matchModels(prevSibling, [CalloutBlockModel])) {
@@ -65,7 +71,7 @@ export function mergeWithPrev(editorHost: EditorHost, model: BlockModel) {
     return true;
   }
 
-  if (matchModels(prevBlock, [ParagraphBlockModel, ListBlockModel])) {
+  if (!insideCallout && matchModels(prevBlock, [ParagraphBlockModel, ListBlockModel])) {
     if (
       (modelIndex === -1 || modelIndex === parent.children.length - 1) &&
       parent.role === 'content'
@@ -84,6 +90,7 @@ export function mergeWithPrev(editorHost: EditorHost, model: BlockModel) {
     return true;
   }
 
+  //todo ali ghasami for delete with backspace
   if (
     matchModels(prevBlock, [
       AttachmentBlockModel,
@@ -92,6 +99,8 @@ export function mergeWithPrev(editorHost: EditorHost, model: BlockModel) {
       ImageBlockModel,
       DividerBlockModel,
       ...EMBED_BLOCK_MODEL_LIST,
+      MahdaadCalloutBlockModel,
+      MahdaadObjectBlockModel
     ])
   ) {
     const selection = editorHost.selection.create(BlockSelection, {
