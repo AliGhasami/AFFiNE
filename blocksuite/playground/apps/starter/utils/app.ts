@@ -12,6 +12,7 @@ import { createTestEditor } from './extensions';
 
 export async function createTestApp(doc: Store, collection: Workspace) {
   const app = document.querySelector('#app');
+  //const app = document.querySelector('#test-editor');
   if (!app) {
     throw new Error('Cannot find app root element(#app).');
   }

@@ -11,6 +11,7 @@ import { createTestApp } from './app.js';
 
 export async function mountDefaultDocEditor(collection: Workspace) {
   const app = document.getElementById('app');
+  //const app = document.getElementById('test-editor');
   if (!app) return;
 
   const url = new URL(location.toString());
