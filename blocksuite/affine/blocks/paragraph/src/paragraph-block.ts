@@ -214,6 +214,12 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
   }
 
   override renderBlock(): TemplateResult<1> {
+
+    const temp = document.querySelector(
+      `.editor-scroll-container:has([data-block-id='${this.doc.root?.id}'])`
+    );
+    const scrollContainer = temp ? temp : getViewportElement(this.host);
+
     const { type$ } = this.model.props;
     const collapsed = this.doc.readonly
       ? this._readonlyCollapsed
@@ -302,8 +308,7 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
             .inlineRangeProvider=${this._inlineRangeProvider}
             .enableClipboard=${false}
             .enableUndoRedo=${false}
-            .verticalScrollContainerGetter=${() =>
-              getViewportElement(this.host)}
+            .verticalScrollContainerGetter=${() => scrollContainer}
           ></rich-text>
           ${this.inEdgelessText
             ? nothing

@@ -144,6 +144,11 @@ export class ListBlockComponent extends CaptionedBlockComponent<ListBlockModel> 
 
     const listIcon = getListIcon(model, !collapsed, _onClickIcon);
 
+    const temp = document.querySelector(
+      `.editor-scroll-container:has([data-block-id='${this.doc.root?.id}'])`
+    );
+    const scrollContainer = temp ? temp : getViewportElement(this.host);
+
     const children = html`<div
       class="affine-block-children-container"
       style=${styleMap({
@@ -194,8 +199,7 @@ export class ListBlockComponent extends CaptionedBlockComponent<ListBlockModel> 
             .inlineRangeProvider=${this._inlineRangeProvider}
             .enableClipboard=${false}
             .enableUndoRedo=${false}
-            .verticalScrollContainerGetter=${() =>
-              getViewportElement(this.host)}
+            .verticalScrollContainerGetter=${() =>scrollContainer }
           ></rich-text>
         </div>
 
