@@ -94,7 +94,6 @@ export const CommonSpecs: ExtensionType[] = [
   scrollAnchoringWidget,
   toolbarWidget,
   fallbackKeymap,
-
   ToolbarModuleExtension({
     id: BlockFlavourIdentifier(NoteBlockSchema.model.flavour),
     config: builtinToolbarConfig,
