@@ -8,7 +8,8 @@ import { effects as gfxTemplateEffects } from '@blocksuite/affine-gfx-template/e
 import { effects as gfxCanvasTextEffects } from '@blocksuite/affine-gfx-text/effects';
 import { effects as widgetEdgelessToolbarEffects } from '@blocksuite/affine-widget-edgeless-toolbar/effects';
 import { effects as widgetMobileToolbarEffects } from '@blocksuite/affine-widget-keyboard-toolbar/effects';
-import { effects as widgetLinkedDocEffects } from '@blocksuite/affine-widget-linked-doc/effects';
+//import { effects as widgetLinkedDocEffects } from '@blocksuite/affine-widget-linked-doc/effects';
+import { effects as widgetLinkedDocEffects } from '@blocksuite/mahdaad-widget-object-picker/effects';
 
 import { EdgelessAutoCompletePanel } from './edgeless/components/auto-complete/auto-complete-panel.js';
 import { EdgelessAutoComplete } from './edgeless/components/auto-complete/edgeless-auto-complete.js';

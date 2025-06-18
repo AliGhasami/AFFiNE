@@ -1,34 +1,35 @@
-import { LoadingIcon } from '@blocksuite/affine-block-image';
-import type { IconButton } from '@blocksuite/affine-components/icon-button';
+//import { LoadingIcon } from '@blocksuite/affine-block-image';
+//import type { IconButton } from '@blocksuite/affine-components/icon-button';
 import {
   cleanSpecifiedTail,
   getTextContentFromInlineRange,
 } from '@blocksuite/affine-rich-text';
-import { unsafeCSSVar } from '@blocksuite/affine-shared/theme';
+//import { unsafeCSSVar } from '@blocksuite/affine-shared/theme';
 import {
   createKeydownObserver,
   getPopperPosition,
   getViewportElement,
 } from '@blocksuite/affine-shared/utils';
 import { SignalWatcher, WithDisposable } from '@blocksuite/global/lit';
-import { MoreHorizontalIcon } from '@blocksuite/icons/lit';
+//import { MoreHorizontalIcon } from '@blocksuite/icons/lit';
 import { PropTypes, requiredProperties } from '@blocksuite/std';
+import {  ShadowlessElement } from '@blocksuite/std';
 import { GfxControllerIdentifier } from '@blocksuite/std/gfx';
-import { effect } from '@preact/signals-core';
-import { css, html, LitElement, nothing } from 'lit';
-import { property, query, queryAll, state } from 'lit/decorators.js';
+//import { effect } from '@preact/signals-core';
+import { html } from 'lit';
+import { property, state } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import throttle from 'lodash-es/throttle';
 
-import type { LinkedDocContext, LinkedMenuGroup } from './config.js';
+import type { LinkedDocContext } from './config.js';
 import { linkedDocPopoverStyles } from './styles.js';
-import { resolveSignal } from './utils.js';
+//import { resolveSignal } from './utils.js';
 
 @requiredProperties({
   context: PropTypes.object,
 })
-export class LinkedDocPopover extends SignalWatcher(
-  WithDisposable(LitElement)
+export class ObjectPickerPopover extends SignalWatcher(
+  WithDisposable(ShadowlessElement)
 ) {
   static override styles = linkedDocPopoverStyles;
 
@@ -43,11 +44,84 @@ export class LinkedDocPopover extends SignalWatcher(
     );
   };
 
-  private readonly _expanded = new Map<string, boolean>();
+  private  readonly  clearTrigger=()=>{
+    cleanSpecifiedTail(
+      this.context.std,
+      this.context.inlineEditor,
+      this.context.triggerKey + (this._query || '')
+    );
+    /*try {
+      /!*const text = this._searchText ? this.triggerKey + this._searchText : this.triggerKey;
+      cleanSpecifiedTail(this.editorHost, this.inlineEditor, text);*!/
 
-  private _menusItemsEffectCleanup: () => void = () => {};
 
-  private readonly _updateLinkedDocGroup = async () => {
+    } catch (e) {
+      console.log(e);
+    }*/
+  }
+
+  //todo ali ghasami for migrate to event bus
+  addObjectLink(model: BlockModel, lnk: ObjectLink,deleteEmptyBlock: boolean= true) {
+    //return;
+    if (!model.doc.getSchemaByFlavour('affine:mahdaad-object')) {
+      return;
+    }
+
+    /*insertContent(this.editorHost, this.model, REFERENCE_NODE, {
+      mahdaadObjectLink: {
+        object_id: lnk.object_id,
+        link_id: lnk.link_id,
+        type: lnk.type,
+      },
+    });*/
+
+    const temp = model.doc.addSiblingBlocks(this.model, [
+      {
+        flavour: 'affine:mahdaad-object',
+        ...lnk,
+      },
+    ]);
+
+    //model.doc.addBlocks()
+    //console.log('this', model.text?.length);
+    /*
+        if (model.text?.length == 0) {
+          model.doc.deleteBlock(this.model);
+        }*/
+    //return;
+
+    if(deleteEmptyBlock)
+    {
+      setTimeout(()=>{
+        if (model.text?.length == 0) {
+          model.doc.deleteBlock(this.model);
+        }
+      })
+    }
+
+    const next = model.doc.getNext(temp[0]);
+    //console.log("cccc",next);
+    if (next && this.editorHost) {
+      //console.log("host",this.editorHost);
+      const inline: InlineEditor | null = getInlineEditorByModel(
+        this.editorHost,
+        next
+      );
+      if (inline) {
+        inline.focusEnd();
+      }
+    }
+    if (this.abortController) {
+      this.abortController.abort();
+    }
+  }
+
+
+  //private readonly _expanded = new Map<string, boolean>();
+
+  //private readonly _menusItemsEffectCleanup: () => void = () => {};
+
+  /*private readonly _updateLinkedDocGroup = async () => {
     const query = this._query;
     if (this._updateLinkedDocGroupAbortController) {
       this._updateLinkedDocGroupAbortController.abort();
@@ -58,13 +132,13 @@ export class LinkedDocPopover extends SignalWatcher(
       this.context.close();
       return;
     }
-    this._linkedDocGroup = await this.context.config.getMenus(
+    /!*this._linkedDocGroup = await this.context.config.getMenus(
       query,
       this._abort,
       this.context.std.host,
       this.context.inlineEditor,
       this._updateLinkedDocGroupAbortController.signal
-    );
+    );*!/
 
     this._menusItemsEffectCleanup();
 
@@ -77,9 +151,9 @@ export class LinkedDocPopover extends SignalWatcher(
         this.scrollToFocusedItem();
       });
     });
-  };
+  };*/
 
-  private readonly _updateAutoFocusedItem = () => {
+/*  private readonly _updateAutoFocusedItem = () => {
     // Get the auto-focused item key from the config
     const autoFocusedItemKey = this.context.config.autoFocusedItemKey?.(
       this._linkedDocGroup,
@@ -99,26 +173,26 @@ export class LinkedDocPopover extends SignalWatcher(
     if (!this._activatedItemKey && this._flattenActionList.length > 0) {
       this._activatedItemKey = this._flattenActionList[0].key;
     }
-  };
+  };*/
 
-  private _updateLinkedDocGroupAbortController: AbortController | null = null;
+  //private readonly _updateLinkedDocGroupAbortController: AbortController | null = null;
 
-  private get _actionGroup() {
+ /* private get _actionGroup() {
     return this._linkedDocGroup.map(group => {
       return {
         ...group,
         items: this._getActionItems(group),
       };
     });
-  }
+  }*/
 
-  private get _flattenActionList() {
+  /*private get _flattenActionList() {
     return this._actionGroup
       .map(group =>
         group.items.map(item => ({ ...item, groupName: group.name }))
       )
       .flat();
-  }
+  }*/
 
   private get _query() {
     return getTextContentFromInlineRange(
@@ -127,7 +201,7 @@ export class LinkedDocPopover extends SignalWatcher(
     );
   }
 
-  private _getActionItems(group: LinkedMenuGroup) {
+  /*private _getActionItems(group: LinkedMenuGroup) {
     const isExpanded = !!this._expanded.get(group.name);
     let items = resolveSignal(group.items);
 
@@ -148,17 +222,17 @@ export class LinkedDocPopover extends SignalWatcher(
     }
 
     return items;
-  }
+  }*/
 
-  private _isTextOverflowing(element: HTMLElement) {
+  /*private _isTextOverflowing(element: HTMLElement) {
     return element.scrollWidth > element.clientWidth;
-  }
+  }*/
 
   override connectedCallback() {
     super.connectedCallback();
 
     // init
-    this._updateLinkedDocGroup().catch(console.error);
+    //this._updateLinkedDocGroup().catch(console.error);
     this._disposables.addFromEvent(this, 'pointerdown', e => {
       // Prevent input from losing focus
       e.preventDefault();
@@ -198,19 +272,19 @@ export class LinkedDocPopover extends SignalWatcher(
       },
       onInput: isComposition => {
         if (isComposition) {
-          this._updateLinkedDocGroup().catch(console.error);
+          //this._updateLinkedDocGroup().catch(console.error);
         } else {
           const subscription =
             this.context.inlineEditor.slots.renderComplete.subscribe(() => {
               subscription.unsubscribe();
-              this._updateLinkedDocGroup().catch(console.error);
+              //this._updateLinkedDocGroup().catch(console.error);
             });
         }
       },
       onPaste: () => {
-        setTimeout(() => {
+        /*setTimeout(() => {
           this._updateLinkedDocGroup().catch(console.error);
-        }, 50);
+        }, 50);*/
       },
       onDelete: () => {
         const curRange = this.context.inlineEditor.getInlineRange();
@@ -223,22 +297,22 @@ export class LinkedDocPopover extends SignalWatcher(
         const subscription =
           this.context.inlineEditor.slots.renderComplete.subscribe(() => {
             subscription.unsubscribe();
-            this._updateLinkedDocGroup().catch(console.error);
+            //this._updateLinkedDocGroup().catch(console.error);
           });
       },
       onMove: step => {
-        const itemLen = this._flattenActionList.length;
-        const nextIndex = (itemLen + this._activatedItemIndex + step) % itemLen;
+        //const itemLen = this._flattenActionList.length;
+        /*const nextIndex = (itemLen + this._activatedItemIndex + step) % itemLen;
         const item = this._flattenActionList[nextIndex];
         if (item) {
           this._activatedItemKey = item.key;
         }
-        this.scrollToFocusedItem();
+        this.scrollToFocusedItem();*/
       },
       onConfirm: () => {
-        this._flattenActionList[this._activatedItemIndex]
+        /*this._flattenActionList[this._activatedItemIndex]
           .action()
-          ?.catch(console.error);
+          ?.catch(console.error);*/
       },
       onAbort: () => {
         this.context.close();
@@ -248,22 +322,22 @@ export class LinkedDocPopover extends SignalWatcher(
 
   override disconnectedCallback() {
     super.disconnectedCallback();
-    this._menusItemsEffectCleanup();
-    this._updateLinkedDocGroupAbortController?.abort();
+    //this._menusItemsEffectCleanup();
+    //this._updateLinkedDocGroupAbortController?.abort();
   }
 
   override render() {
-    const MAX_HEIGHT = 390;
+    //const MAX_HEIGHT = 390;
     const style = this._position
       ? styleMap({
           transform: `translate(${this._position.x}, ${this._position.y})`,
-          maxHeight: `${Math.min(this._position.height, MAX_HEIGHT)}px`,
+          //maxHeight: `${Math.min(this._position.height, MAX_HEIGHT)}px`,
         })
       : styleMap({
           visibility: 'hidden',
         });
 
-    const actionGroups = this._actionGroup.map(group => {
+    /*const actionGroups = this._actionGroup.map(group => {
       // Check if the group is loading or hidden
       const isLoading = resolveSignal(group.loading);
       const isHidden = resolveSignal(group.hidden);
@@ -272,71 +346,34 @@ export class LinkedDocPopover extends SignalWatcher(
         isLoading,
         isHidden,
       };
-    });
+    });*/
 
     return html`<div class="linked-doc-popover" style="${style}">
-      ${actionGroups
-        .filter(
-          group =>
-            (group.items.length > 0 || group.isLoading) && !group.isHidden
-        )
-        .map((group, idx) => {
-          return html`
-            <div class="divider" ?hidden=${idx === 0}></div>
-            <div class="group-title">
-              <div class="group-title-text">${group.name}</div>
-              ${group.isLoading
-                ? html`<span class="loading-icon">${LoadingIcon}</span>`
-                : nothing}
-            </div>
-            <div class="group" style=${group.styles ?? ''}>
-              ${group.items.map(({ key, name, icon, action }) => {
-                const tooltip = this._showTooltip
-                  ? html`<affine-tooltip
-                      tip-position=${'right'}
-                      .tooltipStyle=${css`
-                        * {
-                          color: ${unsafeCSSVar('white')} !important;
-                        }
-                      `}
-                      >${name}</affine-tooltip
-                    >`
-                  : nothing;
-                return html`<icon-button
-                  width="260px"
-                  height="30px"
-                  data-id=${key}
-                  .text=${name}
-                  hover=${this._activatedItemKey === key}
-                  @pointerdown=${(e: PointerEvent) => {
-                    // Prevent event listeners being registered on the root document
-                    // eg., radix-ui dialogs usePointerDownOutside hooks
-                    e.stopPropagation();
-                  }}
-                  @click=${() => {
-                    action()?.catch(console.error);
-                  }}
-                  @mousemove=${() => {
-                    // Use `mousemove` instead of `mouseover` to avoid navigate conflict with keyboard
-                    this._activatedItemKey = key;
-                    // show tooltip whether text length overflows
-                    for (const button of this.iconButtons.values()) {
-                      if (button.dataset.id == key && button.textElement) {
-                        const isOverflowing = this._isTextOverflowing(
-                          button.textElement
-                        );
-                        this._showTooltip = isOverflowing;
-                        break;
-                      }
-                    }
-                  }}
-                >
-                  ${icon} ${tooltip}
-                </icon-button>`;
-              })}
-            </div>
-          `;
-        })}
+        <mahdaad-object-picker-component
+            search-text="${this._query}"
+            .inline-editor="${this.context.inlineEditor}"
+            type="${this.obj_type}"
+            .model="${this.model}"
+            .create-function=${this.addObjectLink}
+            .insert-template="${this.insertTemplate}"
+            @clear-trigger="${() => {
+                  this.clearTrigger();
+            }}"
+            @select="${(event: CustomEvent) => {
+                this.clearTrigger();
+                if (this.obj_type == 'template') {
+                  this.insertTemplate(event.detail);
+                } else {
+                  this.addObjectLink(this.model, event.detail as ObjectLink);
+                  this._abort()
+                  //this.abortController.abort();
+                }
+            }}"
+            @close="${() => {
+              this._abort() // .abortController.abort();
+            }}"
+          >
+          </mahdaad-object-picker-component>
     </div>`;
   }
 
@@ -369,7 +406,7 @@ export class LinkedDocPopover extends SignalWatcher(
     }
   }
 
-  private scrollToFocusedItem() {
+  /*private scrollToFocusedItem() {
     const shadowRoot = this.shadowRoot;
     if (!shadowRoot) {
       return;
@@ -392,20 +429,20 @@ export class LinkedDocPopover extends SignalWatcher(
     ele.scrollIntoView({
       block: 'nearest',
     });
-  }
+  }*/
 
-  get _activatedItemIndex() {
+  /*get _activatedItemIndex() {
     const index = this._flattenActionList.findIndex(
       item => item.key === this._activatedItemKey
     );
     return index === -1 ? 0 : index;
-  }
+  }*/
 
-  @state()
-  private accessor _activatedItemKey: string | null = null;
+  /*@state()
+  private accessor _activatedItemKey: string | null = null;*/
 
-  @state()
-  private accessor _linkedDocGroup: LinkedMenuGroup[] = [];
+/*  @state()
+  private accessor _linkedDocGroup: LinkedMenuGroup[] = [];*/
 
   @state()
   private accessor _position: {
@@ -414,15 +451,18 @@ export class LinkedDocPopover extends SignalWatcher(
     y: string;
   } | null = null;
 
-  @state()
-  private accessor _showTooltip = false;
+  //@state()
+  //private accessor _showTooltip = false;
 
   @property({ attribute: false })
   accessor context!: LinkedDocContext;
 
-  @queryAll('icon-button')
-  accessor iconButtons!: NodeListOf<IconButton>;
+  /*@state()
+  private accessor _searchText = '';*/
 
-  @query('.linked-doc-popover')
-  accessor linkedDocElement: Element | null = null;
+  /*@queryAll('icon-button')
+  accessor iconButtons!: NodeListOf<IconButton>;*/
+
+ /* @query('.linked-doc-popover')
+  accessor linkedDocElement: Element | null = null;*/
 }

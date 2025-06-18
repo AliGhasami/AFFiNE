@@ -21,23 +21,24 @@ import {
 import { signal } from '@preact/signals-core';
 import { html, nothing } from 'lit';
 import { choose } from 'lit/directives/choose.js';
-import { repeat } from 'lit/directives/repeat.js';
-import { styleMap } from 'lit/directives/style-map.js';
+//import { repeat } from 'lit/directives/repeat.js';
+//import { styleMap } from 'lit/directives/style-map.js';
 import { literal, unsafeStatic } from 'lit/static-html.js';
 
 import {
-  AFFINE_LINKED_DOC_WIDGET,
-  getMenus,
-  type LinkedDocContext,
-  type LinkedWidgetConfig,
-  LinkedWidgetConfigExtension,
+  //LinkedWidgetConfigExtension,
+  //AFFINE_LINKED_DOC_WIDGET,
+  MAHDAAD_OBJECT_PICKER_WIDGET,
+  //getMenus,
+  type ObjectPickerContext,
+  type ObjectPickerWidgetConfig,
 } from './config.js';
 import { linkedDocWidgetStyles } from './styles.js';
 
-export class AffineLinkedDocWidget extends WidgetComponent<RootBlockModel> {
+export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
   static override styles = linkedDocWidgetStyles;
 
-  private _context: LinkedDocContext | null = null;
+  private _context: ObjectPickerContext | null = null;
 
   private readonly _inputRects$ = signal<SelectionRect[]>([]);
 
@@ -76,30 +77,30 @@ export class AffineLinkedDocWidget extends WidgetComponent<RootBlockModel> {
     );
   }
 
-  private get _isCursorAtEnd() {
+  /*private get _isCursorAtEnd() {
     if (!this._context) return false;
     const { inlineEditor } = this._context;
     const currentInlineRange = inlineEditor.getInlineRange();
     if (!currentInlineRange) return false;
     return currentInlineRange.index === inlineEditor.yTextLength;
-  }
+  }*/
 
-  private readonly _renderLinkedDocMenu = () => {
+  /*private readonly _renderLinkedDocMenu = () => {
     if (!this.block?.rootComponent) return nothing;
 
     return html`<affine-mobile-linked-doc-menu
       .context=${this._context}
       .rootComponent=${this.block.rootComponent}
     ></affine-mobile-linked-doc-menu>`;
-  };
+  };*/
 
   private readonly _renderLinkedDocPopover = () => {
-    return html`<affine-linked-doc-popover
+    return html`<mahdaad-object-picker-popover
       .context=${this._context}
-    ></affine-linked-doc-popover>`;
+    ></mahdaad-object-picker-popover>`;
   };
 
-  private _renderInputMask() {
+  /*private _renderInputMask() {
     return html`${repeat(
       this._inputRects$.value,
       ({ top, left, width, height }, index) => {
@@ -118,7 +119,7 @@ export class AffineLinkedDocWidget extends WidgetComponent<RootBlockModel> {
         ></div>`;
       }
     )}`;
-  }
+  }*/
 
   private _watchInput() {
     this.handleEvent('beforeInput', ctx => {
@@ -159,7 +160,7 @@ export class AffineLinkedDocWidget extends WidgetComponent<RootBlockModel> {
 
       const triggerKeys = this.config.triggerKeys;
       const primaryTriggerKey = triggerKeys[0];
-      const convertTriggerKey = this.config.convertTriggerKey;
+      const convertTriggerKey = [] // this.config.convertTriggerKey;
       if (primaryTriggerKey.length > inlineRange.index) return;
       const matchedText = inlineEditor.yTextString.slice(
         inlineRange.index - primaryTriggerKey.length,
@@ -195,10 +196,10 @@ export class AffineLinkedDocWidget extends WidgetComponent<RootBlockModel> {
       }
 
       if (matchedText !== primaryTriggerKey && !converted) return;
-
       inlineEditor
         .waitForUpdate()
         .then(() => {
+          debugger
           this.show({
             inlineEditor,
             primaryTriggerKey,
@@ -218,19 +219,20 @@ export class AffineLinkedDocWidget extends WidgetComponent<RootBlockModel> {
     );
   }
 
-  get config(): LinkedWidgetConfig {
+  get config(): ObjectPickerWidgetConfig {
     return {
-      triggerKeys: ['@', '[[', '【【'],
+      triggerKeys: ['@'],
       ignoreBlockTypes: ['affine:code'],
-      ignoreSelector:
-        'edgeless-text-editor, edgeless-shape-text-editor, edgeless-group-title-editor, edgeless-frame-title-editor, edgeless-connector-label-editor',
-      convertTriggerKey: true,
-      getMenus,
-      mobile: {
+      //convertTriggerKey
+      /*ignoreSelector:
+        'edgeless-text-editor, edgeless-shape-text-editor, edgeless-group-title-editor, edgeless-frame-title-editor, edgeless-connector-label-editor',*/
+      //convertTriggerKey: true,
+      //getMenus,
+      /*mobile: {
         scrollContainer: getViewportElement(this.std.host) ?? window,
         scrollTopOffset: 46,
       },
-      ...this.std.getOptional(LinkedWidgetConfigExtension.identifier),
+      ...this.std.getOptional(LinkedWidgetConfigExtension.identifier),*/
     };
   }
 
@@ -315,15 +317,16 @@ export class AffineLinkedDocWidget extends WidgetComponent<RootBlockModel> {
 
   override render() {
     if (this._mode$.value === 'none') return nothing;
-
-    return html`${this._renderInputMask()}
+    //${this._renderInputMask()}
+    return html`
       <blocksuite-portal
         .shadowDom=${false}
         .template=${choose(
           this._mode$.value,
           [
             ['desktop', this._renderLinkedDocPopover],
-            ['mobile', this._renderLinkedDocMenu],
+            //['mobile', this._renderLinkedDocMenu],
+            ['mobile', this._renderLinkedDocPopover],
           ],
           () => html`${nothing}`
         )}
@@ -331,14 +334,14 @@ export class AffineLinkedDocWidget extends WidgetComponent<RootBlockModel> {
   }
 }
 
-export const linkedDocWidget = WidgetViewExtension(
+export const mahdaadObjectWidget = WidgetViewExtension(
   'affine:page',
-  AFFINE_LINKED_DOC_WIDGET,
-  literal`${unsafeStatic(AFFINE_LINKED_DOC_WIDGET)}`
+  MAHDAAD_OBJECT_PICKER_WIDGET,
+  literal`${unsafeStatic(MAHDAAD_OBJECT_PICKER_WIDGET)}`
 );
 
 declare global {
   interface HTMLElementTagNameMap {
-    [AFFINE_LINKED_DOC_WIDGET]: AffineLinkedDocWidget;
+    [MAHDAAD_OBJECT_PICKER_WIDGET]: MahdaadObjectPickerWidget;
   }
 }

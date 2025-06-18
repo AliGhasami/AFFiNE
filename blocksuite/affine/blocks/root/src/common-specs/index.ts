@@ -33,9 +33,10 @@ import {
   ToolbarRegistryExtension,
 } from '@blocksuite/affine-shared/services';
 import { dragHandleWidget } from '@blocksuite/affine-widget-drag-handle';
-//import { linkedDocWidget } from '@blocksuite/affine-widget-linked-doc';
 import { docRemoteSelectionWidget } from '@blocksuite/affine-widget-remote-selection';
 import { scrollAnchoringWidget } from '@blocksuite/affine-widget-scroll-anchoring';
+//import { linkedDocWidget } from '@blocksuite/affine-widget-linked-doc';
+import { mahdaadObjectWidget } from '@blocksuite/mahdaad-widget-object-picker';
 //import { SlashMenuExtension } from '@blocksuite/affine-widget-slash-menu';
 import { SlashMenuExtension } from '@blocksuite/mahdaad-widget-slash-menu';
 //import { toolbarWidget } from '@blocksuite/affine-widget-toolbar';
@@ -89,6 +90,7 @@ export const CommonSpecs: ExtensionType[] = [
   SlashMenuExtension,
   //linkedDocWidget,
   dragHandleWidget,
+  mahdaadObjectWidget,
   docRemoteSelectionWidget,
   viewportOverlayWidget,
   scrollAnchoringWidget,

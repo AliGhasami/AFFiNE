@@ -1,4 +1,4 @@
-import {
+/*import {
   ImportIcon,
   LinkedDocIcon,
   LinkedEdgelessIcon,
@@ -10,34 +10,51 @@ import {
   DocModeProvider,
   TelemetryProvider,
 } from '@blocksuite/affine-shared/services';
-import type { AffineInlineEditor } from '@blocksuite/affine-shared/types';
+
 import {
   createDefaultDoc,
   isFuzzyMatch,
-  type Signal,
+  //type Signal,
 } from '@blocksuite/affine-shared/utils';
-import { IS_MOBILE } from '@blocksuite/global/env';
-import {
-  type BlockStdScope,
+import { IS_MOBILE } from '@blocksuite/global/env';*/
+/*import {
+  //type BlockStdScope,
   ConfigExtensionFactory,
-  type EditorHost,
-} from '@blocksuite/std';
+  //type EditorHost,
+} from '@blocksuite/std';*/
+
+import type { AffineInlineEditor } from '@blocksuite/affine-shared/types';
+import { BlockStdScope } from '@blocksuite/std'
 import type { InlineRange } from '@blocksuite/std/inline';
-import type { TemplateResult } from 'lit';
+//import type { TemplateResult } from 'lit';
+//import { showImportModal } from './import-doc/index.js';
 
-import { showImportModal } from './import-doc/index.js';
+//todo migrate to claytap folder
+export type IObjectType =
+  | 'document'
+  | 'file'
+  | 'board'
+  | 'image'
+  | 'weblink'
+  | 'tag'
+  | 'template';
 
-export interface LinkedWidgetConfig {
+
+export interface ObjectPickerWidgetConfig {
+  triggerKeys: string[];
+  triggerWords: { words: string[]; type: IObjectType }[];
+  ignoreBlockTypes: string[];
+  //convertTriggerKey: boolean;
   /**
    * The first item of the trigger keys will be the primary key
    * e.g. @, [[
    */
-  triggerKeys: [string, ...string[]];
+  //triggerKeys: [string, ...string[]];
   /**
    * Convert trigger key to primary key (the first item of the trigger keys)
    * [[ -> @
    */
-  convertTriggerKey: boolean;
+  /*convertTriggerKey: boolean;
   ignoreBlockTypes: string[];
   ignoreSelector: string;
   getMenus: (
@@ -46,7 +63,7 @@ export interface LinkedWidgetConfig {
     editorHost: EditorHost,
     inlineEditor: AffineInlineEditor,
     abortSignal: AbortSignal
-  ) => Promise<LinkedMenuGroup[]> | LinkedMenuGroup[];
+  ) => Promise<LinkedMenuGroup[]> | LinkedMenuGroup[];*/
 
   /**
    * Auto focused item
@@ -58,7 +75,7 @@ export interface LinkedWidgetConfig {
    *
    * If the return value is not null, no action will be taken.
    */
-  autoFocusedItemKey?: (
+  /*autoFocusedItemKey?: (
     menus: LinkedMenuGroup[],
     query: string,
     currentActiveKey: string | null,
@@ -67,34 +84,34 @@ export interface LinkedWidgetConfig {
   ) => string | null;
 
   mobile: {
-    /**
+    /!**
      * The linked doc menu widget will scroll the container to make sure the input cursor is visible in viewport.
      * It accepts a selector string, HTMLElement or Window
      *
      * @default getViewportElement(editorHost) this is the scrollable container in playground
-     */
+     *!/
     scrollContainer?: string | HTMLElement | Window;
-    /**
+    /!**
      * The offset between the top of viewport and the input cursor
      *
      * @default 46 The height of header in playground
-     */
+     *!/
     scrollTopOffset?: number | (() => number);
-  };
+  };*/
 }
 
-export type LinkedMenuItem = {
+/*export type LinkedMenuItem = {
   key: string;
   name: string | TemplateResult<1>;
   icon: TemplateResult<1>;
   suffix?: string | TemplateResult<1>;
   // disabled?: boolean;
   action: LinkedMenuAction;
-};
+};*/
 
-export type LinkedMenuAction = () => Promise<void> | void;
+//export type LinkedMenuAction = () => Promise<void> | void;
 
-export type LinkedMenuGroup = {
+/*export type LinkedMenuGroup = {
   name: string;
   items: LinkedMenuItem[] | Signal<LinkedMenuItem[]>;
   styles?: string;
@@ -108,20 +125,23 @@ export type LinkedMenuGroup = {
   hidden?: boolean | Signal<boolean>;
 };
 
-export type LinkedDocContext = {
+*/
+
+export type ObjectPickerContext = {
   std: BlockStdScope;
   inlineEditor: AffineInlineEditor;
   startRange: InlineRange;
   startNativeRange: Range;
   triggerKey: string;
-  config: LinkedWidgetConfig;
+  config: ObjectPickerWidgetConfig;
   close: () => void;
 };
 
-const DEFAULT_DOC_NAME = 'Untitled';
-const DISPLAY_NAME_LENGTH = 8;
 
-export function createLinkedDocMenuGroup(
+//const DEFAULT_DOC_NAME = 'Untitled';
+//const DISPLAY_NAME_LENGTH = 8;
+
+/*export function createLinkedDocMenuGroup(
   query: string,
   abort: () => void,
   editorHost: EditorHost,
@@ -163,9 +183,9 @@ export function createLinkedDocMenuGroup(
     maxDisplay: MAX_DOCS,
     overflowText: `${filteredDocList.length - MAX_DOCS} more docs`,
   };
-}
+}*/
 
-export function createNewDocMenuGroup(
+/*export function createNewDocMenuGroup(
   query: string,
   abort: () => void,
   editorHost: EditorHost,
@@ -249,9 +269,9 @@ export function createNewDocMenuGroup(
     name: 'New Doc',
     items,
   };
-}
+}*/
 
-export function getMenus(
+/*export function getMenus(
   query: string,
   abort: () => void,
   editorHost: EditorHost,
@@ -261,16 +281,16 @@ export function getMenus(
     createLinkedDocMenuGroup(query, abort, editorHost, inlineEditor),
     createNewDocMenuGroup(query, abort, editorHost, inlineEditor),
   ]);
-}
+}*/
 
-export const LinkedWidgetUtils = {
+/*export const LinkedWidgetUtils = {
   createLinkedDocMenuGroup,
   createNewDocMenuGroup,
   insertLinkedNode,
-};
+};*/
 
-export const AFFINE_LINKED_DOC_WIDGET = 'affine-linked-doc-widget';
+export const MAHDAAD_OBJECT_PICKER_WIDGET = 'mahdaad-object-picker-widget';
 
-export const LinkedWidgetConfigExtension = ConfigExtensionFactory<
-  Partial<LinkedWidgetConfig>
->('affine:widget-linked-doc');
+/*export const LinkedWidgetConfigExtension = ConfigExtensionFactory<
+  Partial<ObjectPickerWidgetConfig>
+>('affine:widget-linked-doc');*/
