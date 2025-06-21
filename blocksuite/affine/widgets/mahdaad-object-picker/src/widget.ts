@@ -250,6 +250,7 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
       triggerKey: primaryTriggerKey,
       config: this.config,
       obj_type,
+      model:props.model,
       close: () => {
         disposable.unsubscribe();
         this._inputRects$.value = [];

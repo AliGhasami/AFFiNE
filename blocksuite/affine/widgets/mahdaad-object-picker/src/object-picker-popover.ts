@@ -61,6 +61,7 @@ export class ObjectPickerPopover extends SignalWatcher(
 
   //todo ali ghasami for migrate to event bus
   addObjectLink(model: BlockModel, lnk: ObjectLink,deleteEmptyBlock: boolean= true) {
+    //debugger
     //return;
    /* if (!model.doc.getSchemaByFlavour('affine:mahdaad-object')) {
       return;
@@ -132,19 +133,29 @@ export class ObjectPickerPopover extends SignalWatcher(
 
     // init
     //this._updateLinkedDocGroup().catch(console.error);
-    this._disposables.addFromEvent(this, 'pointerdown', e => {
+    /*this._disposables.addFromEvent(this, 'pointerdown', e => {
       // Prevent input from losing focus
       e.preventDefault();
-    });
-    this._disposables.addFromEvent(this, 'mousedown', e => {
+    });*/
+    /*this._disposables.addFromEvent(this, 'mousedown', e => {
       // Prevent input from losing focus in electron
       e.preventDefault();
+    });*/
+
+    this._disposables.addFromEvent(this,'mousedown', e => {
+      e.stopPropagation();
+      //if (e.target === this) return;
+      // We don't clear the query when clicking outside the popover
     });
-    this._disposables.addFromEvent(window, 'pointerdown', e => {
-      if (e.target === this) return;
+
+    //todo ali ghasami
+    this._disposables.addFromEvent(window, 'mousedown', e => {
+      //if (e.target === this) return;
       // We don't clear the query when clicking outside the popover
       this.context.close();
     });
+
+
 
     const keydownObserverAbortController = new AbortController();
     this._disposables.add(() => keydownObserverAbortController.abort());
@@ -203,15 +214,6 @@ export class ObjectPickerPopover extends SignalWatcher(
             subscription.unsubscribe();
             //this._updateLinkedDocGroup().catch(console.error);
           });
-      },
-      onMove: step => {
-        //const itemLen = this._flattenActionList.length;
-        /*const nextIndex = (itemLen + this._activatedItemIndex + step) % itemLen;
-        const item = this._flattenActionList[nextIndex];
-        if (item) {
-          this._activatedItemKey = item.key;
-        }
-        this.scrollToFocusedItem();*/
       },
       onConfirm: () => {
         /*this._flattenActionList[this._activatedItemIndex]
