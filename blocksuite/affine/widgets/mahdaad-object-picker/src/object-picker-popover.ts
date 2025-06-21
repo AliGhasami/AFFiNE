@@ -1,29 +1,28 @@
-//import { LoadingIcon } from '@blocksuite/affine-block-image';
-//import type { IconButton } from '@blocksuite/affine-components/icon-button';
 import {
   cleanSpecifiedTail,
+  getInlineEditorByModel,
   getTextContentFromInlineRange,
 } from '@blocksuite/affine-rich-text';
-//import { unsafeCSSVar } from '@blocksuite/affine-shared/theme';
+import { replaceIdMiddleware } from '@blocksuite/affine-shared/adapters'
 import {
   createKeydownObserver,
   getPopperPosition,
   getViewportElement,
 } from '@blocksuite/affine-shared/utils';
 import { SignalWatcher, WithDisposable } from '@blocksuite/global/lit';
-//import { MoreHorizontalIcon } from '@blocksuite/icons/lit';
 import { PropTypes, requiredProperties } from '@blocksuite/std';
 import {  ShadowlessElement } from '@blocksuite/std';
 import { GfxControllerIdentifier } from '@blocksuite/std/gfx';
-//import { effect } from '@preact/signals-core';
+import type { InlineEditor } from '@blocksuite/std/inline';
+import type { BlockModel } from '@blocksuite/store';
 import { html } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
+import { get } from 'lodash-es';
 import throttle from 'lodash-es/throttle';
 
-import type { LinkedDocContext } from './config.js';
-import { linkedDocPopoverStyles } from './styles.js';
-//import { resolveSignal } from './utils.js';
+import type { ObjectLink } from '../../../../../../src/claytapEditor/types'
+import type { ObjectPickerContext } from './config.js';
 
 @requiredProperties({
   context: PropTypes.object,
@@ -31,7 +30,7 @@ import { linkedDocPopoverStyles } from './styles.js';
 export class ObjectPickerPopover extends SignalWatcher(
   WithDisposable(ShadowlessElement)
 ) {
-  static override styles = linkedDocPopoverStyles;
+  //static override styles = objectPickerPopoverStyles;
 
   private readonly _abort = () => {
     // remove popover dom
@@ -63,9 +62,9 @@ export class ObjectPickerPopover extends SignalWatcher(
   //todo ali ghasami for migrate to event bus
   addObjectLink(model: BlockModel, lnk: ObjectLink,deleteEmptyBlock: boolean= true) {
     //return;
-    if (!model.doc.getSchemaByFlavour('affine:mahdaad-object')) {
+   /* if (!model.doc.getSchemaByFlavour('affine:mahdaad-object')) {
       return;
-    }
+    }*/
 
     /*insertContent(this.editorHost, this.model, REFERENCE_NODE, {
       mahdaadObjectLink: {
@@ -75,7 +74,7 @@ export class ObjectPickerPopover extends SignalWatcher(
       },
     });*/
 
-    const temp = model.doc.addSiblingBlocks(this.model, [
+    const temp = model.doc.addSiblingBlocks(this.context.model, [
       {
         flavour: 'affine:mahdaad-object',
         ...lnk,
@@ -94,105 +93,31 @@ export class ObjectPickerPopover extends SignalWatcher(
     {
       setTimeout(()=>{
         if (model.text?.length == 0) {
-          model.doc.deleteBlock(this.model);
+          model.doc.deleteBlock(this.context.model);
         }
       })
     }
 
     const next = model.doc.getNext(temp[0]);
     //console.log("cccc",next);
-    if (next && this.editorHost) {
+
+    if (next &&  this.context.std) {
       //console.log("host",this.editorHost);
       const inline: InlineEditor | null = getInlineEditorByModel(
-        this.editorHost,
+        this.context.std,
         next
       );
       if (inline) {
         inline.focusEnd();
       }
     }
-    if (this.abortController) {
+    this.context.close()
+    /*if (this.abortController) {
       this.abortController.abort();
-    }
+    }*/
   }
 
 
-  //private readonly _expanded = new Map<string, boolean>();
-
-  //private readonly _menusItemsEffectCleanup: () => void = () => {};
-
-  /*private readonly _updateLinkedDocGroup = async () => {
-    const query = this._query;
-    if (this._updateLinkedDocGroupAbortController) {
-      this._updateLinkedDocGroupAbortController.abort();
-    }
-    this._updateLinkedDocGroupAbortController = new AbortController();
-
-    if (query === null || query.startsWith(' ')) {
-      this.context.close();
-      return;
-    }
-    /!*this._linkedDocGroup = await this.context.config.getMenus(
-      query,
-      this._abort,
-      this.context.std.host,
-      this.context.inlineEditor,
-      this._updateLinkedDocGroupAbortController.signal
-    );*!/
-
-    this._menusItemsEffectCleanup();
-
-    // need to rebind the effect because this._linkedDocGroup has changed.
-    this._menusItemsEffectCleanup = effect(() => {
-      this._updateAutoFocusedItem();
-
-      // wait for the next tick to ensure the items are rendered to DOM
-      setTimeout(() => {
-        this.scrollToFocusedItem();
-      });
-    });
-  };*/
-
-/*  private readonly _updateAutoFocusedItem = () => {
-    // Get the auto-focused item key from the config
-    const autoFocusedItemKey = this.context.config.autoFocusedItemKey?.(
-      this._linkedDocGroup,
-      this._query || '',
-      this._activatedItemKey,
-      this.context.std.host,
-      this.context.inlineEditor
-    );
-
-    if (autoFocusedItemKey) {
-      this._activatedItemKey = autoFocusedItemKey;
-      return;
-    }
-
-    // If no auto-focused item key is returned from the config and no item is currently focused,
-    // focus the first item in the flattened action list
-    if (!this._activatedItemKey && this._flattenActionList.length > 0) {
-      this._activatedItemKey = this._flattenActionList[0].key;
-    }
-  };*/
-
-  //private readonly _updateLinkedDocGroupAbortController: AbortController | null = null;
-
- /* private get _actionGroup() {
-    return this._linkedDocGroup.map(group => {
-      return {
-        ...group,
-        items: this._getActionItems(group),
-      };
-    });
-  }*/
-
-  /*private get _flattenActionList() {
-    return this._actionGroup
-      .map(group =>
-        group.items.map(item => ({ ...item, groupName: group.name }))
-      )
-      .flat();
-  }*/
 
   private get _query() {
     return getTextContentFromInlineRange(
@@ -201,32 +126,6 @@ export class ObjectPickerPopover extends SignalWatcher(
     );
   }
 
-  /*private _getActionItems(group: LinkedMenuGroup) {
-    const isExpanded = !!this._expanded.get(group.name);
-    let items = resolveSignal(group.items);
-
-    const isOverflow = !!group.maxDisplay && items.length > group.maxDisplay;
-
-    items = isExpanded ? items : items.slice(0, group.maxDisplay);
-
-    if (isOverflow && !isExpanded && group.maxDisplay) {
-      items = items.concat({
-        key: `${group.name} More`,
-        name: resolveSignal(group.overflowText) || 'more',
-        icon: MoreHorizontalIcon({ width: '24px', height: '24px' }),
-        action: () => {
-          this._expanded.set(group.name, true);
-          this.requestUpdate();
-        },
-      });
-    }
-
-    return items;
-  }*/
-
-  /*private _isTextOverflowing(element: HTMLElement) {
-    return element.scrollWidth > element.clientWidth;
-  }*/
 
   override connectedCallback() {
     super.connectedCallback();
@@ -257,6 +156,11 @@ export class ObjectPickerPopover extends SignalWatcher(
       target: eventSource,
       signal: keydownObserverAbortController.signal,
       interceptor: (event, next) => {
+        const { key } = event;
+        if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'Enter') {
+          return;
+        }
+
         if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
           event.preventDefault();
           event.stopPropagation();
@@ -320,6 +224,42 @@ export class ObjectPickerPopover extends SignalWatcher(
     });
   }
 
+  //todo ali ghasami
+  async insertTemplate(data: any) {
+    // console.log('this is data', data);
+    if (!data.context) return;
+    const content = JSON.parse(data.context);
+    ///console.log('14141444', content);
+    const blocks = get(content, 'blocks.children', []);
+    const note = blocks.find(item => item.flavour == 'affine:note');
+    const noteChildren = get(note, 'children', []);
+    const doc = this.model.doc;
+    if (noteChildren.length > 0) {
+      const schema = new Schema().register(AffineSchemas);
+      const collection = new DocCollection({ schema });
+      const job = new Job({
+        collection: collection,
+        middlewares: [replaceIdMiddleware],
+      });
+      const notes = doc.getBlocksByFlavour('affine:note');
+      if (notes.length > 0) {
+        const parent = doc.getParent(this.context.model);
+        if (parent) {
+          const targetIndex =
+            parent.children.findIndex(({ id }) => id === this.context.model.id) ?? 0;
+          let insertIndex = targetIndex + 1; //place === 'before' ? targetIndex :
+          for (const item of noteChildren) {
+            await job.snapshotToBlock(item, doc, parent.id, insertIndex++);
+          }
+        }
+      }
+    }
+    this.context.close()
+    /*if (this.abortController) {
+      this.abortController.abort();
+    }*/
+  }
+
   override disconnectedCallback() {
     super.disconnectedCallback();
     //this._menusItemsEffectCleanup();
@@ -337,34 +277,23 @@ export class ObjectPickerPopover extends SignalWatcher(
           visibility: 'hidden',
         });
 
-    /*const actionGroups = this._actionGroup.map(group => {
-      // Check if the group is loading or hidden
-      const isLoading = resolveSignal(group.loading);
-      const isHidden = resolveSignal(group.hidden);
-      return {
-        ...group,
-        isLoading,
-        isHidden,
-      };
-    });*/
-
-    return html`<div class="linked-doc-popover" style="${style}">
+    return html`<div class="object-picker-popover" style="${style}">
         <mahdaad-object-picker-component
             search-text="${this._query}"
             .inline-editor="${this.context.inlineEditor}"
-            type="${this.obj_type}"
-            .model="${this.model}"
+            type="${this.context.obj_type}"
+            .model="${this.context.model}"
             .create-function=${this.addObjectLink}
             .insert-template="${this.insertTemplate}"
             @clear-trigger="${() => {
-                  this.clearTrigger();
+                this.clearTrigger();
             }}"
             @select="${(event: CustomEvent) => {
                 this.clearTrigger();
-                if (this.obj_type == 'template') {
+                if (this.context.obj_type == 'template') {
                   this.insertTemplate(event.detail);
                 } else {
-                  this.addObjectLink(this.model, event.detail as ObjectLink);
+                  this.addObjectLink(this.context.model,event.detail as ObjectLink);
                   this._abort()
                   //this.abortController.abort();
                 }
@@ -406,44 +335,6 @@ export class ObjectPickerPopover extends SignalWatcher(
     }
   }
 
-  /*private scrollToFocusedItem() {
-    const shadowRoot = this.shadowRoot;
-    if (!shadowRoot) {
-      return;
-    }
-
-    // If there's no active item key, don't try to scroll
-    if (!this._activatedItemKey) {
-      return;
-    }
-
-    const ele = shadowRoot.querySelector(
-      `icon-button[data-id="${this._activatedItemKey}"]`
-    );
-
-    // If the element doesn't exist, don't log a warning
-    if (!ele) {
-      return;
-    }
-
-    ele.scrollIntoView({
-      block: 'nearest',
-    });
-  }*/
-
-  /*get _activatedItemIndex() {
-    const index = this._flattenActionList.findIndex(
-      item => item.key === this._activatedItemKey
-    );
-    return index === -1 ? 0 : index;
-  }*/
-
-  /*@state()
-  private accessor _activatedItemKey: string | null = null;*/
-
-/*  @state()
-  private accessor _linkedDocGroup: LinkedMenuGroup[] = [];*/
-
   @state()
   private accessor _position: {
     height: number;
@@ -451,18 +342,9 @@ export class ObjectPickerPopover extends SignalWatcher(
     y: string;
   } | null = null;
 
-  //@state()
-  //private accessor _showTooltip = false;
+
 
   @property({ attribute: false })
-  accessor context!: LinkedDocContext;
+  accessor context!: ObjectPickerContext;
 
-  /*@state()
-  private accessor _searchText = '';*/
-
-  /*@queryAll('icon-button')
-  accessor iconButtons!: NodeListOf<IconButton>;*/
-
- /* @query('.linked-doc-popover')
-  accessor linkedDocElement: Element | null = null;*/
 }

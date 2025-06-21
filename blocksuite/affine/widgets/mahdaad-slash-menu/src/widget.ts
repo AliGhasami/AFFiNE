@@ -11,6 +11,7 @@ import { SlashMenuExtension } from './extensions';
 import { SlashMenu } from './slash-menu-popover';
 import type { SlashMenuConfig, SlashMenuContext, SlashMenuItem } from './types';
 import { buildSlashMenuItems } from './utils';
+import { MahdaadObjectPickerWidget } from '@blocksuite/mahdaad-widget-object-picker'
 let globalAbortController = new AbortController();
 
 function closeSlashMenu() {
@@ -126,6 +127,17 @@ export class AffineSlashMenuWidget extends WidgetComponent {
       const text = leafStart.textContent
         ? leafStart.textContent.slice(0, offsetStart)
         : '';
+
+      if (text) {
+        for (const item of  MahdaadObjectPickerWidget.DEFAULT_OPTIONS.triggerWords) {
+          //text.toLowerCase().startsWith(item.word.toLowerCase())
+          const temp= item.words.map(_=> _.toLowerCase())
+          if (temp.includes(text.toLowerCase())) {
+            closeSlashMenu();
+            return;
+          }
+        }
+      }
 
       if (!text.endsWith(AFFINE_SLASH_MENU_TRIGGER_KEY)) return;
 

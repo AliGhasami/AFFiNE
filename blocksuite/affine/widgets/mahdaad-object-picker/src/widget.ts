@@ -18,25 +18,22 @@ import {
   type InlineEditor,
   type InlineRootElement,
 } from '@blocksuite/std/inline';
+import { BlockModel } from '@blocksuite/store'
 import { signal } from '@preact/signals-core';
 import { html, nothing } from 'lit';
 import { choose } from 'lit/directives/choose.js';
-//import { repeat } from 'lit/directives/repeat.js';
-//import { styleMap } from 'lit/directives/style-map.js';
 import { literal, unsafeStatic } from 'lit/static-html.js';
 
+import { objectTriggerWords } from '../../../../../../src/claytapEditor/utils.ts'
 import {
-  //LinkedWidgetConfigExtension,
-  //AFFINE_LINKED_DOC_WIDGET,
+  type IObjectType,
   MAHDAAD_OBJECT_PICKER_WIDGET,
-  //getMenus,
   type ObjectPickerContext,
   type ObjectPickerWidgetConfig,
-} from './config.js';
-import { linkedDocWidgetStyles } from './styles.js';
+} from './config.js'
 
 export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
-  static override styles = linkedDocWidgetStyles;
+  //static override styles = linkedDocWidgetStyles;
 
   private _context: ObjectPickerContext | null = null;
 
@@ -44,18 +41,45 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
 
   private readonly _mode$ = signal<'desktop' | 'mobile' | 'none'>('none');
 
-  private _addTriggerKey(inlineEditor: InlineEditor, triggerKey: string) {
-    const inlineRange = inlineEditor.getInlineRange();
-    if (!inlineRange) return;
-    inlineEditor.insertText(
-      { index: inlineRange.index, length: 0 },
-      triggerKey
-    );
-    inlineEditor.setInlineRange({
-      index: inlineRange.index + triggerKey.length,
-      length: 0,
-    });
-  }
+  static DEFAULT_OPTIONS: ObjectPickerWidgetConfig = {
+    /**
+     * The first item of the trigger keys will be the primary key
+     */
+    triggerKeys: [
+      //'@',
+      //comment for support mention
+      //'@',
+    ],
+    triggerWords: [
+      {
+        words: objectTriggerWords.file,
+        type: 'file',
+      },
+      {
+        words: objectTriggerWords.page,
+        type: 'document',
+      },
+      {
+        words: objectTriggerWords.image,
+        type: 'image',
+      },
+      {
+        words: objectTriggerWords.weblink,
+        type: 'weblink',
+      },
+      {
+        words: objectTriggerWords.tag,
+        type: 'tag',
+      },
+      {
+        words: objectTriggerWords.template,
+        type: 'template',
+      },
+    ],
+    ignoreBlockTypes: ['affine:code'],
+  };
+
+
 
   private _updateInputRects() {
     if (!this._context) return;
@@ -77,49 +101,12 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
     );
   }
 
-  /*private get _isCursorAtEnd() {
-    if (!this._context) return false;
-    const { inlineEditor } = this._context;
-    const currentInlineRange = inlineEditor.getInlineRange();
-    if (!currentInlineRange) return false;
-    return currentInlineRange.index === inlineEditor.yTextLength;
-  }*/
-
-  /*private readonly _renderLinkedDocMenu = () => {
-    if (!this.block?.rootComponent) return nothing;
-
-    return html`<affine-mobile-linked-doc-menu
-      .context=${this._context}
-      .rootComponent=${this.block.rootComponent}
-    ></affine-mobile-linked-doc-menu>`;
-  };*/
-
   private readonly _renderLinkedDocPopover = () => {
     return html`<mahdaad-object-picker-popover
       .context=${this._context}
     ></mahdaad-object-picker-popover>`;
   };
 
-  /*private _renderInputMask() {
-    return html`${repeat(
-      this._inputRects$.value,
-      ({ top, left, width, height }, index) => {
-        const last =
-          index === this._inputRects$.value.length - 1 && this._isCursorAtEnd;
-
-        const padding = 2;
-        return html`<div
-          class="input-mask"
-          style=${styleMap({
-            top: `${top - padding}px`,
-            left: `${left}px`,
-            width: `${width + (last ? 10 : 0)}px`,
-            height: `${height + 2 * padding}px`,
-          })}
-        ></div>`;
-      }
-    )}`;
-  }*/
 
   private _watchInput() {
     this.handleEvent('beforeInput', ctx => {
@@ -141,13 +128,14 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
           : range.commonAncestorContainer.parentElement;
       if (!containerElement) return;
 
-      if (containerElement.closest(this.config.ignoreSelector)) return;
+      //if (containerElement.closest(this.config.ignoreSelector)) return;
 
       const block = containerElement.closest<BlockComponent>(
         `[${BLOCK_ID_ATTR}]`
       );
       if (!block || this.config.ignoreBlockTypes.includes(block.flavour))
         return;
+      const model = block.model;
 
       const inlineRoot = containerElement.closest<InlineRootElement>(
         `[${INLINE_ROOT_ATTR}]`
@@ -157,56 +145,28 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
       const inlineEditor = inlineRoot.inlineEditor;
       const inlineRange = inlineEditor.getInlineRange();
       if (!inlineRange) return;
-
-      const triggerKeys = this.config.triggerKeys;
-      const primaryTriggerKey = triggerKeys[0];
-      const convertTriggerKey = [] // this.config.convertTriggerKey;
-      if (primaryTriggerKey.length > inlineRange.index) return;
-      const matchedText = inlineEditor.yTextString.slice(
-        inlineRange.index - primaryTriggerKey.length,
-        inlineRange.index
-      );
-
-      let converted = false;
-      if (matchedText !== primaryTriggerKey && convertTriggerKey) {
-        for (const key of triggerKeys.slice(1)) {
-          if (key.length > inlineRange.index) continue;
-          const matchedText = inlineEditor.yTextString.slice(
-            inlineRange.index - key.length,
-            inlineRange.index
-          );
-          if (matchedText === key) {
-            const startIdxBeforeMatchKey = inlineRange.index - key.length;
-            inlineEditor.deleteText({
-              index: startIdxBeforeMatchKey,
-              length: key.length,
-            });
-            inlineEditor.insertText(
-              { index: startIdxBeforeMatchKey, length: 0 },
-              primaryTriggerKey
-            );
-            inlineEditor.setInlineRange({
-              index: startIdxBeforeMatchKey + primaryTriggerKey.length,
-              length: 0,
-            });
-            converted = true;
-            break;
+      const text = inlineEditor.yTextString;
+      if (text) {
+        this.config.triggerWords.forEach(item => {
+          const temp=item.words.map(_=>_.toLowerCase())
+          if (temp.includes(text.toLowerCase())) {
+            const triggerKey= temp.find(key=>key==text.toLowerCase())
+              ?? ''
+            inlineEditor
+              .waitForUpdate()
+              .then(() => {
+                this.show({
+                  inlineEditor,
+                  primaryTriggerKey:triggerKey,
+                  mode: IS_MOBILE ? 'mobile' : 'desktop',
+                  obj_type:item.type,
+                  model
+                });
+              })
+              .catch(console.error);
           }
-        }
+        });
       }
-
-      if (matchedText !== primaryTriggerKey && !converted) return;
-      inlineEditor
-        .waitForUpdate()
-        .then(() => {
-          debugger
-          this.show({
-            inlineEditor,
-            primaryTriggerKey,
-            mode: IS_MOBILE ? 'mobile' : 'desktop',
-          });
-        })
-        .catch(console.error);
     });
   }
 
@@ -220,20 +180,7 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
   }
 
   get config(): ObjectPickerWidgetConfig {
-    return {
-      triggerKeys: ['@'],
-      ignoreBlockTypes: ['affine:code'],
-      //convertTriggerKey
-      /*ignoreSelector:
-        'edgeless-text-editor, edgeless-shape-text-editor, edgeless-group-title-editor, edgeless-frame-title-editor, edgeless-connector-label-editor',*/
-      //convertTriggerKey: true,
-      //getMenus,
-      /*mobile: {
-        scrollContainer: getViewportElement(this.std.host) ?? window,
-        scrollTopOffset: 46,
-      },
-      ...this.std.getOptional(LinkedWidgetConfigExtension.identifier),*/
-    };
+    return  MahdaadObjectPickerWidget.DEFAULT_OPTIONS
   }
 
   override connectedCallback() {
@@ -247,13 +194,16 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
     inlineEditor?: InlineEditor;
     primaryTriggerKey?: string;
     mode?: 'desktop' | 'mobile';
+    obj_type: IObjectType;
     addTriggerKey?: boolean;
+    model:BlockModel
   }) {
     const host = this.host;
     const {
-      primaryTriggerKey = '@',
+      primaryTriggerKey = '',
       mode = 'desktop',
-      addTriggerKey = false,
+      obj_type='document'
+      //addTriggerKey = false,
     } = props ?? {};
     let inlineEditor: InlineEditor;
     if (!props?.inlineEditor) {
@@ -273,7 +223,7 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
       inlineEditor = props.inlineEditor;
     }
 
-    if (addTriggerKey) {
+    /*if (addTriggerKey) {
       this._addTriggerKey(inlineEditor, primaryTriggerKey);
       // we need to wait the range sync to get the correct startNativeRange
       const subscription = inlineEditor.slots.inlineRangeSync.subscribe(() => {
@@ -281,7 +231,7 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
         subscription.unsubscribe();
       });
       return;
-    }
+    }*/
 
     const startRange = inlineEditor.getInlineRange();
     if (!startRange) return;
@@ -299,6 +249,7 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
       startNativeRange,
       triggerKey: primaryTriggerKey,
       config: this.config,
+      obj_type,
       close: () => {
         disposable.unsubscribe();
         this._inputRects$.value = [];

@@ -308,7 +308,7 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
 
   checkKeys() {
     let allowKeys=['*']
-    const denyKeys=[]
+    const denyKeys : string[]=[]
     //const temp = []
     //todo ali ghasami
     /*if(checkParentIs(this.context.model,MahdaadMultiColumnBlockSchema.model.flavour)) {
@@ -398,16 +398,16 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
     'four_columns':'0_mahdaad_multi_column@4',
     'table_of_content':'0_mahdaad@1',
     'mention':'',
-    'template':'',
+    'template':'0_mahdaad@6',
     'date':'',
     'time':'',
     'table':'7_Database@0',
     'divider':'0_Basic@7',
-    'page':'',
-    'file':'',
-    'image':'',
-    'weblink':'',
-    'tag':'',
+    'page':'0_mahdaad@2',
+    'file':'0_mahdaad@3',
+    'image':'0_mahdaad@7',
+    'weblink':'0_mahdaad@4',
+    'tag':'0_mahdaad@5',
   }
 
 
