@@ -51,6 +51,10 @@
     { "path": "../../widgets/toolbar" },
     { "path": "../../data-view" },
     { "path": "../../../framework/global" },
+    { "path": "../../widgets/mahdaad-mention" },
+    { "path": "../../widgets/mahdaad-object-picker" },
+    { "path": "../../widgets/mahdaad-slash-menu" },
+    { "path": "../../widgets/mahdaad-toolbar" },
     { "path": "../../../framework/std" },
     { "path": "../../../framework/store" }
   ]

@@ -17,6 +17,10 @@
     { "path": "../../rich-text" },
     { "path": "../../shared" },
     { "path": "../../../framework/global" },
+    { "path": "../mahdaad-date-time" },
+    { "path": "../mahdaad-link" },
+    { "path": "../mahdaad-mention" },
+    { "path": "../mahdaad-object" },
     { "path": "../../../framework/std" },
     { "path": "../../../framework/store" }
   ]

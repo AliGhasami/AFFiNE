@@ -58,9 +58,30 @@ export const PackageList = [
       'blocksuite/affine/widgets/toolbar',
       'blocksuite/affine/data-view',
       'blocksuite/framework/global',
+      'blocksuite/affine/blocks/mahdaad-callout',
+      'blocksuite/affine/inlines/mahdaad-date-time',
+      'blocksuite/affine/inlines/mahdaad-link',
+      'blocksuite/affine/inlines/mahdaad-mention',
+      'blocksuite/affine/inlines/mahdaad-object',
+      'blocksuite/affine/blocks/mahdaad-multi-column',
+      'blocksuite/affine/blocks/mahdaad-object',
+      'blocksuite/affine/blocks/mahdaad-table-of-conent',
+      'blocksuite/affine/widgets/mahdaad-slash-menu',
+      'blocksuite/affine/widgets/mahdaad-toolbar',
       'blocksuite/framework/std',
       'blocksuite/framework/store',
       'blocksuite/framework/sync',
+    ],
+  },
+  {
+    location: 'blocksuite/affine/blocks/_mahdaad-empty-template-for-block',
+    name: '@blocksuite/mahdaad-empty-template-for-block',
+    workspaceDependencies: [
+      'blocksuite/affine/components',
+      'blocksuite/affine/model',
+      'blocksuite/affine/shared',
+      'blocksuite/framework/std',
+      'blocksuite/framework/store',
     ],
   },
   {
@@ -267,6 +288,50 @@ export const PackageList = [
     ],
   },
   {
+    location: 'blocksuite/affine/blocks/mahdaad-callout',
+    name: '@blocksuite/mahdaad-callout-block',
+    workspaceDependencies: [
+      'blocksuite/affine/components',
+      'blocksuite/affine/model',
+      'blocksuite/affine/shared',
+      'blocksuite/framework/std',
+      'blocksuite/framework/store',
+    ],
+  },
+  {
+    location: 'blocksuite/affine/blocks/mahdaad-multi-column',
+    name: '@blocksuite/mahdaad-multi-column-block',
+    workspaceDependencies: [
+      'blocksuite/affine/components',
+      'blocksuite/affine/model',
+      'blocksuite/affine/shared',
+      'blocksuite/framework/std',
+      'blocksuite/framework/store',
+    ],
+  },
+  {
+    location: 'blocksuite/affine/blocks/mahdaad-object',
+    name: '@blocksuite/mahdaad-object-block',
+    workspaceDependencies: [
+      'blocksuite/affine/components',
+      'blocksuite/affine/model',
+      'blocksuite/affine/shared',
+      'blocksuite/framework/std',
+      'blocksuite/framework/store',
+    ],
+  },
+  {
+    location: 'blocksuite/affine/blocks/mahdaad-table-of-conent',
+    name: '@blocksuite/mahdaad-table-of-content-block',
+    workspaceDependencies: [
+      'blocksuite/affine/components',
+      'blocksuite/affine/model',
+      'blocksuite/affine/shared',
+      'blocksuite/framework/std',
+      'blocksuite/framework/store',
+    ],
+  },
+  {
     location: 'blocksuite/affine/blocks/note',
     name: '@blocksuite/affine-block-note',
     workspaceDependencies: [
@@ -348,6 +413,10 @@ export const PackageList = [
       'blocksuite/affine/widgets/toolbar',
       'blocksuite/affine/data-view',
       'blocksuite/framework/global',
+      'blocksuite/affine/widgets/mahdaad-mention',
+      'blocksuite/affine/widgets/mahdaad-object-picker',
+      'blocksuite/affine/widgets/mahdaad-slash-menu',
+      'blocksuite/affine/widgets/mahdaad-toolbar',
       'blocksuite/framework/std',
       'blocksuite/framework/store',
     ],
@@ -647,6 +716,54 @@ export const PackageList = [
     ],
   },
   {
+    location: 'blocksuite/affine/inlines/mahdaad-date-time',
+    name: '@blocksuite/mahdaad-inline-date-time',
+    workspaceDependencies: [
+      'blocksuite/affine/components',
+      'blocksuite/affine/model',
+      'blocksuite/affine/shared',
+      'blocksuite/framework/global',
+      'blocksuite/framework/std',
+      'blocksuite/framework/store',
+    ],
+  },
+  {
+    location: 'blocksuite/affine/inlines/mahdaad-link',
+    name: '@blocksuite/mahdaad-inline-link',
+    workspaceDependencies: [
+      'blocksuite/affine/components',
+      'blocksuite/affine/model',
+      'blocksuite/affine/shared',
+      'blocksuite/framework/global',
+      'blocksuite/framework/std',
+      'blocksuite/framework/store',
+    ],
+  },
+  {
+    location: 'blocksuite/affine/inlines/mahdaad-mention',
+    name: '@blocksuite/mahdaad-inline-mention',
+    workspaceDependencies: [
+      'blocksuite/affine/components',
+      'blocksuite/affine/model',
+      'blocksuite/affine/shared',
+      'blocksuite/framework/global',
+      'blocksuite/framework/std',
+      'blocksuite/framework/store',
+    ],
+  },
+  {
+    location: 'blocksuite/affine/inlines/mahdaad-object',
+    name: '@blocksuite/mahdaad-inline-object',
+    workspaceDependencies: [
+      'blocksuite/affine/components',
+      'blocksuite/affine/model',
+      'blocksuite/affine/shared',
+      'blocksuite/framework/global',
+      'blocksuite/framework/std',
+      'blocksuite/framework/store',
+    ],
+  },
+  {
     location: 'blocksuite/affine/inlines/mention',
     name: '@blocksuite/affine-inline-mention',
     workspaceDependencies: [
@@ -672,6 +789,10 @@ export const PackageList = [
       'blocksuite/affine/rich-text',
       'blocksuite/affine/shared',
       'blocksuite/framework/global',
+      'blocksuite/affine/inlines/mahdaad-date-time',
+      'blocksuite/affine/inlines/mahdaad-link',
+      'blocksuite/affine/inlines/mahdaad-mention',
+      'blocksuite/affine/inlines/mahdaad-object',
       'blocksuite/framework/std',
       'blocksuite/framework/store',
     ],
@@ -817,6 +938,62 @@ export const PackageList = [
       'blocksuite/framework/global',
       'blocksuite/framework/std',
       'blocksuite/framework/store',
+    ],
+  },
+  {
+    location: 'blocksuite/affine/widgets/mahdaad-mention',
+    name: '@blocksuite/mahdaad-widget-mention',
+    workspaceDependencies: [
+      'blocksuite/affine/blocks/image',
+      'blocksuite/affine/components',
+      'blocksuite/affine/inlines/reference',
+      'blocksuite/affine/model',
+      'blocksuite/affine/rich-text',
+      'blocksuite/affine/shared',
+      'blocksuite/framework/global',
+      'blocksuite/framework/std',
+      'blocksuite/framework/store',
+    ],
+  },
+  {
+    location: 'blocksuite/affine/widgets/mahdaad-object-picker',
+    name: '@blocksuite/mahdaad-widget-object-picker',
+    workspaceDependencies: [
+      'blocksuite/affine/blocks/image',
+      'blocksuite/affine/components',
+      'blocksuite/affine/inlines/reference',
+      'blocksuite/affine/model',
+      'blocksuite/affine/rich-text',
+      'blocksuite/affine/shared',
+      'blocksuite/framework/global',
+      'blocksuite/framework/std',
+      'blocksuite/framework/store',
+    ],
+  },
+  {
+    location: 'blocksuite/affine/widgets/mahdaad-slash-menu',
+    name: '@blocksuite/mahdaad-widget-slash-menu',
+    workspaceDependencies: [
+      'blocksuite/affine/components',
+      'blocksuite/affine/rich-text',
+      'blocksuite/affine/shared',
+      'blocksuite/framework/global',
+      'blocksuite/framework/std',
+      'blocksuite/framework/store',
+    ],
+  },
+  {
+    location: 'blocksuite/affine/widgets/mahdaad-toolbar',
+    name: '@blocksuite/mahdaad-widget-toolbar',
+    workspaceDependencies: [
+      'blocksuite/affine/blocks/database',
+      'blocksuite/affine/blocks/surface',
+      'blocksuite/affine/blocks/table',
+      'blocksuite/affine/components',
+      'blocksuite/affine/model',
+      'blocksuite/affine/shared',
+      'blocksuite/framework/global',
+      'blocksuite/framework/std',
     ],
   },
   {
@@ -1223,6 +1400,7 @@ export const PackageList = [
 
 export type PackageName =
   | '@blocksuite/affine'
+  | '@blocksuite/mahdaad-empty-template-for-block'
   | '@blocksuite/affine-block-attachment'
   | '@blocksuite/affine-block-bookmark'
   | '@blocksuite/affine-block-callout'
@@ -1236,6 +1414,10 @@ export type PackageName =
   | '@blocksuite/affine-block-image'
   | '@blocksuite/affine-block-latex'
   | '@blocksuite/affine-block-list'
+  | '@blocksuite/mahdaad-callout-block'
+  | '@blocksuite/mahdaad-multi-column-block'
+  | '@blocksuite/mahdaad-object-block'
+  | '@blocksuite/mahdaad-table-of-content-block'
   | '@blocksuite/affine-block-note'
   | '@blocksuite/affine-block-paragraph'
   | '@blocksuite/affine-block-root'
@@ -1259,6 +1441,10 @@ export type PackageName =
   | '@blocksuite/affine-inline-footnote'
   | '@blocksuite/affine-inline-latex'
   | '@blocksuite/affine-inline-link'
+  | '@blocksuite/mahdaad-inline-date-time'
+  | '@blocksuite/mahdaad-inline-link'
+  | '@blocksuite/mahdaad-inline-mention'
+  | '@blocksuite/mahdaad-inline-object'
   | '@blocksuite/affine-inline-mention'
   | '@blocksuite/affine-inline-preset'
   | '@blocksuite/affine-inline-reference'
@@ -1271,6 +1457,10 @@ export type PackageName =
   | '@blocksuite/affine-widget-frame-title'
   | '@blocksuite/affine-widget-keyboard-toolbar'
   | '@blocksuite/affine-widget-linked-doc'
+  | '@blocksuite/mahdaad-widget-mention'
+  | '@blocksuite/mahdaad-widget-object-picker'
+  | '@blocksuite/mahdaad-widget-slash-menu'
+  | '@blocksuite/mahdaad-widget-toolbar'
   | '@blocksuite/affine-widget-remote-selection'
   | '@blocksuite/affine-widget-scroll-anchoring'
   | '@blocksuite/affine-widget-slash-menu'
