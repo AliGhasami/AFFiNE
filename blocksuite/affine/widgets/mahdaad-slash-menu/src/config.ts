@@ -1,36 +1,95 @@
-import { toast } from '@blocksuite/affine-components/toast';
-import type {
-  ListBlockModel,
-  ParagraphBlockModel,
-} from '@blocksuite/affine-model';
 import { insertContent } from '@blocksuite/affine-rich-text';
-import {
-  ArrowDownBigIcon,
-  ArrowUpBigIcon,
-  CopyIcon,
-  DeleteIcon,
-  DualLinkIcon,
-  NowIcon,
-  TodayIcon,
-  TomorrowIcon,
-  YesterdayIcon,
-} from '@blocksuite/icons/lit';
-import { type DeltaInsert, Slice, Text } from '@blocksuite/store';
+import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts'
+import {uuidv4 } from '@blocksuite/store'
 
-import { slashMenuToolTips } from './tooltips';
 import type { SlashMenuConfig } from './types';
-import { formatDate, formatTime } from './utils';
 
 export const defaultSlashMenuConfig: SlashMenuConfig = {
   items: () => {
-    const now = new Date();
-    const tomorrow = new Date();
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
     return [
       {
+        name: 'mention',
+        //icon: TodayIcon(),
+        //tooltip: slashMenuToolTips['Today'],
+        //description: formatDate(now),
+        group: '0_mahdaad@8',
+        action: ({ std, model }) => {
+          const triggerKey = '@';
+          insertContent(std, model, triggerKey);
+          const root = model.doc.root;
+          if (!root) return;
+          const mahdaadMentionWidget = std.view.getWidget(
+            'mahdaad-mention-menu-widget',
+            root.id
+          );
+          if (!mahdaadMentionWidget) return;
+          setTimeout(()=>{
+            // TODO(@L-Sun): make linked-doc-widget as extension
+            // @ts-expect-error same as above
+            mahdaadMentionWidget.show({ primaryTriggerKey:triggerKey });
+          })
+        },
+      },
+      {
+        name: 'date',
+        //icon: TodayIcon(),
+        //tooltip: slashMenuToolTips['Today'],
+        //description: formatDate(now),
+        group: '0_mahdaad@9',
+        action: ({ std, model }) => {
+          const date = new Date();
+          // Extract UTC time components
+          const year = date.getUTCFullYear(); // Get hours in UTC and pad with leading zero if needed
+          const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Get minutes in UTC and pad with leading zero if needed
+          const day = String(date.getUTCDate()).padStart(2, '0'); // Get seconds in UTC and pad with leading zero if needed
+          const triggerKey = `${year}-${month}-${day}`;
+          const temp = {
+            date: triggerKey,
+            time: null,
+            id: uuidv4(),
+          };
+          /*{
+            const triggerKey = '$';
+            insertContent(rootComponent.host, model, triggerKey);
+          }*/
+          insertContent(std, model, REFERENCE_NODE, {
+            date: temp,
+          });
+        },
+      },
+      {
+        name: 'date_time',
+        //icon: TodayIcon(),
+        //tooltip: slashMenuToolTips['Today'],
+        //description: formatDate(now),
+        group: '0_mahdaad@10',
+        action: ({ std, model }) => {
+          const date = new Date();
+          // Extract UTC time components
+          const year = date.getUTCFullYear(); // Get hours in UTC and pad with leading zero if needed
+          const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Get minutes in UTC and pad with leading zero if needed
+          const day = String(date.getUTCDate()).padStart(2, '0'); // Get seconds in UTC and pad with leading zero if needed
+          const triggerKey = `${year}-${month}-${day}`;
+          const hour = String(date.getUTCHours()).padStart(2, '0')
+          const minute = String(date.getUTCMinutes()).padStart(2, '0')
+          const second = String(date.getUTCSeconds()).padStart(2, '0')
+          const time = `${hour}:${minute}:${second}`
+          const temp = {
+            date: triggerKey,
+            time,
+            id: uuidv4(),
+          };
+          window.focusedDateTime = temp.id
+          /*{
+            const triggerKey = '$';
+            insertContent(rootComponent.host, model, triggerKey);
+          }*/
+          insertContent(std, model, REFERENCE_NODE, {
+            date: temp,
+          });
+        },
+      },
+     /* {
         name: 'Today',
         icon: TodayIcon(),
         tooltip: slashMenuToolTips['Today'],
@@ -178,7 +237,7 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
         action: ({ std, model }) => {
           std.host.doc.deleteBlock(model);
         },
-      },
+      },*/
     ];
   },
 };

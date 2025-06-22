@@ -1,11 +1,7 @@
 import { MahdaadCalloutBlockModel } from '@blocksuite/affine-model';
 import { insertContent } from '@blocksuite/affine-rich-text'
-import { focusBlockEnd } from '@blocksuite/affine-shared/commands';
-import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts'
-//import { FeatureFlagService } from '@blocksuite/affine-shared/services';
 import {
   findAncestorModel,
-  //isInsideBlockByFlavour,
   matchModels,
 } from '@blocksuite/affine-shared/utils';
 import { type SlashMenuConfig } from '@blocksuite/affine-widget-slash-menu';
