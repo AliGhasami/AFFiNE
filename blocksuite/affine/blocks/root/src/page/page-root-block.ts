@@ -229,6 +229,7 @@ export class PageRootBlockComponent extends BlockComponent<
         return true;
       },
       ArrowUp: () => {
+        debugger
         const selection = this.host.selection;
         const sel = selection.value.find(
           sel => sel.is(TextSelection) || sel.is(BlockSelection)
