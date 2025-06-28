@@ -40,7 +40,7 @@ export function getListIcon(
     case 'bulleted':
       return html`<div
         contenteditable="false"
-        class="affine-list-block__prefix"
+        class="affine-list-block__prefix affine-list-block__bullet"
         @click=${onClick}
       >
         ${BulletIcons[deep % BulletIcons.length]}

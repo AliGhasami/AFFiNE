@@ -25,7 +25,9 @@ import { query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 
+import quoteIcon from './assets/quote.svg?raw'
 import { ParagraphBlockConfigExtension } from './paragraph-block-config.js';
 import { paragraphBlockStyles } from './styles.js';
 
@@ -251,6 +253,35 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
       ${this.renderChildren(this.model)}
     </div>`;
 
+    const placeholder=html`${this.inEdgelessText
+      ? nothing
+      : html`
+                <div
+                  contenteditable="false"
+                  class=${classMap({
+        'affine-paragraph-placeholder': true,
+        visible: this._displayPlaceholder.value,
+      })}
+                >
+                  ${this._placeholder}
+                </div>
+              `}`
+    const richText=html` <rich-text
+            .yText=${this.model.props.text.yText}
+            .inlineEventSource=${this.topContenteditableElement ?? nothing}
+            .undoManager=${this.doc.history}
+            .attributesSchema=${this.attributesSchema}
+            .attributeRenderer=${this.attributeRenderer}
+            .markdownMatches=${this.inlineManager?.markdownMatches}
+            .embedChecker=${this.embedChecker}
+            .readonly=${this.doc.readonly}
+            .inlineRangeProvider=${this._inlineRangeProvider}
+            .enableClipboard=${false}
+            .enableUndoRedo=${false}
+            .verticalScrollContainerGetter=${() => scrollContainer}
+          ></rich-text>`
+
+
     return html`
       ${style}
       <style>
@@ -296,35 +327,19 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
                 ></blocksuite-toggle-button>
               `
             : nothing}
-          <rich-text
-            .yText=${this.model.props.text.yText}
-            .inlineEventSource=${this.topContenteditableElement ?? nothing}
-            .undoManager=${this.doc.history}
-            .attributesSchema=${this.attributesSchema}
-            .attributeRenderer=${this.attributeRenderer}
-            .markdownMatches=${this.inlineManager?.markdownMatches}
-            .embedChecker=${this.embedChecker}
-            .readonly=${this.doc.readonly}
-            .inlineRangeProvider=${this._inlineRangeProvider}
-            .enableClipboard=${false}
-            .enableUndoRedo=${false}
-            .verticalScrollContainerGetter=${() => scrollContainer}
-          ></rich-text>
-          ${this.inEdgelessText
-            ? nothing
-            : html`
-                <div
-                  contenteditable="false"
-                  class=${classMap({
-                    'affine-paragraph-placeholder': true,
-                    visible: this._displayPlaceholder.value,
-                  })}
-                >
-                  ${this._placeholder}
-                </div>
-              `}
-        </div>
 
+          ${type$.value=='quote' ?
+            html`<div class="quote-container" dir=${this.model.props.dir}>
+              <span class="quote-icon">${html`${unsafeSVG(quoteIcon)}`}</span>
+              ${richText}
+              ${placeholder}
+            </div>`
+            : richText}
+
+          ${this.model.props.type=='quote' ? nothing : placeholder}
+
+
+        </div>
         ${children}
       </div>
     `;

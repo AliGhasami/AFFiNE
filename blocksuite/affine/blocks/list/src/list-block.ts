@@ -1,7 +1,7 @@
 import '@blocksuite/affine-shared/commands';
 
 import { CaptionedBlockComponent } from '@blocksuite/affine-components/caption';
-import { playCheckAnimation } from '@blocksuite/affine-components/icons';
+//import { playCheckAnimation } from '@blocksuite/affine-components/icons';
 import { TOGGLE_BUTTON_PARENT_CLASS } from '@blocksuite/affine-components/toggle-button';
 import { DefaultInlineManagerExtension } from '@blocksuite/affine-inline-preset';
 import type { ListBlockModel } from '@blocksuite/affine-model';
@@ -55,12 +55,12 @@ export class ListBlockComponent extends CaptionedBlockComponent<ListBlockModel> 
       this.doc.captureSync();
       const checkedPropObj = { checked: !this.model.props.checked };
       this.doc.updateBlock(this.model, checkedPropObj);
-      if (this.model.props.checked) {
+      /*if (this.model.props.checked) {
         const checkEl = this.querySelector('.affine-list-block__todo-prefix');
         if (checkEl) {
           playCheckAnimation(checkEl).catch(console.error);
         }
-      }
+      }*/
       return;
     }
     this._select();

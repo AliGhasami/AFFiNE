@@ -21,6 +21,7 @@ export type ParagraphProps = {
   type: ParagraphType;
   text: Text;
   collapsed: boolean;
+  dir: null | 'rtl' | 'ltr'
 } & BlockMeta;
 
 export const ParagraphBlockSchema = defineBlockSchema({
@@ -33,6 +34,7 @@ export const ParagraphBlockSchema = defineBlockSchema({
     'meta:createdBy': undefined,
     'meta:updatedAt': undefined,
     'meta:updatedBy': undefined,
+    dir:null,
   }),
   metadata: {
     version: 1,

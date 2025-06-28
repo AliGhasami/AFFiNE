@@ -3,16 +3,18 @@ import { css } from 'lit';
 export const listPrefix = css`
   .affine-list-block__prefix {
     display: flex;
-    color: var(--affine-blue-700);
-    font-size: var(--affine-font-sm);
+    //color: var(--affine-blue-700);
+    //font-size: var(--affine-font-sm);
     user-select: none;
     position: relative;
   }
 
   .affine-list-block__numbered {
-    min-width: 22px;
-    height: 24px;
-    margin-left: 2px;
+    //min-width: 22px;
+    //height: 24px;
+    //margin-left: 2px;
+    margin-top: 4px;
+    margin-inline-end: 3px;
   }
 
   .affine-list-block__todo-prefix {
@@ -22,6 +24,7 @@ export const listPrefix = css`
     width: 24px;
     height: 24px;
     color: var(--affine-icon-color);
+    margin-top: 3.5px;
   }
 
   .affine-list-block__todo-prefix.readonly {
@@ -31,7 +34,18 @@ export const listPrefix = css`
   .affine-list-block__todo-prefix > svg {
     width: 20px;
     height: 20px;
+    margin-top: 3px;
   }
+
+  .affine-list-block__bullet{
+    margin-top: 5px;
+    //width: 15px;
+  }
+
+  .affine-list-block__bullet svg{
+    width: 18px;
+  }
+
 `;
 
 export const listBlockStyles = css`
