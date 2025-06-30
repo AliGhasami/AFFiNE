@@ -1,10 +1,12 @@
 import { CaptionedBlockComponent } from '@blocksuite/affine-components/caption';
 import type { MahdaadObjectBlockModel } from '@blocksuite/affine-model';
 import {
-  EDGELESS_TOP_CONTENTEDITABLE_SELECTOR,
+  EDGELESS_TOP_CONTENTEDITABLE_SELECTOR, REFERENCE_NODE,
 } from '@blocksuite/affine-shared/consts';
 import { DocModeProvider } from '@blocksuite/affine-shared/services';
+import type {AffineTextAttributes} from "@blocksuite/affine-shared/types";
 import type { BlockComponent } from '@blocksuite/std';
+import {type DeltaInsert, Text} from "@blocksuite/store";
 import { html, type TemplateResult } from 'lit';
 import {merge} from 'lodash-es'
 
@@ -119,26 +121,40 @@ export class MahdaadObjectBlockComponent extends CaptionedBlockComponent<Mahdaad
 
   //todo ali ghasami
   changeViewMode(event: CustomEvent) {
-    /*const mode = event.detail[0];
+    const mode = event.detail[0];
     //console.log("111111",this.model.type);
     if (
-      ['document', 'image', 'weblink'].includes(this.model.type) &&
+      ['document', 'image', 'weblink'].includes(this.model.props.type) &&
       mode == 'inline'
     ) {
       const { doc } = this.model;
       const parent = doc.getParent(this.model);
-      assertExists(parent);
+      //assertExists(parent);
       const index = parent.children.indexOf(this.model);
-      const yText = new DocCollection.Y.Text();
-      yText.insert(0, REFERENCE_NODE);
+
+      const text = new Text([
+        {
+          insert: REFERENCE_NODE,
+          attributes: {
+            mahdaadObjectLink: {
+              object_id: this.model.props.object_id,
+              link_id: this.model.props.link_id,
+              type: this.model.props.type,
+            },
+          },
+        },
+      ] as DeltaInsert<AffineTextAttributes>[]);
+
+      //const yText = new DocCollection.Y.Text();
+      /*yText.insert(0, REFERENCE_NODE);
       yText.format(0, REFERENCE_NODE.length, {
         mahdaadObjectLink: {
-          object_id: this.model.object_id,
-          link_id: this.model.link_id,
-          type: this.model.type,
+          object_id: this.model.props.object_id,
+          link_id: this.model.props.link_id,
+          type: this.model.props.type,
         },
       });
-      const text = new doc.Text(yText);
+      const text = new doc.Text(yText);*/
 
       doc.addBlock(
         'affine:paragraph',
@@ -153,6 +169,6 @@ export class MahdaadObjectBlockComponent extends CaptionedBlockComponent<Mahdaad
       this.doc.updateBlock(this.model, {
         show_type: mode,
       });
-    }*/
+    }
   }
 }
