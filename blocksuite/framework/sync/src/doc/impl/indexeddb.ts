@@ -42,7 +42,9 @@ export class IndexedDBDocSource implements DocSource {
 
   name = 'indexeddb';
 
-  constructor(readonly dbName: string = DEFAULT_DB_NAME) {}
+  constructor(readonly dbName: string = DEFAULT_DB_NAME) {
+    console.log("index db constructor")
+  }
 
   getDb() {
     if (this.dbPromise === null) {
@@ -59,12 +61,13 @@ export class IndexedDBDocSource implements DocSource {
   ): Promise<{ data: Uint8Array; state?: Uint8Array | undefined } | null> {
     //debugger
     //if()
+    console.log("index db pull start")
     const db = await this.getDb();
     const store = db
       .transaction('collection', 'readonly')
       .objectStore('collection');
     const data = await store.get(docId);
-
+    console.log("index db pull data",data)
     if (!data) {
       return null;
     }
@@ -73,13 +76,14 @@ export class IndexedDBDocSource implements DocSource {
     const update = mergeUpdates(updates.map(({ update }) => update));
 
     const diff = state.length ? diffUpdate(update, state) : update;
-
+    console.log("index db pull ",{ data: diff, state: encodeStateVectorFromUpdate(update) })
     return { data: diff, state: encodeStateVectorFromUpdate(update) };
   }
 
   async push(docId: string, data: Uint8Array): Promise<void> {
     //debugger
     //if(docId.startsWith('collection')) return
+
     const db = await this.getDb();
     const store = db
       .transaction('collection', 'readwrite')
@@ -98,6 +102,7 @@ export class IndexedDBDocSource implements DocSource {
       id: docId,
       updates: rows,
     });
+    console.log("index db push",docId,rows)
     this.channel.postMessage({
       type: 'db-updated',
       payload: { docId, update: data },
