@@ -18,6 +18,7 @@ import {
   type InlineEditor,
   type InlineRootElement,
 } from '@blocksuite/std/inline';
+import type { BlockModel } from '@blocksuite/store';
 import { signal } from '@preact/signals-core';
 import { html, nothing } from 'lit';
 import { choose } from 'lit/directives/choose.js';
@@ -127,7 +128,6 @@ export class MahdaadMentionMenuWidget extends WidgetComponent<RootBlockModel> {
             inlineEditor,
             primaryTriggerKey:this.config.triggerKeys[0],
             mode: IS_MOBILE ? 'mobile' : 'desktop',
-            //obj_type:item.type,
             model
           });
         })
@@ -169,9 +169,8 @@ export class MahdaadMentionMenuWidget extends WidgetComponent<RootBlockModel> {
     inlineEditor?: InlineEditor;
     primaryTriggerKey?: string;
     mode?: 'desktop' | 'mobile';
-    //obj_type: IObjectType;
     addTriggerKey?: boolean;
-    //model:BlockModel
+    model:BlockModel
   }) {
     const host = this.host;
     const {
@@ -225,7 +224,7 @@ export class MahdaadMentionMenuWidget extends WidgetComponent<RootBlockModel> {
       triggerKey: primaryTriggerKey,
       config: this.config,
       //obj_type,
-      //model:props.model,
+      model:props.model,
       close: () => {
         disposable.unsubscribe();
         this._inputRects$.value = [];

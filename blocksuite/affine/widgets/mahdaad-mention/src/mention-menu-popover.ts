@@ -3,7 +3,7 @@ import {
   getTextContentFromInlineRange,
 } from '@blocksuite/affine-rich-text';
 import { insertContent } from '@blocksuite/affine-rich-text';
-import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts'
+import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts';
 import {
   createKeydownObserver,
   getPopperPosition,
@@ -11,7 +11,7 @@ import {
 } from '@blocksuite/affine-shared/utils';
 import { SignalWatcher, WithDisposable } from '@blocksuite/global/lit';
 import { PropTypes, requiredProperties } from '@blocksuite/std';
-import {  ShadowlessElement } from '@blocksuite/std';
+import { ShadowlessElement } from '@blocksuite/std';
 import { GfxControllerIdentifier } from '@blocksuite/std/gfx';
 import { html } from 'lit';
 import { property, state } from 'lit/decorators.js';
@@ -39,7 +39,9 @@ export class MentionMenuPopover extends SignalWatcher(
     );
   };
 
-  private  readonly  clearTrigger=()=>{
+  private readonly clearTrigger = () => {
+    //console.log("11111",this.context.triggerKey + (this._query || ''),this.context.triggerKey,this._query)
+    // + (this._query || '')
     cleanSpecifiedTail(
       this.context.std,
       this.context.inlineEditor,
@@ -53,8 +55,7 @@ export class MentionMenuPopover extends SignalWatcher(
     } catch (e) {
       console.log(e);
     }*/
-  }
-
+  };
 
   private get _query() {
     return getTextContentFromInlineRange(
@@ -62,7 +63,6 @@ export class MentionMenuPopover extends SignalWatcher(
       this.context.startRange
     );
   }
-
 
   override connectedCallback() {
     super.connectedCallback();
@@ -78,7 +78,7 @@ export class MentionMenuPopover extends SignalWatcher(
       e.preventDefault();
     });*/
 
-    this._disposables.addFromEvent(this,'mousedown', e => {
+    this._disposables.addFromEvent(this, 'mousedown', e => {
       e.stopPropagation();
       //if (e.target === this) return;
       // We don't clear the query when clicking outside the popover
@@ -90,8 +90,6 @@ export class MentionMenuPopover extends SignalWatcher(
       // We don't clear the query when clicking outside the popover
       this.context.close();
     });
-
-
 
     const keydownObserverAbortController = new AbortController();
     this._disposables.add(() => keydownObserverAbortController.abort());
@@ -180,14 +178,82 @@ export class MentionMenuPopover extends SignalWatcher(
         });
 
     return html`<div class="object-picker-popover" style="${style}">
-       <mahdaad-user-picker
-            search-text="${this._query}"
-            .inline-editor="${this.context.inlineEditor}"
-            @select="${(event: CustomEvent) => {
-              this.clearTrigger()
+      <mahdaad-user-picker
+        search-text="${this._query}"
+        .inline-editor="${this.context.inlineEditor}"
+        @pointerdown=${(e: PointerEvent) => {
+          // Prevent event listeners being registered on the root document
+          // eg., radix-ui dialogs usePointerDownOutside hooks
+          e.stopPropagation();
+        }}
+        @select="${(event: CustomEvent) => {
+          //return;
+          this.context.close();
+          this.clearTrigger();
+
+          setTimeout(() => {
+            insertContent(
+              this.context.std,
+              this.context.model,
+              REFERENCE_NODE,
+              {
+                mention: {
+                  user_id: event.detail.user_id,
+                  id: event.detail.id,
+                },
+              }
+            );
+            /* const inlineEditor = this.context.inlineEditor
+                const inlineRange = inlineEditor.getInlineRange();
+                if (!inlineRange) return;
+
+                inlineEditor.insertText(inlineRange, REFERENCE_NODE, {
+                  mention: {
+                    user_id: event.detail.user_id,
+                    id: event.detail.id,
+                  },
+                });
+                inlineEditor.setInlineRange({
+                  index: inlineRange.index+1,
+                  length: 0,
+                });*/
+          }, 1);
+
+          /*return;
+              const inlineEditor = this.context.inlineEditor
+              if (!inlineEditor) return;
               this.context.inlineEditor
+                .waitForUpdate()
+                .then(() => {
+                  const inlineRange = inlineEditor.getInlineRange();
+                  if (!inlineRange) return;
+
+                  inlineEditor.insertText(inlineRange, REFERENCE_NODE, {
+                    mention: {
+                      user_id: event.detail.user_id,
+                      id: event.detail.id,
+                    },
+                  });
+                  inlineEditor.setInlineRange({
+                    index: inlineRange.index+1,
+                    length: 0,
+                  });
+                  //inlineEditor.deleteText({index:inlineRange.index-1,length:1})
+                })*/
+          //return
+          /*insertContent(this.context.std, this.context.model, REFERENCE_NODE, {
+                mention: {
+                  user_id: event.detail.user_id,
+                  id: event.detail.id,
+                },
+              });*/
+
+          //this.context.close();
+          //return
+          /*this.context.inlineEditor
               .waitForUpdate()
               .then(() => {
+                //console.log("11111",this.context)
                 //item.action(this.context)?.catch(console.error);
                 //this.abortController.abort();
                 insertContent(this.context.std, this.context.model, REFERENCE_NODE, {
@@ -198,13 +264,12 @@ export class MentionMenuPopover extends SignalWatcher(
                 });
                 this.context.close();
               })
-              .catch(console.error);
-
-            }}"
-            @close="${() => {
-              this.context.close();
-            }}"
-          ></mahdaad-user-picker>
+              .catch(console.error);*/
+        }}"
+        @close="${() => {
+          this.context.close();
+        }}"
+      ></mahdaad-user-picker>
     </div>`;
   }
 
@@ -244,9 +309,6 @@ export class MentionMenuPopover extends SignalWatcher(
     y: string;
   } | null = null;
 
-
-
   @property({ attribute: false })
   accessor context!: MahdaadMentionContext;
-
 }

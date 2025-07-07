@@ -1,19 +1,26 @@
 import { CaptionedBlockComponent } from '@blocksuite/affine-components/caption';
 import type { MahdaadCalloutBlockModel } from '@blocksuite/affine-model';
-import { transformModel } from '@blocksuite/affine-shared/utils'
-import { BlockModel } from '@blocksuite/store'
+import { transformModel } from '@blocksuite/affine-shared/utils';
+import { BlockModel } from '@blocksuite/store';
+import { effect } from '@preact/signals-core';
 import { html, type TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 // eslint-disable-next-line import-x/no-extraneous-dependencies
-import {pick} from 'lodash-es'
+import { pick } from 'lodash-es';
+
+import { checkNotEmptyNote } from '../../../../../../src/claytapEditor/utils/index.js';
 
 export class MahdaadCalloutBlockComponent extends CaptionedBlockComponent<MahdaadCalloutBlockModel> {
-
   @property({ attribute: false })
   accessor _isLoad: boolean = false;
 
   override connectedCallback() {
     super.connectedCallback();
+    this.disposables.add(
+      effect(() => {
+        checkNotEmptyNote(this.model, this.doc);
+      })
+    );
   }
 
   //todo ali ghasami
@@ -23,7 +30,6 @@ export class MahdaadCalloutBlockComponent extends CaptionedBlockComponent<Mahdaa
     //return  'Callout'
   }*/
 
-
   //todo ali ghasami for check empty important
   /*override async getUpdateComplete() {
     const result = await super.getUpdateComplete();
@@ -31,18 +37,18 @@ export class MahdaadCalloutBlockComponent extends CaptionedBlockComponent<Mahdaa
     return result;
   }*/
 
-  changeProps(event:CustomEvent) {
-    const data=event.detail[0]
-    if(data) {
-      const normal=pick(data,['type','icon','background'])
-      this.doc.updateBlock(this.model,{
-        ...normal
-      })
+  changeProps(event: CustomEvent) {
+    const data = event.detail[0];
+    if (data) {
+      const normal = pick(data, ['type', 'icon', 'background']);
+      this.doc.updateBlock(this.model, {
+        ...normal,
+      });
     }
   }
 
-  convertToType(blocksModel:BlockModel[],flavour:string,type:string) {
-    blocksModel.forEach(blockModel=>{
+  convertToType(blocksModel: BlockModel[], flavour: string, type: string) {
+    blocksModel.forEach(blockModel => {
       /*this.std.command
         .chain()
         .updateBlockType({
@@ -51,51 +57,49 @@ export class MahdaadCalloutBlockComponent extends CaptionedBlockComponent<Mahdaa
         })
         .run();*/
       //this.std.doc.updateBlock(blockModel,{flavour,type})
-      if(blockModel.flavour==flavour) {
-        this.doc.updateBlock(blockModel,{flavour,type})
-      }else{
-        transformModel(blockModel, flavour, {type});
+      if (blockModel.flavour == flavour) {
+        this.doc.updateBlock(blockModel, { flavour, type });
+      } else {
+        transformModel(blockModel, flavour, { type });
       }
-      this.convertToType(blockModel.children,flavour,type)
-    })
+      this.convertToType(blockModel.children, flavour, type);
+    });
   }
 
-
-  changeOptions(event:CustomEvent) {
-    const key=event.detail[0]
+  changeOptions(event: CustomEvent) {
+    const key = event.detail[0];
     switch (key) {
       case 'delete':
-        this.doc.deleteBlock(this.model)
-        break
+        this.doc.deleteBlock(this.model);
+        break;
       case 'text':
-        this.convertToType(this.model.children,'affine:paragraph','text')
-        break
+        this.convertToType(this.model.children, 'affine:paragraph', 'text');
+        break;
       case 'heading_1':
-        this.convertToType(this.model.children,'affine:paragraph','h1')
-        break
+        this.convertToType(this.model.children, 'affine:paragraph', 'h1');
+        break;
       case 'heading_2':
-        this.convertToType(this.model.children,'affine:paragraph','h2')
-        break
+        this.convertToType(this.model.children, 'affine:paragraph', 'h2');
+        break;
       case 'heading_3':
-        this.convertToType(this.model.children,'affine:paragraph','h3')
-        break
+        this.convertToType(this.model.children, 'affine:paragraph', 'h3');
+        break;
       case 'bullet_list':
-        this.convertToType(this.model.children,'affine:list', 'bulleted')
-        break
+        this.convertToType(this.model.children, 'affine:list', 'bulleted');
+        break;
       case 'number_list':
-        this.convertToType(this.model.children,'affine:list', 'numbered')
-        break
+        this.convertToType(this.model.children, 'affine:list', 'numbered');
+        break;
       case 'right_to_left':
-        this.doc.updateBlock(this.model, { dir: 'rtl'})
-        break
+        this.doc.updateBlock(this.model, { dir: 'rtl' });
+        break;
       case 'left_to_right':
         //todo ali ghasami for check
-        delete this.model.props.dir
-        this.doc.updateBlock(this.model, { })
-        break
+        delete this.model.props.dir;
+        this.doc.updateBlock(this.model, {});
+        break;
     }
   }
-
 
   override renderBlock(): TemplateResult<1> {
     return html`
@@ -123,5 +127,4 @@ export class MahdaadCalloutBlockComponent extends CaptionedBlockComponent<Mahdaa
       </div>
     `;
   }
-
 }

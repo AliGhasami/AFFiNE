@@ -1,6 +1,10 @@
 import type { NoteBlockModel } from '@blocksuite/affine-model';
 import { BlockComponent } from '@blocksuite/std';
+import { effect } from '@preact/signals-core';
 import { css, html } from 'lit';
+
+//todo ali ghasami for fix import
+import { checkNotEmptyNote } from '../../../../../../src/claytapEditor/utils/index.ts';
 
 export class NoteBlockComponent extends BlockComponent<NoteBlockModel> {
   static override styles = css`
@@ -14,6 +18,11 @@ export class NoteBlockComponent extends BlockComponent<NoteBlockModel> {
 
   override connectedCallback() {
     super.connectedCallback();
+    this.disposables.add(
+      effect(() => {
+        checkNotEmptyNote(this.model, this.doc);
+      })
+    );
   }
 
   override renderBlock() {
