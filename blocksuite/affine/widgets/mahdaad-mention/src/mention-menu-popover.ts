@@ -120,6 +120,11 @@ export class MentionMenuPopover extends SignalWatcher(
         next();
       },
       onInput: isComposition => {
+        setTimeout(() => {
+          // console.log("22222",this._query);
+          this._searchText = this._query;
+        }, 50);
+
         if (isComposition) {
           //this._updateLinkedDocGroup().catch(console.error);
         } else {
@@ -136,18 +141,41 @@ export class MentionMenuPopover extends SignalWatcher(
         }, 50);*/
       },
       onDelete: () => {
-        const curRange = this.context.inlineEditor.getInlineRange();
+        /* setTimeout(() => {
+          //console.log("22222",this._query);
+          this._searchText = this._query;
+        }, 50);*/
+        /* const curRange = this.context.inlineEditor.getInlineRange();
         if (!this.context.startRange || !curRange) {
           return;
         }
         if (curRange.index < this.context.startRange.index) {
           this.context.close();
-        }
-        const subscription =
+        }*/
+        /*const subscription =
           this.context.inlineEditor.slots.renderComplete.subscribe(() => {
             subscription.unsubscribe();
             //this._updateLinkedDocGroup().catch(console.error);
-          });
+          });*/
+
+        /*************************/
+        setTimeout(() => {
+          //console.log("22222",this._query);
+          this._searchText = this._query;
+        }, 50);
+        //const curIndex = inlineEditor.getInlineRange()?.index ?? 0;
+        const curRange = this.context.inlineEditor.getInlineRange();
+        if (!this.context.startRange || !curRange) {
+          return;
+        }
+        /*if (curIndex < this._startIndex) {
+          this.abortController.abort();
+        }*/
+        //console.log("1111",curRange.index);
+        //console.log("22222",this._startRange.index);
+        if (curRange.index - 1 < this.context.startRange.index) {
+          this._abort();
+        }
       },
       onConfirm: () => {
         /*this._flattenActionList[this._activatedItemIndex]
@@ -155,7 +183,8 @@ export class MentionMenuPopover extends SignalWatcher(
           ?.catch(console.error);*/
       },
       onAbort: () => {
-        this.context.close();
+        this._abort();
+        //this.context.close();
       },
     });
   }
@@ -176,21 +205,15 @@ export class MentionMenuPopover extends SignalWatcher(
       : styleMap({
           visibility: 'hidden',
         });
-
+    //console.log('{1111', this._query, this.context.triggerKey);
     return html`<div class="object-picker-popover" style="${style}">
       <mahdaad-user-picker
         search-text="${this._query}"
         .inline-editor="${this.context.inlineEditor}"
-        @pointerdown=${(e: PointerEvent) => {
-          // Prevent event listeners being registered on the root document
-          // eg., radix-ui dialogs usePointerDownOutside hooks
-          e.stopPropagation();
-        }}
         @select="${(event: CustomEvent) => {
           //return;
           this.context.close();
           this.clearTrigger();
-
           setTimeout(() => {
             insertContent(
               this.context.std,
@@ -267,7 +290,8 @@ export class MentionMenuPopover extends SignalWatcher(
               .catch(console.error);*/
         }}"
         @close="${() => {
-          this.context.close();
+          this._abort();
+          //this.context.close();
         }}"
       ></mahdaad-user-picker>
     </div>`;
@@ -311,4 +335,7 @@ export class MentionMenuPopover extends SignalWatcher(
 
   @property({ attribute: false })
   accessor context!: MahdaadMentionContext;
+
+  @state()
+  private accessor _searchText = '';
 }
