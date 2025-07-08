@@ -1,21 +1,24 @@
-import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts'
+import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts';
 import type { AffineTextAttributes } from '@blocksuite/affine-shared/types';
 import { SignalWatcher, WithDisposable } from '@blocksuite/global/lit';
-import { BLOCK_ID_ATTR, BlockComponent, type BlockStdScope } from '@blocksuite/std'
+import {
+  BLOCK_ID_ATTR,
+  BlockComponent,
+  type BlockStdScope,
+} from '@blocksuite/std';
 import { ShadowlessElement } from '@blocksuite/std';
 import {
   INLINE_ROOT_ATTR,
   type InlineRootElement,
   ZERO_WIDTH_FOR_EMPTY_LINE,
-} from '@blocksuite/std/inline'
+} from '@blocksuite/std/inline';
 import type { DeltaInsert } from '@blocksuite/store';
-import {  html } from 'lit';
+import { html } from 'lit';
 import { property } from 'lit/decorators.js';
 
 export class MahdaadLink extends SignalWatcher(
   WithDisposable(ShadowlessElement)
 ) {
-
   get link() {
     const link = this.delta.attributes?.link;
     if (!link) {
@@ -29,14 +32,12 @@ export class MahdaadLink extends SignalWatcher(
     return selfInlineRange;
   }
 
-
   get inlineEditor() {
     const inlineRoot = this.closest<InlineRootElement<AffineTextAttributes>>(
       `[${INLINE_ROOT_ATTR}]`
     );
     return inlineRoot?.inlineEditor;
   }
-
 
   /*get currentText() {
     return  "111111"
@@ -52,21 +53,20 @@ export class MahdaadLink extends SignalWatcher(
     return selfInlineRange;
   }*/
 
- /* get currentLink() {
+  /* get currentLink() {
     return  "222222"
     const link = this.inlineEditor?.getFormat(this.selfInlineRange).link;
     //assertExists(link);
     return link;
   }*/
 
-  get url(){
-    return this.delta.attributes.link
+  get url() {
+    return this.delta.attributes.link;
   }
 
-  get title(){
-    return this.delta.insert
+  get title() {
+    return this.delta.insert;
   }
-
 
   get block() {
     const block = this.inlineEditor.rootElement.closest<BlockComponent>(
@@ -107,7 +107,7 @@ export class MahdaadLink extends SignalWatcher(
     const block = this.block;
     if (!block) return;
     const url = this.url;
-    const title =  this.title  ; //this.currentText
+    const title = this.title; //this.currentText
     const props = {
       url,
       title: title === url ? '' : title,
@@ -127,9 +127,7 @@ export class MahdaadLink extends SignalWatcher(
     }
   }
 
-
   override render() {
-
     return html`
       <mahdaad-link-inline
         url="${this.url}"
@@ -138,7 +136,8 @@ export class MahdaadLink extends SignalWatcher(
         @removeLink="${this._removeLink}"
         @generateWeblink="${this.generateWeblink}"
         @changeViewMode="${(event: CustomEvent) => {
-          const mode = event.detail;
+          //debugger;
+          const mode = event.detail[0];
           switch (mode) {
             case 'card':
               this._convertToCardView('card');
@@ -149,10 +148,9 @@ export class MahdaadLink extends SignalWatcher(
           }
         }}"
       >
-      <v-text .str=${this.title}></v-text>
+        <v-text .str=${this.title}></v-text>
       </mahdaad-link-inline>
     `;
-
   }
 
   @property({ type: Object })

@@ -71,6 +71,7 @@
     "@blocksuite/mahdaad-multi-column-block": "workspace:*",
     "@blocksuite/mahdaad-object-block": "workspace:*",
     "@blocksuite/mahdaad-table-of-content-block": "workspace:*",
+    "@blocksuite/mahdaad-weblink-block": "workspace:*",
     "@blocksuite/mahdaad-widget-slash-menu": "workspace:*",
     "@blocksuite/mahdaad-widget-toolbar": "workspace:*",
     "@blocksuite/std": "workspace:*",

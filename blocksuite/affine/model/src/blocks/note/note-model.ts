@@ -73,7 +73,7 @@ export const NoteBlockSchema = defineBlockSchema({
   metadata: {
     version: 1,
     role: 'hub',
-    parent: ['@root','affine:note','affine:mahdaad-multi-column'],
+    parent: ['@root', 'affine:note', 'affine:mahdaad-multi-column'],
     children: [
       '@content',
       'affine:database',
@@ -81,6 +81,7 @@ export const NoteBlockSchema = defineBlockSchema({
       'affine:callout',
       'affine:mahdaad-callout',
       'affine:mahdaad-multi-column',
+      'affine:mahdaad-weblink-block',
       'affine:note',
     ],
   },

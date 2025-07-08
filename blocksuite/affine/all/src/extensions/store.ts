@@ -28,13 +28,14 @@ import {
   MahdaadMultiColumnBlockSchemaExtension,
   MahdaadObjectBlockSchemaExtension,
   MahdaadTableOfContentBlockSchemaExtension,
+  MahdaadWeblinkBlockSchemaExtension,
   NoteBlockSchemaExtension,
   ParagraphBlockSchemaExtension,
   RootBlockSchemaExtension,
   SurfaceRefBlockSchemaExtension,
   TableBlockSchemaExtension,
   TranscriptionBlockSchemaExtension,
-} from '@blocksuite/affine-model'
+} from '@blocksuite/affine-model';
 import {
   HighlightSelectionExtension,
   ImageSelectionExtension,
@@ -94,6 +95,7 @@ export const StoreExtensions: ExtensionType[] = [
   MahdaadCalloutBlockSchemaExtension,
   MahdaadMultiColumnBlockSchemaExtension,
   MahdaadTableOfContentBlockSchemaExtension,
+  MahdaadWeblinkBlockSchemaExtension,
   BlockSelectionExtension,
   TextSelectionExtension,
   SurfaceSelectionExtension,

@@ -24,12 +24,14 @@ import {
   MahdaadMultiColumnBlockSchema,
   MahdaadObjectBlockSchema,
   MahdaadTableOfContentBlockSchema,
+  MahdaadWeblinkBlockSchema,
   NoteBlockSchema,
   ParagraphBlockSchema,
   RootBlockSchema,
   SurfaceRefBlockSchema,
   TableBlockSchema,
-  TranscriptionBlockSchema} from '@blocksuite/affine-model';
+  TranscriptionBlockSchema,
+} from '@blocksuite/affine-model';
 import type { BlockSchema } from '@blocksuite/store';
 import type { z } from 'zod';
 
@@ -64,5 +66,6 @@ export const AffineSchemas: z.infer<typeof BlockSchema>[] = [
   MahdaadObjectBlockSchema,
   MahdaadCalloutBlockSchema,
   MahdaadMultiColumnBlockSchema,
-  MahdaadTableOfContentBlockSchema
+  MahdaadTableOfContentBlockSchema,
+  MahdaadWeblinkBlockSchema,
 ];

@@ -59,9 +59,10 @@ import {
   FontLoaderService,
 } from '@blocksuite/affine-shared/services';
 import { MahdaadCalloutBlockSpec } from '@blocksuite/mahdaad-callout-block';
-import { MahdaadMultiColumnBlockSpec  } from '@blocksuite/mahdaad-multi-column-block';
+import { MahdaadMultiColumnBlockSpec } from '@blocksuite/mahdaad-multi-column-block';
 import { MahdaadObjectBlockSpec } from '@blocksuite/mahdaad-object-block';
 import { MahdaadTableOfContentBlockSpec } from '@blocksuite/mahdaad-table-of-content-block';
+import { MahdaadWeblinkBlockSpec } from '@blocksuite/mahdaad-weblink-block';
 import type { ExtensionType } from '@blocksuite/store';
 
 const elementToPlainTextAdapterMatchers = [
@@ -106,6 +107,7 @@ export const CommonBlockSpecs: ExtensionType[] = [
   MahdaadCalloutBlockSpec,
   MahdaadMultiColumnBlockSpec,
   MahdaadTableOfContentBlockSpec,
+  MahdaadWeblinkBlockSpec,
   elementToPlainTextAdapterMatchers,
   elementToMarkdownAdapterMatchers,
 ].flat();
