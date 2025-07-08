@@ -13,3 +13,16 @@ export const mindMapSeniorTool = SeniorToolExtension(
     };
   }
 );
+
+/*export const textSeniorTool = SeniorToolExtension(
+  'text',
+  ({ block, toolbarContainer }) => {
+    return {
+      name: 'Text',
+      content: html`<edgeless-mindmap-tool-button
+        .edgeless=${block}
+        .toolbarContainer=${toolbarContainer}
+      ></edgeless-mindmap-tool-button>`,
+    };
+  }
+);*/

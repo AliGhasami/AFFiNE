@@ -131,7 +131,7 @@ export class EdgelessShapeMenu extends SignalWatcher(
           ${
             // TODO(@fundon): add a flag
             when(
-              false,
+              true,
               () => html`
                 <div class="shape-style-container">
                   <edgeless-tool-icon-button

@@ -4,4 +4,5 @@ export * from './edgeless-text-editor';
 export * from './element-renderer';
 export * from './tool';
 export * from './toolbar';
+export * from './toolbar/senior-tool';
 export * from './view';

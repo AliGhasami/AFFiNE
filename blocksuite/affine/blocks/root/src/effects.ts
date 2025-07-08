@@ -28,7 +28,9 @@ import {
 } from './edgeless/components/rects/edgeless-selected-rect.js';
 import { EdgelessSlideMenu } from './edgeless/components/toolbar/common/slide-menu.js';
 import { ToolbarArrowUpIcon } from './edgeless/components/toolbar/common/toolbar-arrow-up-icon.js';
-import { EdgelessDefaultToolButton } from './edgeless/components/toolbar/default/default-tool-button.js';
+//import { EdgelessDefaultToolButton } from './edgeless/components/toolbar/default/default-tool-button.js';
+import { MahdaadEdgelessDefaultToolButton } from './edgeless/components/toolbar/default/mahdaad-default-tool-button';
+import { MahdaadEdgelessPanToolButton } from './edgeless/components/toolbar/default/mahdaad-pan-tool-button';
 import { EdgelessLinkToolButton } from './edgeless/components/toolbar/link/link-tool-button.js';
 import {
   EdgelessRootBlockComponent,
@@ -40,12 +42,18 @@ import {
   EDGELESS_NAVIGATOR_BLACK_BACKGROUND_WIDGET,
   EdgelessNavigatorBlackBackgroundWidget,
 } from './widgets/edgeless-navigator-bg/index.js';
-import {
+/*import {
   AFFINE_EDGELESS_ZOOM_TOOLBAR_WIDGET,
   AffineEdgelessZoomToolbarWidget,
-} from './widgets/edgeless-zoom-toolbar/index.js';
-import { ZoomBarToggleButton } from './widgets/edgeless-zoom-toolbar/zoom-bar-toggle-button.js';
-import { EdgelessZoomToolbar } from './widgets/edgeless-zoom-toolbar/zoom-toolbar.js';
+} from './widgets/edgeless-zoom-toolbar/index.js';*/
+import {
+  Mahdaad_EDGELESS_ZOOM_TOOLBAR_WIDGET,
+  MahdaadEdgelessZoomToolbarWidget,
+} from './widgets/mahdaad-edgeless-zoom-toolbar/index.js';
+//import { ZoomBarToggleButton } from './widgets/edgeless-zoom-toolbar/zoom-bar-toggle-button.js';
+import { ZoomBarToggleButton } from './widgets/mahdaad-edgeless-zoom-toolbar/zoom-bar-toggle-button.js';
+//import { EdgelessZoomToolbar } from './widgets/edgeless-zoom-toolbar/zoom-toolbar.js';
+import { EdgelessZoomToolbar } from './widgets/mahdaad-edgeless-zoom-toolbar/zoom-toolbar.js';
 import {
   AFFINE_PAGE_DRAGGING_AREA_WIDGET,
   AffinePageDraggingAreaWidget,
@@ -62,7 +70,6 @@ export function effects() {
   widgetEdgelessToolbarEffects();
   widgetMahdaadObjectPickerEffects();
   widgetMahdaadMentionEffects();
-
 
   // Register components by category
   registerRootComponents();
@@ -102,17 +109,30 @@ function registerWidgets() {
     AFFINE_VIEWPORT_OVERLAY_WIDGET,
     AffineViewportOverlayWidget
   );
-  customElements.define(
+  /*customElements.define(
     AFFINE_EDGELESS_ZOOM_TOOLBAR_WIDGET,
     AffineEdgelessZoomToolbarWidget
+  );*/
+  customElements.define(
+    Mahdaad_EDGELESS_ZOOM_TOOLBAR_WIDGET,
+    MahdaadEdgelessZoomToolbarWidget
   );
 }
 
 function registerEdgelessToolbarComponents() {
   // Tool buttons
-  customElements.define(
+  /*customElements.define(
     'edgeless-default-tool-button',
     EdgelessDefaultToolButton
+  );*/
+  customElements.define(
+    'edgeless-default-tool-button',
+    MahdaadEdgelessDefaultToolButton
+  );
+  //customElements.define('edgeless-pan-tool-button', EdgelessPanToolButton);
+  customElements.define(
+    'edgeless-pan-tool-button',
+    MahdaadEdgelessPanToolButton
   );
   customElements.define('edgeless-link-tool-button', EdgelessLinkToolButton);
 
@@ -167,12 +187,14 @@ declare global {
     'edgeless-selected-rect': EdgelessSelectedRectWidget;
     'edgeless-slide-menu': EdgelessSlideMenu;
     'toolbar-arrow-up-icon': ToolbarArrowUpIcon;
-    'edgeless-default-tool-button': EdgelessDefaultToolButton;
+    'edgeless-default-tool-button': MahdaadEdgelessDefaultToolButton;
+    'edgeless-pan-tool-button': MahdaadEdgelessPanToolButton;
     'edgeless-link-tool-button': EdgelessLinkToolButton;
     'affine-page-root': PageRootBlockComponent;
     'zoom-bar-toggle-button': ZoomBarToggleButton;
     'edgeless-zoom-toolbar': EdgelessZoomToolbar;
 
-    [AFFINE_EDGELESS_ZOOM_TOOLBAR_WIDGET]: AffineEdgelessZoomToolbarWidget;
+    //[AFFINE_EDGELESS_ZOOM_TOOLBAR_WIDGET]: AffineEdgelessZoomToolbarWidget;
+    [Mahdaad_EDGELESS_ZOOM_TOOLBAR_WIDGET]: MahdaadEdgelessZoomToolbarWidget;
   }
 }

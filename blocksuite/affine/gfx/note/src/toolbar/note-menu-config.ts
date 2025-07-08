@@ -109,14 +109,15 @@ const TEXT_ITEMS = [
     icon: Heading6Icon,
     tooltip: 'Drag/Click to insert Heading 6',
   },
-  {
+  /** disable for mahdaad */
+  /*{
     flavour: 'affine:code',
     type: 'code',
     name: 'Code Block',
     description: 'Capture a code snippet.',
     icon: CodeBlockIcon,
     tooltip: 'Drag/Click to insert Code Block',
-  },
+  },*/
   {
     flavour: 'affine:paragraph',
     type: 'quote',

@@ -2,9 +2,10 @@ import { EdgelessShapePanel } from './components/shape-panel';
 import { EdgelessShapeStylePanel } from './components/shape-style-panel';
 import {
   EdgelessShapeMenu,
-  EdgelessShapeToolButton,
+  //EdgelessShapeToolButton,
   EdgelessShapeToolElement,
   EdgelessToolbarShapeDraggable,
+  MahdaadEdgelessShapeToolButton,
 } from './draggable';
 import { EdgelessShapeTextEditor } from './text/edgeless-shape-text-editor';
 
@@ -15,7 +16,11 @@ export function effects() {
     'edgeless-shape-tool-element',
     EdgelessShapeToolElement
   );
-  customElements.define('edgeless-shape-tool-button', EdgelessShapeToolButton);
+  //customElements.define('edgeless-shape-tool-button', EdgelessShapeToolButton);
+  customElements.define(
+    'edgeless-shape-tool-button',
+    MahdaadEdgelessShapeToolButton
+  );
   customElements.define(
     'edgeless-toolbar-shape-draggable',
     EdgelessToolbarShapeDraggable
@@ -30,7 +35,8 @@ declare global {
     'edgeless-shape-menu': EdgelessShapeMenu;
     'edgeless-shape-tool-element': EdgelessShapeToolElement;
     'edgeless-toolbar-shape-draggable': EdgelessToolbarShapeDraggable;
-    'edgeless-shape-tool-button': EdgelessShapeToolButton;
+    //'edgeless-shape-tool-button': EdgelessShapeToolButton;
+    'edgeless-shape-tool-button': MahdaadEdgelessShapeToolButton;
     'edgeless-shape-panel': EdgelessShapePanel;
     'edgeless-shape-style-panel': EdgelessShapeStylePanel;
   }

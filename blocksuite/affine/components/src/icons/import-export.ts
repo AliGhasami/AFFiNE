@@ -108,3 +108,92 @@ export const ImportIcon = html`
     />
   </svg>
 `;
+
+export const NoteIcon = html`
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    width="24"
+    height="24"
+    style="user-select:none;flex-shrink:0;"
+  >
+    <path
+      fill="currentColor"
+      fill-rule="evenodd"
+      d="M7 3.25A2.75 2.75 0 0 0 4.25 6v12A2.75 2.75 0 0 0 7 20.75h10A2.75 2.75 0 0 0 19.75 18V6A2.75 2.75 0 0 0 17 3.25zM5.75 6c0-.69.56-1.25 1.25-1.25h10c.69 0 1.25.56 1.25 1.25v12c0 .69-.56 1.25-1.25 1.25H7c-.69 0-1.25-.56-1.25-1.25zM9 7.25a.75.75 0 0 0 0 1.5h3.5a.75.75 0 0 0 0-1.5zm-.75 4.25a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75M9 14.25a.75.75 0 0 0 0 1.5h5a.75.75 0 0 0 0-1.5z"
+      clip-rule="evenodd"
+    ></path>
+  </svg>
+`;
+
+export const PenTablerIcon = html`
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+  >
+    <g
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.5"
+    >
+      <path d="M3 21v-4a4 4 0 1 1 4 4z"></path>
+      <path d="M21 3A16 16 0 0 0 8.2 13.2M21 3a16 16 0 0 1-10.2 12.8"></path>
+      <path d="M10.6 9a9 9 0 0 1 4.4 4.4"></path>
+    </g>
+  </svg>
+`;
+
+export const ShapeTablerIcon = html`<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+>
+  <path
+    fill="none"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="1.5"
+    d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+  />
+</svg>`;
+
+export const MapTablerIcon = html`<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+>
+  <g
+    fill="none"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="1.5"
+  >
+    <path d="M3 7h5l3.5 5H21M3 17h5l3.495-5" />
+    <path d="m18 15l3-3l-3-3" />
+  </g>
+</svg>`;
+
+export const TablerTextIcon = html`<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+>
+  <path
+    fill="none"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="1.5"
+    d="M4 8V6a2 2 0 0 1 2-2h2M4 16v2a2 2 0 0 0 2 2h2m8-16h2a2 2 0 0 1 2 2v2m-4 12h2a2 2 0 0 0 2-2v-2m-8 0V9M9 9h6"
+  />
+</svg>`;

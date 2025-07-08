@@ -6,7 +6,17 @@ export const penSeniorTool = SeniorToolExtension('pen', ({ block }) => {
     name: 'Pen',
     content: html`<div class="pen-and-eraser">
       <edgeless-pen-tool-button .edgeless=${block}></edgeless-pen-tool-button>
+      <!-- <edgeless-eraser-tool-button
+        .edgeless=${block}
+      ></edgeless-eraser-tool-button> -->
+    </div> `,
+  };
+});
 
+export const eraserSeniorTool = SeniorToolExtension('eraser', ({ block }) => {
+  return {
+    name: 'Eraser',
+    content: html`<div>
       <edgeless-eraser-tool-button
         .edgeless=${block}
       ></edgeless-eraser-tool-button>
