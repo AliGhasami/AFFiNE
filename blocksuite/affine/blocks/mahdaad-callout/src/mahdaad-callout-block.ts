@@ -8,7 +8,7 @@ import { property } from 'lit/decorators.js';
 // eslint-disable-next-line import-x/no-extraneous-dependencies
 import { pick } from 'lodash-es';
 
-import { checkNotEmptyNote } from '../../../../../../src/claytapEditor/utils/index.js';
+//import { checkNotEmptyNote } from '../../../../../../src/claytapEditor/utils/index.js';
 
 export class MahdaadCalloutBlockComponent extends CaptionedBlockComponent<MahdaadCalloutBlockModel> {
   @property({ attribute: false })
@@ -18,7 +18,7 @@ export class MahdaadCalloutBlockComponent extends CaptionedBlockComponent<Mahdaa
     super.connectedCallback();
     this.disposables.add(
       effect(() => {
-        checkNotEmptyNote(this.model, this.doc);
+        //checkNotEmptyNote(this.model, this.doc);
       })
     );
   }
