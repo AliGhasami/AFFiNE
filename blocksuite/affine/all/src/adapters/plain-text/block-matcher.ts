@@ -1,5 +1,5 @@
 import { BookmarkBlockPlainTextAdapterExtension } from '@blocksuite/affine-block-bookmark';
-import { CodeBlockPlainTextAdapterExtension } from '@blocksuite/affine-block-code';
+//import { CodeBlockPlainTextAdapterExtension } from '@blocksuite/affine-block-code';
 import { DatabaseBlockPlainTextAdapterExtension } from '@blocksuite/affine-block-database';
 import { DividerBlockPlainTextAdapterExtension } from '@blocksuite/affine-block-divider';
 import {
@@ -20,7 +20,7 @@ export const defaultBlockPlainTextAdapterMatchers: ExtensionType[] = [
   ParagraphBlockPlainTextAdapterExtension,
   ListBlockPlainTextAdapterExtension,
   DividerBlockPlainTextAdapterExtension,
-  CodeBlockPlainTextAdapterExtension,
+  //CodeBlockPlainTextAdapterExtension,
   BookmarkBlockPlainTextAdapterExtension,
   EmbedFigmaBlockPlainTextAdapterExtension,
   EmbedGithubBlockPlainTextAdapterExtension,

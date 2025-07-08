@@ -1,5 +1,5 @@
 import { BookmarkBlockHtmlAdapterExtension } from '@blocksuite/affine-block-bookmark';
-import { CodeBlockHtmlAdapterExtension } from '@blocksuite/affine-block-code';
+//import { CodeBlockHtmlAdapterExtension } from '@blocksuite/affine-block-code';
 import { DatabaseBlockHtmlAdapterExtension } from '@blocksuite/affine-block-database';
 import { DividerBlockHtmlAdapterExtension } from '@blocksuite/affine-block-divider';
 import {
@@ -20,7 +20,7 @@ import { TableBlockHtmlAdapterExtension } from '@blocksuite/affine-block-table';
 export const defaultBlockHtmlAdapterMatchers = [
   ListBlockHtmlAdapterExtension,
   ParagraphBlockHtmlAdapterExtension,
-  CodeBlockHtmlAdapterExtension,
+  //CodeBlockHtmlAdapterExtension,
   DividerBlockHtmlAdapterExtension,
   ImageBlockHtmlAdapterExtension,
   RootBlockHtmlAdapterExtension,

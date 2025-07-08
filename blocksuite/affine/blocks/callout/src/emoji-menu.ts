@@ -1,5 +1,5 @@
 import { WithDisposable } from '@blocksuite/global/lit';
-import data from '@emoji-mart/data';
+//import data from '@emoji-mart/data';
 import { Picker } from 'emoji-mart';
 import { html, LitElement, type PropertyValues } from 'lit';
 import { property, query } from 'lit/decorators.js';
@@ -9,7 +9,7 @@ export class EmojiMenu extends WithDisposable(LitElement) {
     const result = super.firstUpdated(props);
 
     const picker = new Picker({
-      data,
+      data: [],
       onEmojiSelect: this.onEmojiSelect,
       autoFocus: true,
       theme: this.theme,

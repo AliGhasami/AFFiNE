@@ -1,7 +1,7 @@
 import { effects as blockAttachmentEffects } from '@blocksuite/affine-block-attachment/effects';
 import { effects as blockBookmarkEffects } from '@blocksuite/affine-block-bookmark/effects';
-import { effects as blockCalloutEffects } from '@blocksuite/affine-block-callout/effects';
-import { effects as blockCodeEffects } from '@blocksuite/affine-block-code/effects';
+//import { effects as blockCalloutEffects } from '@blocksuite/affine-block-callout/effects';
+//import { effects as blockCodeEffects } from '@blocksuite/affine-block-code/effects';
 import { effects as blockDataViewEffects } from '@blocksuite/affine-block-data-view/effects';
 import { effects as blockDatabaseEffects } from '@blocksuite/affine-block-database/effects';
 import { effects as blockDividerEffects } from '@blocksuite/affine-block-divider/effects';
@@ -95,7 +95,7 @@ export declare const _GLOBAL_:
   | typeof blockEdgelessTextEffects
   | typeof blockDividerEffects
   | typeof blockDataViewEffects
-  | typeof blockCodeEffects
+  //| typeof blockCodeEffects
   | typeof blockTableEffects
   | typeof blockRootEffects
   | typeof blockCalloutEffects
@@ -145,12 +145,12 @@ export function effects() {
 
   blockNoteEffects();
   blockAttachmentEffects();
-  blockBookmarkEffects();
-  blockFrameEffects();
+  //blockBookmarkEffects();
+  //blockFrameEffects();
   blockListEffects();
   blockParagraphEffects();
   blockEmbedEffects();
-  blockSurfaceEffects();
+  //blockSurfaceEffects();
   blockImageEffects();
   blockDatabaseEffects();
   blockSurfaceRefEffects();
@@ -158,10 +158,10 @@ export function effects() {
   blockEdgelessTextEffects();
   blockDividerEffects();
   blockDataViewEffects();
-  blockCodeEffects();
+  //blockCodeEffects();
   blockTableEffects();
   blockRootEffects();
-  blockCalloutEffects();
+  //blockCalloutEffects();
 
   componentCaptionEffects();
   componentContextMenuEffects();

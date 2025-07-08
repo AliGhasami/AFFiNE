@@ -1,7 +1,7 @@
 import { AttachmentBlockSpec } from '@blocksuite/affine-block-attachment';
 import { BookmarkBlockSpec } from '@blocksuite/affine-block-bookmark';
-import { CalloutBlockSpec } from '@blocksuite/affine-block-callout';
-import { CodeBlockSpec } from '@blocksuite/affine-block-code';
+//import { CalloutBlockSpec } from '@blocksuite/affine-block-callout';
+//import { CodeBlockSpec } from '@blocksuite/affine-block-code';
 import { DataViewBlockSpec } from '@blocksuite/affine-block-data-view';
 import { DatabaseBlockSpec } from '@blocksuite/affine-block-database';
 import { DividerBlockSpec } from '@blocksuite/affine-block-divider';
@@ -96,12 +96,12 @@ export const CommonBlockSpecs: ExtensionType[] = [
   BookmarkBlockSpec,
   EmbedExtensions,
   AttachmentBlockSpec,
-  CodeBlockSpec,
+  //CodeBlockSpec,
   ImageBlockSpec,
   ParagraphBlockSpec,
   DefaultOpenDocExtension,
   FontLoaderService,
-  CalloutBlockSpec,
+  //CalloutBlockSpec,
   FrameBlockSpec,
   MahdaadObjectBlockSpec,
   MahdaadCalloutBlockSpec,

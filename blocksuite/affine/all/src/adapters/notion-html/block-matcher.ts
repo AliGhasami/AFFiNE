@@ -1,6 +1,6 @@
 import { AttachmentBlockNotionHtmlAdapterExtension } from '@blocksuite/affine-block-attachment';
 import { BookmarkBlockNotionHtmlAdapterExtension } from '@blocksuite/affine-block-bookmark';
-import { CodeBlockNotionHtmlAdapterExtension } from '@blocksuite/affine-block-code';
+//import { CodeBlockNotionHtmlAdapterExtension } from '@blocksuite/affine-block-code';
 import { DatabaseBlockNotionHtmlAdapterExtension } from '@blocksuite/affine-block-database';
 import { DividerBlockNotionHtmlAdapterExtension } from '@blocksuite/affine-block-divider';
 import {
@@ -19,7 +19,7 @@ import type { ExtensionType } from '@blocksuite/store';
 export const defaultBlockNotionHtmlAdapterMatchers: ExtensionType[] = [
   ListBlockNotionHtmlAdapterExtension,
   ParagraphBlockNotionHtmlAdapterExtension,
-  CodeBlockNotionHtmlAdapterExtension,
+  //CodeBlockNotionHtmlAdapterExtension,
   DividerBlockNotionHtmlAdapterExtension,
   ImageBlockNotionHtmlAdapterExtension,
   RootBlockNotionHtmlAdapterExtension,

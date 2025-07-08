@@ -1,5 +1,5 @@
 import { BookmarkBlockMarkdownAdapterExtension } from '@blocksuite/affine-block-bookmark';
-import { CodeBlockMarkdownAdapterExtension } from '@blocksuite/affine-block-code';
+//import { CodeBlockMarkdownAdapterExtension } from '@blocksuite/affine-block-code';
 import { DatabaseBlockMarkdownAdapterExtension } from '@blocksuite/affine-block-database';
 import { DividerBlockMarkdownAdapterExtension } from '@blocksuite/affine-block-divider';
 import {
@@ -32,7 +32,7 @@ export const defaultBlockMarkdownAdapterMatchers = [
   ListBlockMarkdownAdapterExtension,
   ParagraphBlockMarkdownAdapterExtension,
   BookmarkBlockMarkdownAdapterExtension,
-  CodeBlockMarkdownAdapterExtension,
+  //CodeBlockMarkdownAdapterExtension,
   DatabaseBlockMarkdownAdapterExtension,
   TableBlockMarkdownAdapterExtension,
   DividerBlockMarkdownAdapterExtension,

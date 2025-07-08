@@ -1,6 +1,6 @@
 import { PAGE_HEADER_HEIGHT } from '@blocksuite/affine-shared/consts';
 import { WithDisposable } from '@blocksuite/global/lit';
-import { DoneIcon, SearchIcon } from '@blocksuite/icons/lit';
+//import { DoneIcon, SearchIcon } from '@blocksuite/icons/lit';
 import { autoPlacement, offset, type Placement, size } from '@floating-ui/dom';
 import { html, LitElement, nothing } from 'lit';
 import { property, query, state } from 'lit/decorators.js';

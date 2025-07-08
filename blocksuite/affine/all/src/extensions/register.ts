@@ -16,7 +16,7 @@ export function registerStoreSpecs() {
 
 export function registerBlockSpecs() {
   SpecProvider._.addSpec('page', PageEditorBlockSpecs);
-  SpecProvider._.addSpec('edgeless', EdgelessEditorBlockSpecs);
+  //SpecProvider._.addSpec('edgeless', EdgelessEditorBlockSpecs);
   SpecProvider._.addSpec('preview:page', PreviewPageEditorBlockSpecs);
-  SpecProvider._.addSpec('preview:edgeless', PreviewEdgelessEditorBlockSpecs);
+  //SpecProvider._.addSpec('preview:edgeless', PreviewEdgelessEditorBlockSpecs);
 }

@@ -6,7 +6,7 @@ export function effects() {
   // editor host
   customElements.define('editor-host', EditorHost);
   // gfx
-  customElements.define('gfx-viewport', GfxViewportElement);
+  //customElements.define('gfx-viewport', GfxViewportElement);
   // inline
   customElements.define('v-element', VElement);
   customElements.define('v-line', VLine);
