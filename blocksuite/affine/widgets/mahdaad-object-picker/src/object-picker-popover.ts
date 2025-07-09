@@ -1,9 +1,12 @@
+import { AffineSchemas } from '@blocksuite/affine/schemas';
+import { Schema, Transformer } from '@blocksuite/affine/store';
+import { TestWorkspace } from '@blocksuite/affine/store/test';
 import {
   cleanSpecifiedTail,
   getInlineEditorByModel,
   getTextContentFromInlineRange,
 } from '@blocksuite/affine-rich-text';
-import { replaceIdMiddleware } from '@blocksuite/affine-shared/adapters'
+import { replaceIdMiddleware } from '@blocksuite/affine-shared/adapters';
 import {
   createKeydownObserver,
   getPopperPosition,
@@ -11,7 +14,7 @@ import {
 } from '@blocksuite/affine-shared/utils';
 import { SignalWatcher, WithDisposable } from '@blocksuite/global/lit';
 import { PropTypes, requiredProperties } from '@blocksuite/std';
-import {  ShadowlessElement } from '@blocksuite/std';
+import { ShadowlessElement } from '@blocksuite/std';
 import { GfxControllerIdentifier } from '@blocksuite/std/gfx';
 import type { InlineEditor } from '@blocksuite/std/inline';
 import type { BlockModel } from '@blocksuite/store';
@@ -21,9 +24,8 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { get } from 'lodash-es';
 import throttle from 'lodash-es/throttle';
 
-import type { ObjectLink } from '../../../../../../src/claytapEditor/types'
+import type { ObjectLink } from '../../../../../../src/claytapEditor/types';
 import type { ObjectPickerContext } from './config.js';
-
 @requiredProperties({
   context: PropTypes.object,
 })
@@ -43,7 +45,7 @@ export class ObjectPickerPopover extends SignalWatcher(
     );
   };
 
-  private  readonly  clearTrigger=()=>{
+  private readonly clearTrigger = () => {
     cleanSpecifiedTail(
       this.context.std,
       this.context.inlineEditor,
@@ -57,13 +59,17 @@ export class ObjectPickerPopover extends SignalWatcher(
     } catch (e) {
       console.log(e);
     }*/
-  }
+  };
 
   //todo ali ghasami for migrate to event bus
-  addObjectLink(model: BlockModel, lnk: ObjectLink,deleteEmptyBlock: boolean= true) {
+  addObjectLink(
+    model: BlockModel,
+    lnk: ObjectLink,
+    deleteEmptyBlock: boolean = true
+  ) {
     //debugger
     //return;
-   /* if (!model.doc.getSchemaByFlavour('affine:mahdaad-object')) {
+    /* if (!model.doc.getSchemaByFlavour('affine:mahdaad-object')) {
       return;
     }*/
 
@@ -90,19 +96,18 @@ export class ObjectPickerPopover extends SignalWatcher(
         }*/
     //return;
 
-    if(deleteEmptyBlock)
-    {
-      setTimeout(()=>{
+    if (deleteEmptyBlock) {
+      setTimeout(() => {
         if (model.text?.length == 0) {
           model.doc.deleteBlock(this.context.model);
         }
-      })
+      });
     }
 
     const next = model.doc.getNext(temp[0]);
     //console.log("cccc",next);
 
-    if (next &&  this.context.std) {
+    if (next && this.context.std) {
       //console.log("host",this.editorHost);
       const inline: InlineEditor | null = getInlineEditorByModel(
         this.context.std,
@@ -112,13 +117,11 @@ export class ObjectPickerPopover extends SignalWatcher(
         inline.focusEnd();
       }
     }
-    this.context.close()
+    this.context.close();
     /*if (this.abortController) {
       this.abortController.abort();
     }*/
   }
-
-
 
   private get _query() {
     return getTextContentFromInlineRange(
@@ -126,7 +129,6 @@ export class ObjectPickerPopover extends SignalWatcher(
       this.context.startRange
     );
   }
-
 
   override connectedCallback() {
     super.connectedCallback();
@@ -142,7 +144,7 @@ export class ObjectPickerPopover extends SignalWatcher(
       e.preventDefault();
     });*/
 
-    this._disposables.addFromEvent(this,'mousedown', e => {
+    this._disposables.addFromEvent(this, 'mousedown', e => {
       e.stopPropagation();
       //if (e.target === this) return;
       // We don't clear the query when clicking outside the popover
@@ -154,8 +156,6 @@ export class ObjectPickerPopover extends SignalWatcher(
       // We don't clear the query when clicking outside the popover
       this.context.close();
     });
-
-
 
     const keydownObserverAbortController = new AbortController();
     this._disposables.add(() => keydownObserverAbortController.abort());
@@ -226,29 +226,37 @@ export class ObjectPickerPopover extends SignalWatcher(
     });
   }
 
-  //todo ali ghasami
-  async insertTemplate(data: any) {
-    // console.log('this is data', data);
+  async insertTemplate(data: any, model) {
     if (!data.context) return;
     const content = JSON.parse(data.context);
-    ///console.log('14141444', content);
     const blocks = get(content, 'blocks.children', []);
     const note = blocks.find(item => item.flavour == 'affine:note');
     const noteChildren = get(note, 'children', []);
-    const doc = this.model.doc;
+    const doc = model.doc; //this?.model?.doc; //this.model.doc;
     if (noteChildren.length > 0) {
-      const schema = new Schema().register(AffineSchemas);
-      const collection = new DocCollection({ schema });
-      const job = new Job({
+      //const schema = new Schema().register(AffineSchemas);
+      const collection = new TestWorkspace({});
+      const job = new Transformer({
+        schema: new Schema().register(AffineSchemas),
+        blobCRUD: collection.blobSync,
+        docCRUD: {
+          create: (id: string) => collection.createDoc(id).getStore({ id }),
+          get: (id: string) => collection.getDoc(id)?.getStore({ id }) ?? null,
+          delete: (id: string) => collection.removeDoc(id),
+        },
+        middlewares: [replaceIdMiddleware(collection.idGenerator)],
+      });
+      //const collection = new DocCollection({ schema });
+      /*const job = new Job({
         collection: collection,
         middlewares: [replaceIdMiddleware],
-      });
+      });*/
       const notes = doc.getBlocksByFlavour('affine:note');
       if (notes.length > 0) {
-        const parent = doc.getParent(this.context.model);
+        const parent = doc.getParent(model);
         if (parent) {
           const targetIndex =
-            parent.children.findIndex(({ id }) => id === this.context.model.id) ?? 0;
+            parent.children.findIndex(({ id }) => id === model.id) ?? 0;
           let insertIndex = targetIndex + 1; //place === 'before' ? targetIndex :
           for (const item of noteChildren) {
             await job.snapshotToBlock(item, doc, parent.id, insertIndex++);
@@ -256,7 +264,7 @@ export class ObjectPickerPopover extends SignalWatcher(
         }
       }
     }
-    this.context.close()
+    //this.context.close();
     /*if (this.abortController) {
       this.abortController.abort();
     }*/
@@ -280,31 +288,31 @@ export class ObjectPickerPopover extends SignalWatcher(
         });
 
     return html`<div class="object-picker-popover" style="${style}">
-        <mahdaad-object-picker-component
-            search-text="${this._query}"
-            .inline-editor="${this.context.inlineEditor}"
-            type="${this.context.obj_type}"
-            .model="${this.context.model}"
-            .create-function=${this.addObjectLink}
-            .insert-template="${this.insertTemplate}"
-            @clear-trigger="${() => {
-                this.clearTrigger();
-            }}"
-            @select="${(event: CustomEvent) => {
-                this.clearTrigger();
-                if (this.context.obj_type == 'template') {
-                  this.insertTemplate(event.detail);
-                } else {
-                  this.addObjectLink(this.context.model,event.detail as ObjectLink);
-                  this._abort()
-                  //this.abortController.abort();
-                }
-            }}"
-            @close="${() => {
-              this._abort() // .abortController.abort();
-            }}"
-          >
-          </mahdaad-object-picker-component>
+      <mahdaad-object-picker-component
+        search-text="${this._query}"
+        .inline-editor="${this.context.inlineEditor}"
+        type="${this.context.obj_type}"
+        .model="${this.context.model}"
+        .create-function=${this.addObjectLink}
+        .insert-template="${this.insertTemplate}"
+        @clear-trigger="${() => {
+          this.clearTrigger();
+        }}"
+        @select="${(event: CustomEvent) => {
+          this.clearTrigger();
+          if (this.context.obj_type == 'template') {
+            this.insertTemplate(event.detail, this.context.model);
+          } else {
+            this.addObjectLink(this.context.model, event.detail as ObjectLink);
+            this._abort();
+            //this.abortController.abort();
+          }
+        }}"
+        @close="${() => {
+          this._abort(); // .abortController.abort();
+        }}"
+      >
+      </mahdaad-object-picker-component>
     </div>`;
   }
 
@@ -344,9 +352,6 @@ export class ObjectPickerPopover extends SignalWatcher(
     y: string;
   } | null = null;
 
-
-
   @property({ attribute: false })
   accessor context!: ObjectPickerContext;
-
 }

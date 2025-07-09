@@ -15,28 +15,25 @@ import {
   substringMatchScore,
 } from '@blocksuite/affine-shared/utils';
 import { WithDisposable } from '@blocksuite/global/lit';
-import { ShadowlessElement } from '@blocksuite/std'
+import { ShadowlessElement } from '@blocksuite/std';
 import { html } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import throttle from 'lodash-es/throttle';
 
 //todo fix import ali ghasami
-import { prefixCls } from '../../../../../../src/claytapEditor/const'
-import {
-  AFFINE_SLASH_MENU_TRIGGER_KEY,
-} from './consts.js';
+import { prefixCls } from '../../../../../../src/claytapEditor/const';
+import { getDirection } from '../../../../../../src/claytapEditor/utils';
+import { AFFINE_SLASH_MENU_TRIGGER_KEY } from './consts.js';
 //import { actionsMenu } from './mahdaad_menu'
-import {  styles } from './styles.js';
+import { styles } from './styles.js';
 import type {
   SlashMenuActionItem,
   SlashMenuContext,
   SlashMenuItem,
   SlashMenuSubMenu,
 } from './types.js';
-import {
-  isSubMenuItem,
-} from './utils.js';
+import { isSubMenuItem } from './utils.js';
 type InnerSlashMenuContext = SlashMenuContext & {
   onClickItem: (item: SlashMenuActionItem) => void;
   searching: boolean;
@@ -298,7 +295,8 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
 
       // Handle position
       const updatePosition = throttle(() => {
-        this._position = getPopperPosition(this, currRage);
+        this._position = getPopperPosition(this, currRage, {}, getDirection());
+        console.log('aaaaa', this._position);
       }, 10);
 
       this.disposables.addFromEvent(window, 'resize', updatePosition);
@@ -307,8 +305,8 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
   }
 
   checkKeys() {
-    let allowKeys=['*']
-    const denyKeys : string[]=[]
+    let allowKeys = ['*'];
+    const denyKeys: string[] = [];
     //const temp = []
     //todo ali ghasami
     /*if(checkParentIs(this.context.model,MahdaadMultiColumnBlockSchema.model.flavour)) {
@@ -317,11 +315,11 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
     if(checkParentIs(this.context.model,MahdaadCalloutBlockSchema.model.flavour)) {
       allowKeys=['text','h1','h2','h3','bullet_list','number_list','check_list','quote']
     }*/
-    return  {allowKeys,denyKeys}
+    return { allowKeys, denyKeys };
   }
 
   override render() {
-    const {denyKeys,allowKeys} = this.checkKeys()
+    const { denyKeys, allowKeys } = this.checkKeys();
     const slashMenuStyles = this._position
       ? {
           transform: `translate(${this._position.x}, ${this._position.y})`,
@@ -344,7 +342,7 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
         .abortController=${this.abortController}
       >
       </inner-slash-menu>`;*/
-// .tools-list="${this._toolsList()}"
+    // .tools-list="${this._toolsList()}"
     //vue-block-board-editor-popover ${Prefix}-slash-menu
     //console.log("1111111",this.inlineEditor)
     return html`${html` <div
@@ -362,55 +360,51 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
           deny-keys="${JSON.stringify(denyKeys)}"
           allow-keys="${JSON.stringify(allowKeys)}"
           @select="${(event: CustomEvent) => {
-      const key = event.detail;
+            const key = event.detail;
             //console.log("1111",key)
-      //todo ali ghasami
-      const temp = this.actionMap[key] //actionsMenu.find(i => i.key == key);
-      if (temp) {
-        const item=this.items.find(i=>i.group==temp)
-        if(item){
-          this._handleClickItem(item);
-        }
-      }
-      this.abortController.abort();
-    }}"
+            //todo ali ghasami
+            const temp = this.actionMap[key]; //actionsMenu.find(i => i.key == key);
+            if (temp) {
+              const item = this.items.find(i => i.group == temp);
+              if (item) {
+                this._handleClickItem(item);
+              }
+            }
+            this.abortController.abort();
+          }}"
           @close="${() => {
-      this.abortController.abort();
-    }}"
+            this.abortController.abort();
+          }}"
         ></mahdaad-slash-menu>
       </div>`;
   }
 
-
-
-  private accessor actionMap={
-    'text':'0_Basic@0',
-    'h1':'0_Basic@1',
-    'h2':'0_Basic@2',
-    'h3':'0_Basic@3',
-    'bullet_list':'1_List@0',
-    'number_list':'1_List@1',
-    'check_list':'1_List@2',
-    'quote':'0_Basic@6',
-    'callout':'0_mahdaad@0',
-    'two_columns':'0_mahdaad_multi_column@2',
-    'three_columns':'0_mahdaad_multi_column@3',
-    'four_columns':'0_mahdaad_multi_column@4',
-    'table_of_content':'0_mahdaad@1',
-    'mention':'0_mahdaad@8',
-    'template':'0_mahdaad@6',
-    'date':'0_mahdaad@9',
-    'time':'0_mahdaad@10',
-    'table':'7_Database@0',
-    'divider':'0_Basic@7',
-    'page':'0_mahdaad@2',
-    'file':'0_mahdaad@3',
-    'image':'0_mahdaad@7',
-    'weblink':'0_mahdaad@4',
-    'tag':'0_mahdaad@5',
-  }
-
-
+  private accessor actionMap = {
+    text: '0_Basic@0',
+    h1: '0_Basic@1',
+    h2: '0_Basic@2',
+    h3: '0_Basic@3',
+    bullet_list: '1_List@0',
+    number_list: '1_List@1',
+    check_list: '1_List@2',
+    quote: '0_Basic@6',
+    callout: '0_mahdaad@0',
+    two_columns: '0_mahdaad_multi_column@2',
+    three_columns: '0_mahdaad_multi_column@3',
+    four_columns: '0_mahdaad_multi_column@4',
+    table_of_content: '0_mahdaad@1',
+    mention: '0_mahdaad@8',
+    template: '0_mahdaad@6',
+    date: '0_mahdaad@9',
+    time: '0_mahdaad@10',
+    table: '7_Database@0',
+    divider: '0_Basic@7',
+    page: '0_mahdaad@2',
+    file: '0_mahdaad@3',
+    image: '0_mahdaad@7',
+    weblink: '0_mahdaad@4',
+    tag: '0_mahdaad@5',
+  };
 
   @state()
   private accessor _filteredItems: (SlashMenuActionItem | SlashMenuSubMenu)[] =
@@ -429,4 +423,3 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
   @property({ attribute: false })
   accessor context!: SlashMenuContext;
 }
-

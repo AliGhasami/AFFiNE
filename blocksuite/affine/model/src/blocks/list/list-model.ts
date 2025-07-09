@@ -16,6 +16,7 @@ export type ListProps = {
   checked: boolean;
   collapsed: boolean;
   order: number | null;
+  dir: null | 'rtl' | 'ltr';
 } & BlockMeta;
 
 export const ListBlockSchema = defineBlockSchema({
@@ -26,7 +27,7 @@ export const ListBlockSchema = defineBlockSchema({
       text: internal.Text(),
       checked: false,
       collapsed: false,
-
+      dir: null,
       // number type only for numbered list
       order: null,
       'meta:createdAt': undefined,

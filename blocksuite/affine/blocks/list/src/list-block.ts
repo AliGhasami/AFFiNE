@@ -25,6 +25,7 @@ import { query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
+import { setDirectionOnBlock } from '../../../../../../src/claytapEditor/utils/block';
 import { correctNumberedListsOrderToPrev } from './commands/utils.js';
 import { listBlockStyles } from './styles.js';
 import { getListIcon } from './utils/get-list-icon.js';
@@ -130,10 +131,39 @@ export class ListBlockComponent extends CaptionedBlockComponent<ListBlockModel> 
     );
   }
 
+  get inlineEditor() {
+    return this._richTextElement?.inlineEditor;
+  }
+
   override async getUpdateComplete() {
     const result = await super.getUpdateComplete();
     await this._richTextElement?.updateComplete;
     return result;
+  }
+
+  override firstUpdated() {
+    this._richTextElement?.updateComplete
+      .then(() => {
+        if (this.inlineEditor && !this.doc.readonly) {
+          setDirectionOnBlock(
+            this.model,
+            this.doc,
+            this.inlineEditor?.yText.toString().trim()
+          );
+          this.disposables.add(
+            this.inlineEditor.slots.textChange.subscribe(() => {
+              if (this.inlineEditor) {
+                setDirectionOnBlock(
+                  this.model,
+                  this.doc,
+                  this.inlineEditor?.yText.toString().trim()
+                );
+              }
+            })
+          );
+        }
+      })
+      .catch(console.error);
   }
 
   override renderBlock(): TemplateResult<1> {
@@ -150,6 +180,7 @@ export class ListBlockComponent extends CaptionedBlockComponent<ListBlockModel> 
     const scrollContainer = temp ? temp : getViewportElement(this.host);
 
     const children = html`<div
+      dir=${this.model.props.dir}
       class="affine-block-children-container"
       style=${styleMap({
         paddingLeft: `${BLOCK_CHILDREN_CONTAINER_PADDING_LEFT}px`,
@@ -199,7 +230,7 @@ export class ListBlockComponent extends CaptionedBlockComponent<ListBlockModel> 
             .inlineRangeProvider=${this._inlineRangeProvider}
             .enableClipboard=${false}
             .enableUndoRedo=${false}
-            .verticalScrollContainerGetter=${() =>scrollContainer }
+            .verticalScrollContainerGetter=${() => scrollContainer}
           ></rich-text>
         </div>
 

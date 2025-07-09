@@ -95,7 +95,7 @@ export class MahdaadCalloutBlockComponent extends CaptionedBlockComponent<Mahdaa
         break;
       case 'left_to_right':
         //todo ali ghasami for check
-        delete this.model.props.dir;
+        //delete this.model.props.dir;
         this.doc.updateBlock(this.model, {});
         break;
     }
