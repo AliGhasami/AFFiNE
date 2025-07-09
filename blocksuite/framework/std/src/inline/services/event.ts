@@ -42,6 +42,13 @@ export class EventService<TextAttributes extends BaseTextAttributes> {
   };
 
   private readonly _onBeforeInput = (event: InputEvent) => {
+
+    const target = event.target as Element;
+    //@ts-ignore
+    if (target && Object.hasOwn(target.dataset, 'inlineIgnoreInput')) {
+      return;
+    }
+
     const range = this.editor.rangeService.getNativeRange();
     if (
       this.editor.isReadonly ||

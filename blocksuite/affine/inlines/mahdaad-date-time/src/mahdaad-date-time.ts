@@ -1,27 +1,34 @@
+//import { addParagraphCommand } from '@blocksuite/affine-block-paragraph';
 import type { AffineTextAttributes } from '@blocksuite/affine-shared/types';
 import { SignalWatcher, WithDisposable } from '@blocksuite/global/lit';
-import { BLOCK_ID_ATTR, type BlockComponent, type BlockStdScope } from '@blocksuite/std'
+import {
+  BLOCK_ID_ATTR,
+  type BlockComponent,
+  type BlockStdScope,
+} from '@blocksuite/std';
 import { ShadowlessElement } from '@blocksuite/std';
 import {
   INLINE_ROOT_ATTR,
   type InlineRootElement,
   ZERO_WIDTH_FOR_EMBED_NODE,
   ZERO_WIDTH_FOR_EMPTY_LINE,
-} from '@blocksuite/std/inline'
+} from '@blocksuite/std/inline';
 import type { DeltaInsert } from '@blocksuite/store';
-import {  html } from 'lit';
+import { html } from 'lit';
 import { property } from 'lit/decorators.js';
 
-import { prefixCls } from '../../../../../../src/claytapEditor/const'
+import { prefixCls } from '../../../../../../src/claytapEditor/const';
+import { addParagraphCommand } from '../../../blocks/paragraph/src/commands/add-paragraph';
 
 export class MahdaadDateTime extends SignalWatcher(
   WithDisposable(ShadowlessElement)
 ) {
-
   addParagraph() {
-    setTimeout(()=>{
-      this.std.command.exec('addParagraph');
-    },50)
+    setTimeout(() => {
+      //old method
+      //this.std.command.exec('addParagraph');
+      this.std.command.chain().pipe(addParagraphCommand).run();
+    }, 50);
   }
 
   get inlineEditor() {
@@ -36,17 +43,15 @@ export class MahdaadDateTime extends SignalWatcher(
     return selfInlineRange;
   }
 
-
   selfUpdate(event) {
     const data = event?.detail;
     if (data && data.key && data.hasOwnProperty('value')) {
       const format = this.inlineEditor.getFormat(this.selfInlineRange);
       if (format?.date?.id) {
         const date = JSON.parse(JSON.stringify(format.date));
-        const {value, key} = data
-        if (value === undefined && date[key] !== undefined)
-          delete date[key];
-        else date[key] = value
+        const { value, key } = data;
+        if (value === undefined && date[key] !== undefined) delete date[key];
+        else date[key] = value;
         this.inlineEditor.formatText(this.selfInlineRange, {
           date,
         });
@@ -63,9 +68,7 @@ export class MahdaadDateTime extends SignalWatcher(
   }
 
   override render() {
-
-
-    return html`<span >
+    return html`<span>
       <mahdaad-date-time
         class="${prefixCls}-date-time"
         data-event-id="${this.id}"

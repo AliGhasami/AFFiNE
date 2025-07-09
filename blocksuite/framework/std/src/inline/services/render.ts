@@ -14,6 +14,13 @@ export class RenderService<TextAttributes extends BaseTextAttributes> {
     _: Y.YTextEvent,
     transaction: Y.Transaction
   ) => {
+    /** for ignore input mahdaad date time */
+    this.forceInlineSyncStop = false;
+    _.changes.delta.forEach(item => {
+      if (!item.insert && item?.attributes && item.attributes.date) {
+        this.forceInlineSyncStop = true;
+      }
+    });
     this.editor.slots.textChange.next();
 
     const yText = this.editor.yText;
@@ -80,13 +87,14 @@ export class RenderService<TextAttributes extends BaseTextAttributes> {
   }
   // render current deltas to VLines
   render = () => {
+    let syncInlineRange = true;
     if (!this.editor.rootElement) return;
 
     this._rendering = true;
 
     const rootElement = this.editor.rootElement;
     const embedDeltas = this.editor.deltaService.embedDeltas;
-    const chunks = deltaInsertsToChunks(embedDeltas);
+    const chunks = deltaInsertsToChunks(cleanIllegalAttributes(embedDeltas));
 
     let deltaIndex = 0;
     // every chunk is a line
@@ -149,6 +157,15 @@ export class RenderService<TextAttributes extends BaseTextAttributes> {
       this.editor.rerenderWholeEditor();
     }
 
+    const matchDelta = this.getCurrentInlineRangeDelta;
+    if (matchDelta?.attributes?.date) syncInlineRange = false;
+    if (this.forceInlineSyncStop) syncInlineRange = false;
+    if (syncInlineRange) {
+      // We need to synchronize the selection immediately after rendering is completed,
+      // otherwise there is a possibility of an error in the cursor position
+      this.editor.rangeService.syncInlineRange();
+    }
+
     this.editor
       .waitForUpdate()
       .then(() => {
@@ -173,6 +190,26 @@ export class RenderService<TextAttributes extends BaseTextAttributes> {
     this.render();
   };
 
+  // TODO return if has bug
+  get getCurrentInlineRangeDelta() {
+    const range = this.editor.getInlineRange();
+    //console.log("1111",range);
+    if (range) return this.getDeltaByInlineRange(range);
+    return undefined;
+  }
+
+  // TODO return if has bug
+  getDeltaByInlineRange(inlineRange: InlineRange) {
+    //console.log("22222",this.editor.getDeltasByInlineRange(inlineRange));
+    return this.editor
+      .getDeltasByInlineRange(inlineRange)
+      ?.find(
+        ([_, _inlineRange]) =>
+          _inlineRange.length == inlineRange.length &&
+          _inlineRange.index == inlineRange.index
+      )?.[0];
+  }
+
   waitForUpdate = async () => {
     if (!this.editor.rootElement) return;
     const vLines = Array.from(
@@ -181,5 +218,42 @@ export class RenderService<TextAttributes extends BaseTextAttributes> {
     await Promise.all(vLines.map(line => line.updateComplete));
   };
 
+  forceInlineSyncStop: boolean = false;
+
   constructor(readonly editor: InlineEditor<TextAttributes>) {}
+}
+
+/** add for fix repeat for mahdaad **/
+//todo ali ghasami for remove if has bug or fix after  - fix for mahdaad
+export function cleanIllegalAttributes(deltas) {
+  //const savedAttributes = null;
+  /*deltas.forEach(item => {
+    if (
+      (savedAttributes &&
+        item.attributes &&
+        item.attributes.mention &&
+        item.attributes.mention.id == savedAttributes.id) ||
+      (item.attributes.mahdaadObjectLink &&
+        item.attributes.mahdaadObjectLink.id == savedAttributes.id)
+    ) {
+      item.attributes = undefined;
+    }
+    if (item.attributes && item.attributes.mention) {
+      savedAttributes = item.attributes.mention;
+    }
+    console.log(' ===>', savedAttributes);
+  });*/
+  deltas.forEach(item => {
+    if (
+      item.insert != ' ' &&
+      item.attributes &&
+      (Object.hasOwn(item.attributes, 'mahdaadObjectLink') ||
+        Object.hasOwn(item.attributes, 'mention') ||
+        Object.hasOwn(item.attributes, 'date'))
+    ) {
+      item.attributes = undefined;
+    }
+  });
+
+  return deltas;
 }
