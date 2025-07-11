@@ -1,5 +1,5 @@
 import {
-  EdgelessBuiltInSpecs,
+  //EdgelessBuiltInSpecs,
   PageRootBlockSpec,
 } from '@blocksuite/affine-block-root';
 import type { ExtensionType } from '@blocksuite/store';
@@ -10,7 +10,7 @@ import {
 } from './common';
 
 export const EdgelessEditorBlockSpecs: ExtensionType[] = [
-  EdgelessBuiltInSpecs,
+  //EdgelessBuiltInSpecs,
   EdgelessFirstPartyBlockSpecs,
 ].flat();
 

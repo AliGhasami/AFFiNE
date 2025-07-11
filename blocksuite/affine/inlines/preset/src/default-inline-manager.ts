@@ -1,5 +1,5 @@
-import { FootNoteInlineSpecExtension } from '@blocksuite/affine-inline-footnote';
-import { LatexInlineSpecExtension } from '@blocksuite/affine-inline-latex';
+//import { FootNoteInlineSpecExtension } from '@blocksuite/affine-inline-footnote';
+//import { LatexInlineSpecExtension } from '@blocksuite/affine-inline-latex';
 //import { LinkInlineSpecExtension } from '@blocksuite/affine-inline-link';
 import { MentionInlineSpecExtension } from '@blocksuite/affine-inline-mention';
 import { ReferenceInlineSpecExtension } from '@blocksuite/affine-inline-reference';
@@ -31,15 +31,15 @@ export const DefaultInlineManagerExtension =
       CodeInlineSpecExtension.identifier,
       BackgroundInlineSpecExtension.identifier,
       ColorInlineSpecExtension.identifier,
-      LatexInlineSpecExtension.identifier,
+      //LatexInlineSpecExtension.identifier,
       ReferenceInlineSpecExtension.identifier,
       /** comment for Mahdaad */
       //LinkInlineSpecExtension.identifier,
-      FootNoteInlineSpecExtension.identifier,
+      //FootNoteInlineSpecExtension.identifier,
       MentionInlineSpecExtension.identifier,
       MahdaadMentionInlineSpecExtension.identifier,
       MahdaadObjectInlineSpecExtension.identifier,
       MahdaadDateTimeInlineSpecExtension.identifier,
-      MahdaadLinkInlineSpecExtension.identifier
+      MahdaadLinkInlineSpecExtension.identifier,
     ],
   });

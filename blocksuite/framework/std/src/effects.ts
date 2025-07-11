@@ -1,4 +1,4 @@
-import { GfxViewportElement } from './gfx/viewport-element.js';
+//import { GfxViewportElement } from './gfx/viewport-element.js';
 import { VElement, VLine, VText } from './inline/index.js';
 import { EditorHost } from './view/index.js';
 

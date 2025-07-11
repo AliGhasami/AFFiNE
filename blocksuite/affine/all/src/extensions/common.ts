@@ -2,21 +2,21 @@ import { AttachmentBlockSpec } from '@blocksuite/affine-block-attachment';
 import { BookmarkBlockSpec } from '@blocksuite/affine-block-bookmark';
 //import { CalloutBlockSpec } from '@blocksuite/affine-block-callout';
 //import { CodeBlockSpec } from '@blocksuite/affine-block-code';
-import { DataViewBlockSpec } from '@blocksuite/affine-block-data-view';
-import { DatabaseBlockSpec } from '@blocksuite/affine-block-database';
+//import { DataViewBlockSpec } from '@blocksuite/affine-block-data-view';
+//import { DatabaseBlockSpec } from '@blocksuite/affine-block-database';
 import { DividerBlockSpec } from '@blocksuite/affine-block-divider';
-import { EdgelessTextBlockSpec } from '@blocksuite/affine-block-edgeless-text';
+//import { EdgelessTextBlockSpec } from '@blocksuite/affine-block-edgeless-text';
 import { EmbedExtensions } from '@blocksuite/affine-block-embed';
-import { FrameBlockSpec } from '@blocksuite/affine-block-frame';
+//import { FrameBlockSpec } from '@blocksuite/affine-block-frame';
 import { ImageBlockSpec } from '@blocksuite/affine-block-image';
-import { LatexBlockSpec } from '@blocksuite/affine-block-latex';
+//import { LatexBlockSpec } from '@blocksuite/affine-block-latex';
 import { ListBlockSpec } from '@blocksuite/affine-block-list';
 import {
-  EdgelessNoteBlockSpec,
+  //EdgelessNoteBlockSpec,
   NoteBlockSpec,
 } from '@blocksuite/affine-block-note';
 import { ParagraphBlockSpec } from '@blocksuite/affine-block-paragraph';
-import {
+/*import {
   EdgelessSurfaceBlockAdapterExtensions,
   EdgelessSurfaceBlockSpec,
   PageSurfaceBlockSpec,
@@ -26,7 +26,7 @@ import {
   EdgelessSurfaceRefBlockSpec,
   PageSurfaceRefBlockSpec,
 } from '@blocksuite/affine-block-surface-ref';
-import { TableBlockSpec } from '@blocksuite/affine-block-table';
+import { TableBlockSpec } from '@blocksuite/affine-block-table';*/
 import {
   brushToMarkdownAdapterMatcher,
   brushToPlainTextAdapterMatcher,
@@ -56,7 +56,7 @@ import {
   DefaultOpenDocExtension,
   DocDisplayMetaService,
   EditPropsStore,
-  FontLoaderService,
+  //FontLoaderService,
 } from '@blocksuite/affine-shared/services';
 import { MahdaadCalloutBlockSpec } from '@blocksuite/mahdaad-callout-block';
 import { MahdaadMultiColumnBlockSpec } from '@blocksuite/mahdaad-multi-column-block';
@@ -87,11 +87,11 @@ export const CommonBlockSpecs: ExtensionType[] = [
   inlinePresetExtensions,
   DocDisplayMetaService,
   EditPropsStore,
-  LatexBlockSpec,
+  //LatexBlockSpec,
   ListBlockSpec,
-  DatabaseBlockSpec,
-  TableBlockSpec,
-  DataViewBlockSpec,
+  //DatabaseBlockSpec,
+  //TableBlockSpec,
+  //DataViewBlockSpec,
   DividerBlockSpec,
   BookmarkBlockSpec,
   EmbedExtensions,
@@ -100,9 +100,9 @@ export const CommonBlockSpecs: ExtensionType[] = [
   ImageBlockSpec,
   ParagraphBlockSpec,
   DefaultOpenDocExtension,
-  FontLoaderService,
+  //FontLoaderService,
   //CalloutBlockSpec,
-  FrameBlockSpec,
+  //FrameBlockSpec,
   MahdaadObjectBlockSpec,
   MahdaadCalloutBlockSpec,
   MahdaadMultiColumnBlockSpec,
@@ -115,19 +115,19 @@ export const CommonBlockSpecs: ExtensionType[] = [
 export const PageFirstPartyBlockSpecs: ExtensionType[] = [
   CommonBlockSpecs,
   NoteBlockSpec,
-  PageSurfaceBlockSpec,
-  PageSurfaceRefBlockSpec,
+  //PageSurfaceBlockSpec,
+  //PageSurfaceRefBlockSpec,
 
-  ...SurfaceBlockAdapterExtensions,
+  //...SurfaceBlockAdapterExtensions,
 ].flat();
 
 export const EdgelessFirstPartyBlockSpecs: ExtensionType[] = [
   CommonBlockSpecs,
 
-  EdgelessNoteBlockSpec,
-  EdgelessSurfaceBlockSpec,
-  EdgelessSurfaceRefBlockSpec,
-  EdgelessTextBlockSpec,
+  //EdgelessNoteBlockSpec,
+  //EdgelessSurfaceBlockSpec,
+  //EdgelessSurfaceRefBlockSpec,
+  //EdgelessTextBlockSpec,
 
-  ...EdgelessSurfaceBlockAdapterExtensions,
+  //...EdgelessSurfaceBlockAdapterExtensions,
 ].flat();

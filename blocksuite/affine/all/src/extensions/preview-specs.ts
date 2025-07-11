@@ -1,5 +1,5 @@
 import {
-  PreviewEdgelessRootBlockSpec,
+  //PreviewEdgelessRootBlockSpec,
   PreviewPageRootBlockSpec,
   ReadOnlyClipboard,
 } from '@blocksuite/affine-block-root';
@@ -11,7 +11,7 @@ import {
 } from './common.js';
 
 export const PreviewEdgelessEditorBlockSpecs: ExtensionType[] = [
-  PreviewEdgelessRootBlockSpec,
+  //PreviewEdgelessRootBlockSpec,
   EdgelessFirstPartyBlockSpecs,
   ReadOnlyClipboard,
 ].flat();

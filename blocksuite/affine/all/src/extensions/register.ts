@@ -1,11 +1,11 @@
 import { SpecProvider } from '@blocksuite/affine-shared/utils';
 
 import {
-  EdgelessEditorBlockSpecs,
+  //EdgelessEditorBlockSpecs,
   PageEditorBlockSpecs,
 } from './editor-specs.js';
 import {
-  PreviewEdgelessEditorBlockSpecs,
+  //PreviewEdgelessEditorBlockSpecs,
   PreviewPageEditorBlockSpecs,
 } from './preview-specs.js';
 import { StoreExtensions } from './store.js';

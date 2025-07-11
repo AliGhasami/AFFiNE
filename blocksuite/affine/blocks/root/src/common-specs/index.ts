@@ -1,5 +1,5 @@
 import { FileDropExtension } from '@blocksuite/affine-components/drop-indicator';
-import { BrushElementRendererExtension } from '@blocksuite/affine-gfx-brush';
+/*import { BrushElementRendererExtension } from '@blocksuite/affine-gfx-brush';
 import {
   ConnectorElementRendererExtension,
   ConnectorElementView,
@@ -20,7 +20,7 @@ import {
 import {
   TextElementRendererExtension,
   TextElementView,
-} from '@blocksuite/affine-gfx-text';
+} from '@blocksuite/affine-gfx-text';*/
 import { NoteBlockSchema } from '@blocksuite/affine-model';
 import {
   AutoClearSelectionService,
@@ -38,8 +38,8 @@ import { scrollAnchoringWidget } from '@blocksuite/affine-widget-scroll-anchorin
 import { mahdaadMentionWidget } from '@blocksuite/mahdaad-widget-mention';
 //import { linkedDocWidget } from '@blocksuite/affine-widget-linked-doc';
 import { mahdaadObjectWidget } from '@blocksuite/mahdaad-widget-object-picker';
-//import { SlashMenuExtension } from '@blocksuite/affine-widget-slash-menu';
-import { SlashMenuExtension } from '@blocksuite/mahdaad-widget-slash-menu';
+import { SlashMenuExtension } from '@blocksuite/affine-widget-slash-menu';
+//import { SlashMenuExtension } from '@blocksuite/mahdaad-widget-slash-menu';
 //import { toolbarWidget } from '@blocksuite/affine-widget-toolbar';
 import { toolbarWidget } from '@blocksuite/mahdaad-widget-toolbar';
 import { BlockFlavourIdentifier, FlavourExtension } from '@blocksuite/std';
@@ -57,21 +57,21 @@ import { viewportOverlayWidget } from './widgets';
  * And these view may contain some logic when elements initialize.
  */
 const EdgelessElementViews = [
-  ConnectorElementView,
+  /*ConnectorElementView,
   MindMapView,
   GroupElementView,
   TextElementView,
-  ShapeElementView,
+  ShapeElementView,*/
 ];
 
 export const EdgelessElementRendererExtension: ExtensionType[] = [
-  BrushElementRendererExtension,
+  /*BrushElementRendererExtension,
   HighlighterElementRendererExtension,
   ShapeElementRendererExtension,
   TextElementRendererExtension,
   ConnectorElementRendererExtension,
   GroupElementRendererExtension,
-  MindmapElementRendererExtension,
+  MindmapElementRendererExtension,*/
 ];
 
 export const CommonSpecs: ExtensionType[] = [
@@ -86,8 +86,8 @@ export const CommonSpecs: ExtensionType[] = [
   AutoClearSelectionService,
   ...RootBlockAdapterExtensions,
   ...clipboardConfigs,
-  ...EdgelessElementViews,
-  ...EdgelessElementRendererExtension,
+  //...EdgelessElementViews,
+  //...EdgelessElementRendererExtension,
   SlashMenuExtension,
   //linkedDocWidget,
   dragHandleWidget,

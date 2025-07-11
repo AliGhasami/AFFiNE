@@ -2,16 +2,16 @@ import { DataViewBlockSchemaExtension } from '@blocksuite/affine-block-data-view
 import { DatabaseSelectionExtension } from '@blocksuite/affine-block-database';
 import { EmbedIframeConfigExtensions } from '@blocksuite/affine-block-embed';
 import { ImageStoreSpec } from '@blocksuite/affine-block-image';
-import { SurfaceBlockSchemaExtension } from '@blocksuite/affine-block-surface';
-import { TableSelectionExtension } from '@blocksuite/affine-block-table';
+//import { SurfaceBlockSchemaExtension } from '@blocksuite/affine-block-surface';
+//import { TableSelectionExtension } from '@blocksuite/affine-block-table';
 import {
   AttachmentBlockSchemaExtension,
   BookmarkBlockSchemaExtension,
   CalloutBlockSchemaExtension,
   CodeBlockSchemaExtension,
-  DatabaseBlockSchemaExtension,
+  //DatabaseBlockSchemaExtension,
   DividerBlockSchemaExtension,
-  EdgelessTextBlockSchemaExtension,
+  //EdgelessTextBlockSchemaExtension,
   EmbedFigmaBlockSchemaExtension,
   EmbedGithubBlockSchemaExtension,
   EmbedHtmlBlockSchemaExtension,
@@ -20,9 +20,9 @@ import {
   EmbedLoomBlockSchemaExtension,
   EmbedSyncedDocBlockSchemaExtension,
   EmbedYoutubeBlockSchemaExtension,
-  FrameBlockSchemaExtension,
+  //FrameBlockSchemaExtension,
   ImageBlockSchemaExtension,
-  LatexBlockSchemaExtension,
+  //LatexBlockSchemaExtension,
   ListBlockSchemaExtension,
   MahdaadCalloutBlockSchemaExtension,
   MahdaadMultiColumnBlockSchemaExtension,
@@ -32,7 +32,7 @@ import {
   NoteBlockSchemaExtension,
   ParagraphBlockSchemaExtension,
   RootBlockSchemaExtension,
-  SurfaceRefBlockSchemaExtension,
+  //SurfaceRefBlockSchemaExtension,
   TableBlockSchemaExtension,
   TranscriptionBlockSchemaExtension,
 } from '@blocksuite/affine-model';
@@ -50,7 +50,7 @@ import {
 import {
   BlockSelectionExtension,
   CursorSelectionExtension,
-  SurfaceSelectionExtension,
+  //SurfaceSelectionExtension,
   TextSelectionExtension,
 } from '@blocksuite/std';
 import type { ExtensionType } from '@blocksuite/store';
@@ -71,12 +71,12 @@ export const StoreExtensions: ExtensionType[] = [
   NoteBlockSchemaExtension,
   DividerBlockSchemaExtension,
   ImageBlockSchemaExtension,
-  SurfaceBlockSchemaExtension,
+  //SurfaceBlockSchemaExtension,
   BookmarkBlockSchemaExtension,
-  FrameBlockSchemaExtension,
-  DatabaseBlockSchemaExtension,
-  SurfaceRefBlockSchemaExtension,
-  DataViewBlockSchemaExtension,
+  //FrameBlockSchemaExtension,
+  //DatabaseBlockSchemaExtension,
+  //SurfaceRefBlockSchemaExtension,
+  //DataViewBlockSchemaExtension,
   AttachmentBlockSchemaExtension,
   EmbedSyncedDocBlockSchemaExtension,
   EmbedLinkedDocBlockSchemaExtension,
@@ -86,8 +86,8 @@ export const StoreExtensions: ExtensionType[] = [
   EmbedFigmaBlockSchemaExtension,
   EmbedLoomBlockSchemaExtension,
   EmbedYoutubeBlockSchemaExtension,
-  EdgelessTextBlockSchemaExtension,
-  LatexBlockSchemaExtension,
+  //EdgelessTextBlockSchemaExtension,
+  //LatexBlockSchemaExtension,
   TableBlockSchemaExtension,
   CalloutBlockSchemaExtension,
   TranscriptionBlockSchemaExtension,
@@ -98,12 +98,12 @@ export const StoreExtensions: ExtensionType[] = [
   MahdaadWeblinkBlockSchemaExtension,
   BlockSelectionExtension,
   TextSelectionExtension,
-  SurfaceSelectionExtension,
+  //SurfaceSelectionExtension,
   CursorSelectionExtension,
   HighlightSelectionExtension,
   ImageSelectionExtension,
-  DatabaseSelectionExtension,
-  TableSelectionExtension,
+  //DatabaseSelectionExtension,
+  //TableSelectionExtension,
 
   getHtmlAdapterExtensions(),
   getMarkdownAdapterExtensions(),

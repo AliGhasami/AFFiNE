@@ -27,7 +27,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 
-import quoteIcon from './assets/quote.svg?raw'
+import quoteIcon from './assets/quote.svg?raw';
 import { ParagraphBlockConfigExtension } from './paragraph-block-config.js';
 import { paragraphBlockStyles } from './styles.js';
 
@@ -216,7 +216,6 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
   }
 
   override renderBlock(): TemplateResult<1> {
-
     const temp = document.querySelector(
       `.editor-scroll-container:has([data-block-id='${this.doc.root?.id}'])`
     );
@@ -253,34 +252,33 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
       ${this.renderChildren(this.model)}
     </div>`;
 
-    const placeholder=html`${this.inEdgelessText
+    const placeholder = html`${this.inEdgelessText
       ? nothing
       : html`
-                <div
-                  contenteditable="false"
-                  class=${classMap({
-        'affine-paragraph-placeholder': true,
-        visible: this._displayPlaceholder.value,
-      })}
-                >
-                  ${this._placeholder}
-                </div>
-              `}`
-    const richText=html` <rich-text
-            .yText=${this.model.props.text.yText}
-            .inlineEventSource=${this.topContenteditableElement ?? nothing}
-            .undoManager=${this.doc.history}
-            .attributesSchema=${this.attributesSchema}
-            .attributeRenderer=${this.attributeRenderer}
-            .markdownMatches=${this.inlineManager?.markdownMatches}
-            .embedChecker=${this.embedChecker}
-            .readonly=${this.doc.readonly}
-            .inlineRangeProvider=${this._inlineRangeProvider}
-            .enableClipboard=${false}
-            .enableUndoRedo=${false}
-            .verticalScrollContainerGetter=${() => scrollContainer}
-          ></rich-text>`
-
+          <div
+            contenteditable="false"
+            class=${classMap({
+              'affine-paragraph-placeholder': true,
+              visible: this._displayPlaceholder.value,
+            })}
+          >
+            ${this._placeholder}
+          </div>
+        `}`;
+    const richText = html` <rich-text
+      .yText=${this.model.props.text.yText}
+      .inlineEventSource=${this.topContenteditableElement ?? nothing}
+      .undoManager=${this.doc.history}
+      .attributesSchema=${this.attributesSchema}
+      .attributeRenderer=${this.attributeRenderer}
+      .markdownMatches=${this.inlineManager?.markdownMatches}
+      .embedChecker=${this.embedChecker}
+      .readonly=${this.doc.readonly}
+      .inlineRangeProvider=${this._inlineRangeProvider}
+      .enableClipboard=${false}
+      .enableUndoRedo=${false}
+      .verticalScrollContainerGetter=${() => scrollContainer}
+    ></rich-text>`;
 
     return html`
       ${style}
@@ -298,7 +296,7 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
         <div
           class=${classMap({
             'affine-paragraph-rich-text-wrapper': true,
-            [`claytap-${type$.value}`]: true,
+            [`${type$.value}`]: true,
             [TOGGLE_BUTTON_PARENT_CLASS]: true,
           })}
         >
@@ -327,18 +325,13 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
                 ></blocksuite-toggle-button>
               `
             : nothing}
-
-          ${type$.value=='quote' ?
-            html`<div class="quote-container" dir=${this.model.props.dir}>
-              <span class="quote-icon">${html`${unsafeSVG(quoteIcon)}`}</span>
-              ${richText}
-              ${placeholder}
-            </div>`
+          ${type$.value == 'quote'
+            ? html`<div class="quote-container" dir=${this.model.props.dir}>
+                <span class="quote-icon">${html`${unsafeSVG(quoteIcon)}`}</span>
+                ${richText} ${placeholder}
+              </div>`
             : richText}
-
-          ${this.model.props.type=='quote' ? nothing : placeholder}
-
-
+          ${this.model.props.type == 'quote' ? nothing : placeholder}
         </div>
         ${children}
       </div>

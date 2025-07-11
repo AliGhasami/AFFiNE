@@ -1,5 +1,5 @@
-import { inlineFootnoteExtensions } from '@blocksuite/affine-inline-footnote';
-import { inlineLatexExtensions } from '@blocksuite/affine-inline-latex';
+//import { inlineFootnoteExtensions } from '@blocksuite/affine-inline-footnote';
+//import { inlineLatexExtensions } from '@blocksuite/affine-inline-latex';
 //import { inlineLinkExtensions } from '@blocksuite/affine-inline-link';
 import { inlineMentionExtensions } from '@blocksuite/affine-inline-mention';
 import { inlineReferenceExtensions } from '@blocksuite/affine-inline-reference';
@@ -113,11 +113,11 @@ export const InlineSpecExtensions: ExtensionType[] = [
   /** comment for Mahdaad */
   //...inlineLinkExtensions,
   ...inlineReferenceExtensions,
-  ...inlineLatexExtensions,
-  ...inlineFootnoteExtensions,
+  //...inlineLatexExtensions,
+  //...inlineFootnoteExtensions,
   ...inlineMentionExtensions,
   ...inlineMahdaadMentionExtensions,
   ...inlineMahdaadObjectExtensions,
   ...inlineMahdaadDateTimeExtensions,
-  ...inlineMahdaadLinkExtensions
+  ...inlineMahdaadLinkExtensions,
 ];
