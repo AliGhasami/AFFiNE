@@ -25,12 +25,22 @@ function calcSafeCoordinate({
   offsetX = 0,
   offsetY = 0,
   edgeGap = 20,
-}: CollisionBox) {
-  const safeX = clamp(
-    positioningPoint.x + offsetX,
-    edgeGap,
-    boundaryRect.width - objRect.width - edgeGap
-  );
+  direction,
+}: CollisionBox & { direction: 'rtl' | 'ltr' }) {
+  let safeX;
+  if (direction === 'rtl') {
+    safeX = clamp(
+      boundaryRect.width - (positioningPoint.x + objRect.width + offsetX),
+      edgeGap,
+      boundaryRect.width - objRect.width - edgeGap
+    );
+  } else {
+    safeX = clamp(
+      positioningPoint.x + offsetX,
+      edgeGap,
+      boundaryRect.width - objRect.width - edgeGap
+    );
+  }
   const y = positioningPoint.y + offsetY;
   // Not use clamp for y coordinate to avoid the quick bar always showing after scrolling
   // const safeY = clamp(
@@ -79,7 +89,8 @@ export function getPopperPosition(
   reference: {
     getBoundingClientRect: () => DOMRect;
   },
-  { gap = 12, offsetY = 5 }: { gap?: number; offsetY?: number } = {}
+  { gap = 12, offsetY = 5 }: { gap?: number; offsetY?: number } = {},
+  direction: 'rtl' | 'ltr' = 'ltr'
 ) {
   if (!popper) {
     // foolproof, someone may use element with non-null assertion
@@ -103,7 +114,9 @@ export function getPopperPosition(
     return null;
 
   const positioningPoint = {
-    x: referenceRect.x,
+    x: direction === 'rtl'
+      ? referenceRect.right // یا boundaryRect.right - referenceRect.x - referenceRect.width
+      : referenceRect.x,
     y: referenceRect.y + (placement === 'bottom' ? referenceRect.height : 0),
   };
 
@@ -118,6 +131,7 @@ export function getPopperPosition(
     objRect: popperRect,
     boundaryRect,
     offsetY: placement === 'bottom' ? offsetY : -offsetY,
+    direction,
   });
 
   return {
