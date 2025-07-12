@@ -175,11 +175,11 @@ function openObjectPicker(
   );
   if (!objectPickerWidget) return;
   setTimeout(() => {
-    const inlineEditor = getInlineEditorByModel(std, model);
-    console.log('11111', objectPickerWidget);
+    //const inlineEditor = getInlineEditorByModel(std, model);
     // @ts-expect-error same as above
     objectPickerWidget.showObjectPicker(
-      inlineEditor,
+      std,
+      //inlineEditor,
       triggerKey,
       obj_type,
       model

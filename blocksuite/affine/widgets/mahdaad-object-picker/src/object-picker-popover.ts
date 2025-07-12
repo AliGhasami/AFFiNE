@@ -55,6 +55,16 @@ export class ObjectPickerPopover extends SignalWatcher(
     );
   };
 
+  updatePosition = (position: { x: string; y: string; height: number }) => {
+    this._position = position;
+  };
+
+  private readonly _startRange = this.inlineEditor.getInlineRange();
+
+  private get _query() {
+    return getTextContentFromInlineRange(this.inlineEditor, this._startRange);
+  }
+
   private readonly clearTrigger = () => {
     cleanSpecifiedTail(
       this.context.std,
@@ -133,12 +143,9 @@ export class ObjectPickerPopover extends SignalWatcher(
     }*/
   }
 
-  private get _query() {
-    return getTextContentFromInlineRange(
-      this.context.inlineEditor,
-      this.context.startRange
-    );
-  }
+  /* private get _query() {
+    return getTextContentFromInlineRange(this.inlineEditor, this._startRange);
+  }*/
 
   override connectedCallback() {
     super.connectedCallback();
@@ -170,7 +177,7 @@ export class ObjectPickerPopover extends SignalWatcher(
     const keydownObserverAbortController = new AbortController();
     this._disposables.add(() => keydownObserverAbortController.abort());
 
-    const { eventSource } = this.context.inlineEditor;
+    const { eventSource } = this.inlineEditor;
     if (!eventSource) return;
 
     createKeydownObserver({
@@ -213,10 +220,10 @@ export class ObjectPickerPopover extends SignalWatcher(
       },
       onDelete: () => {
         const curRange = this.context.inlineEditor.getInlineRange();
-        if (!this.context.startRange || !curRange) {
+        if (!this._startRange || !curRange) {
           return;
         }
-        if (curRange.index < this.context.startRange.index) {
+        if (curRange.index < this._startRange.index) {
           this.context.close();
         }
         const subscription =
@@ -303,9 +310,9 @@ export class ObjectPickerPopover extends SignalWatcher(
     >
       <mahdaad-object-picker-component
         search-text="${this._query}"
-        .inline-editor="${this.context.inlineEditor}"
-        type="${this.context.obj_type}"
-        .model="${this.context.model}"
+        .inline-editor="${this.inlineEditor}"
+        type="${this.obj_type}"
+        .model="${this.model}"
         .create-function=${this.addObjectLink}
         .insert-template="${this.insertTemplate}"
         @clear-trigger="${() => {
@@ -313,10 +320,10 @@ export class ObjectPickerPopover extends SignalWatcher(
         }}"
         @select="${(event: CustomEvent) => {
           this.clearTrigger();
-          if (this.context.obj_type == 'template') {
-            this.insertTemplate(event.detail, this.context.model);
+          if (this.obj_type == 'template') {
+            this.insertTemplate(event.detail, this.model);
           } else {
-            this.addObjectLink(this.context.model, event.detail as ObjectLink);
+            this.addObjectLink(this.model, event.detail as ObjectLink);
             this._abort();
             //this.abortController.abort();
           }
@@ -329,7 +336,7 @@ export class ObjectPickerPopover extends SignalWatcher(
     </div>`;
   }
 
-  override willUpdate() {
+  /*override willUpdate() {
     if (!this.hasUpdated) {
       const updatePosition = throttle(() => {
         this._position = getPopperPosition(this, this.context.startNativeRange);
@@ -356,7 +363,7 @@ export class ObjectPickerPopover extends SignalWatcher(
 
       updatePosition();
     }
-  }
+  }*/
 
   @state()
   private accessor _position: {

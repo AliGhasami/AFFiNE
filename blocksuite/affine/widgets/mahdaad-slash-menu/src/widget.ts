@@ -77,14 +77,11 @@ const showSlashMenu = debounce(
     }, 10);
 
     disposables.addFromEvent(window, 'resize', updatePosition);
-    //console.log("aaaaaa",slashMenu,slashMenu.items)
     // FIXME(Flrande): It is not a best practice,
     // but merely a temporary measure for reusing previous components.
     // Mount
-    //console.log('1111', slashMenu);
     container.append(slashMenu);
     setTimeout(updatePosition);
-    //console.log('2222', slashMenu);
     return slashMenu;
   },
   100,

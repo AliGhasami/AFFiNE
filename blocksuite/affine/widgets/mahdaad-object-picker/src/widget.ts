@@ -4,9 +4,17 @@ import {
   type SelectionRect,
 } from '@blocksuite/affine-shared/commands';
 import { FeatureFlagService } from '@blocksuite/affine-shared/services';
-import { getViewportElement } from '@blocksuite/affine-shared/utils';
+import {
+  getCurrentNativeRange,
+  getPopperPosition,
+  getViewportElement,
+} from '@blocksuite/affine-shared/utils';
 import { IS_MOBILE } from '@blocksuite/global/env';
-import type { BlockComponent } from '@blocksuite/std';
+import {
+  type BlockComponent,
+  BlockStdScope,
+  EditorHost,
+} from '@blocksuite/std';
 import {
   BLOCK_ID_ATTR,
   WidgetComponent,
@@ -18,26 +26,122 @@ import {
   type InlineEditor,
   type InlineRootElement,
 } from '@blocksuite/std/inline';
-import { BlockModel } from '@blocksuite/store'
+import { BlockModel } from '@blocksuite/store';
 import { signal } from '@preact/signals-core';
-import { html, nothing } from 'lit';
-import { choose } from 'lit/directives/choose.js';
-import { literal, unsafeStatic } from 'lit/static-html.js';
-
-import { objectTriggerWords } from '../../../../../../src/claytapEditor/utils.ts'
+import {
+  getDirection,
+  objectTriggerWords,
+} from '../../../../../../src/claytapEditor/utils.ts';
 import {
   type IObjectType,
   MAHDAAD_OBJECT_PICKER_WIDGET,
   type ObjectPickerContext,
   type ObjectPickerWidgetConfig,
-} from './config.js'
+} from './config.js';
+import { literal, unsafeStatic } from 'lit/static-html.js';
+import debounce from 'lodash-es/debounce';
+import type {
+  SlashMenuConfig,
+  SlashMenuContext,
+  SlashMenuItem,
+} from '@blocksuite/mahdaad-widget-slash-menu';
+import { DisposableGroup } from '@blocksuite/global/disposable';
+import { getInlineEditorByModel } from '@blocksuite/affine-rich-text';
+import throttle from 'lodash-es/throttle';
+import { ObjectPickerPopover } from './object-picker-popover';
+import type { AffineInlineEditor } from '@blocksuite/affine-shared/types';
+let globalAbortController = new AbortController();
+
+function closePopover() {
+  globalAbortController.abort();
+}
+
+const showMenu = debounce(
+  ({
+    context,
+    //config,
+    container = document.body,
+    abortController = new AbortController(),
+    obj_type,
+    triggerKey,
+    //configItemTransform,
+  }: {
+    context: any; //: { model }
+    obj_type: string;
+    triggerKey: string;
+    //config: SlashMenuConfig;
+    container?: HTMLElement;
+    abortController?: AbortController;
+    //configItemTransform: (item: SlashMenuItem) => SlashMenuItem;
+  }) => {
+    globalAbortController = abortController;
+    const curRange = getCurrentNativeRange();
+    if (!curRange) return;
+    const disposables = new DisposableGroup();
+    abortController.signal.addEventListener('abort', () =>
+      disposables.dispose()
+    );
+
+    const inlineEditor = getInlineEditorByModel(context.std, context.model);
+    if (!inlineEditor) return;
+    const objectPicker = new ObjectPickerPopover(
+      context.std,
+      inlineEditor,
+      abortController,
+      obj_type,
+      context.model
+    );
+
+    //private obj_type: IObjectType,
+    //private model: BlockModel
+
+    disposables.add(() => objectPicker.remove());
+    //objectPicker.options = options;
+    objectPicker.triggerKey = triggerKey;
+    //slashMenu.context = context;
+    /*slashMenu.items = buildSlashMenuItems(
+      typeof config.items === 'function' ? config.items(context) : config.items,
+      context,
+      configItemTransform
+    );*/
+
+    const updatePosition = throttle(() => {
+      /*const slashMenuElement = slashMenu.slashMenuElement;
+      assertExists(
+        slashMenuElement,
+        'You should render the slash menu node even if no position'
+      );
+      debugger;*/
+      //console.log(slashMenuElement, curRange, getDirection());
+      const position = getPopperPosition(
+        objectPicker.PopOverElement,
+        curRange,
+        {},
+        getDirection()
+      );
+      //console.log('out', position);
+      objectPicker.updatePosition(position);
+    }, 10);
+
+    disposables.addFromEvent(window, 'resize', updatePosition);
+    //console.log("aaaaaa",slashMenu,slashMenu.items)
+    // FIXME(Flrande): It is not a best practice,
+    // but merely a temporary measure for reusing previous components.
+    // Mount
+    //console.log('1111', slashMenu);
+    container.append(objectPicker);
+    setTimeout(updatePosition);
+    //console.log('2222', slashMenu);
+    return objectPicker;
+  },
+  100,
+  { leading: true }
+);
 
 export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
-  //static override styles = linkedDocWidgetStyles;
+  //private _context: ObjectPickerContext | null = null;
 
-  private _context: ObjectPickerContext | null = null;
-
-  private readonly _inputRects$ = signal<SelectionRect[]>([]);
+  //private readonly _inputRects$ = signal<SelectionRect[]>([]);
 
   private readonly _mode$ = signal<'desktop' | 'mobile' | 'none'>('none');
 
@@ -79,10 +183,8 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
     ignoreBlockTypes: ['affine:code'],
   };
 
-
-
-  private _updateInputRects() {
-    if (!this._context) return;
+  /* private _updateInputRects() {
+    //if (!this._context) return;
     const { inlineEditor, startRange, triggerKey } = this._context;
 
     const currentInlineRange = inlineEditor.getInlineRange();
@@ -99,14 +201,13 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
       range,
       getViewportElement(this.host)
     );
-  }
+  }*/
 
-  private readonly _renderLinkedDocPopover = () => {
+  /*private readonly _renderLinkedDocPopover = () => {
     return html`<mahdaad-object-picker-popover
       .context=${this._context}
     ></mahdaad-object-picker-popover>`;
-  };
-
+  };*/
 
   private _watchInput() {
     this.handleEvent('beforeInput', ctx => {
@@ -148,20 +249,52 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
       const text = inlineEditor.yTextString;
       if (text) {
         this.config.triggerWords.forEach(item => {
-          const temp=item.words.map(_=>_.toLowerCase())
+          const temp = item.words.map(_ => _.toLowerCase());
           if (temp.includes(text.toLowerCase())) {
-            const triggerKey= temp.find(key=>key==text.toLowerCase())
-              ?? ''
+            const triggerKey =
+              temp.find(key => key == text.toLowerCase()) ?? '';
             inlineEditor
               .waitForUpdate()
               .then(() => {
-                this.show({
+                //debugger;
+                //todo ali ghasami
+
+                /* std: this.std,
                   inlineEditor,
-                  primaryTriggerKey:triggerKey,
-                  mode: IS_MOBILE ? 'mobile' : 'desktop',
-                  obj_type:item.type,
-                  model
+                  startRange,
+                  startNativeRange,
+                  triggerKey: primaryTriggerKey,
+                  config: this.config,
+                  obj_type,
+                  model: props.model,
+                  close: () => {
+                  disposable.unsubscribe();
+                  this._inputRects$.value = [];
+                  this._mode$.value = 'none';
+                  this._context = null;
+
+                showMenu(this.std,sta);*/
+
+                //showMenu({});
+
+                showMenu({
+                  context: {
+                    model,
+                    std: this.std,
+                  },
+                  obj_type: item.type,
+                  triggerKey,
+                  //config: this.config,
+                  //configItemTransform: this.configItemTransform,
                 });
+
+                /*this.show({
+                  inlineEditor,
+                  primaryTriggerKey: triggerKey,
+                  mode: IS_MOBILE ? 'mobile' : 'desktop',
+                  obj_type: item.type,
+                  model,
+                });*/
               })
               .catch(console.error);
           }
@@ -170,39 +303,69 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
     });
   }
 
-  private _watchViewportChange() {
+  /* private _watchViewportChange() {
     const gfx = this.std.get(GfxControllerIdentifier);
     this.disposables.add(
       gfx.viewport.viewportUpdated.subscribe(() => {
         this._updateInputRects();
       })
     );
-  }
+  }*/
 
   get config(): ObjectPickerWidgetConfig {
-    return  MahdaadObjectPickerWidget.DEFAULT_OPTIONS
+    return MahdaadObjectPickerWidget.DEFAULT_OPTIONS;
   }
 
   override connectedCallback() {
     super.connectedCallback();
 
     this._watchInput();
-    this._watchViewportChange();
+    //this._watchViewportChange();
   }
 
-  show(props?: {
+  showObjectPicker = (
+    std: BlockStdScope,
+    //inlineEditor: AffineInlineEditor,
+    triggerKey: string,
+    obj_type: IObjectType,
+    model: BlockModel
+  ) => {
+    //debugger;
+    /*const curRange = getCurrentNativeRange();
+    if (!curRange) return;
+    showMenu({
+      editorHost: this.host,
+      inlineEditor,
+      range: curRange,
+      options: this.options,
+      triggerKey,
+      obj_type,
+      model,
+    });*/
+
+    showMenu({
+      context: { model, std },
+      //config,
+      //container = document.body,
+      //abortController = new AbortController(),
+      obj_type,
+      triggerKey,
+    });
+  };
+
+  /* show(props?: {
     inlineEditor?: InlineEditor;
     primaryTriggerKey?: string;
     mode?: 'desktop' | 'mobile';
     obj_type: IObjectType;
     addTriggerKey?: boolean;
-    model:BlockModel
+    model: BlockModel;
   }) {
     const host = this.host;
     const {
       primaryTriggerKey = '',
       mode = 'desktop',
-      obj_type='document'
+      obj_type = 'document',
       //addTriggerKey = false,
     } = props ?? {};
     let inlineEditor: InlineEditor;
@@ -223,7 +386,7 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
       inlineEditor = props.inlineEditor;
     }
 
-    /*if (addTriggerKey) {
+    /!*if (addTriggerKey) {
       this._addTriggerKey(inlineEditor, primaryTriggerKey);
       // we need to wait the range sync to get the correct startNativeRange
       const subscription = inlineEditor.slots.inlineRangeSync.subscribe(() => {
@@ -231,7 +394,7 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
         subscription.unsubscribe();
       });
       return;
-    }*/
+    }*!/
 
     const startRange = inlineEditor.getInlineRange();
     if (!startRange) return;
@@ -239,10 +402,10 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
     const startNativeRange = inlineEditor.getNativeRange();
     if (!startNativeRange) return;
 
-    const disposable = inlineEditor.slots.renderComplete.subscribe(() => {
+    /!*const disposable = inlineEditor.slots.renderComplete.subscribe(() => {
       this._updateInputRects();
-    });
-    this._context = {
+    });*!/
+    /!*this._context = {
       std: this.std,
       inlineEditor,
       startRange,
@@ -250,24 +413,24 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
       triggerKey: primaryTriggerKey,
       config: this.config,
       obj_type,
-      model:props.model,
+      model: props.model,
       close: () => {
         disposable.unsubscribe();
         this._inputRects$.value = [];
         this._mode$.value = 'none';
         this._context = null;
       },
-    };
+    };*!/
 
-    this._updateInputRects();
+    //this._updateInputRects();
 
     const enableMobile = this.doc
       .get(FeatureFlagService)
       .getFlag('enable_mobile_linked_doc_menu');
     this._mode$.value = enableMobile ? mode : 'desktop';
-  }
+  }*/
 
-  override render() {
+  /*override render() {
     if (this._mode$.value === 'none') return nothing;
     //${this._renderInputMask()}
     return html`
@@ -283,7 +446,7 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
           () => html`${nothing}`
         )}
       ></blocksuite-portal>`;
-  }
+  }*/
 }
 
 export const mahdaadObjectWidget = WidgetViewExtension(
