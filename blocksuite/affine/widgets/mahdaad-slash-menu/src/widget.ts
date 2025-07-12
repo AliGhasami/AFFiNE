@@ -11,8 +11,15 @@ import { SlashMenuExtension } from './extensions';
 import { SlashMenu } from './slash-menu-popover';
 import type { SlashMenuConfig, SlashMenuContext, SlashMenuItem } from './types';
 import { buildSlashMenuItems } from './utils';
-import { MahdaadObjectPickerWidget } from '@blocksuite/mahdaad-widget-object-picker'
+import { MahdaadObjectPickerWidget } from '@blocksuite/mahdaad-widget-object-picker';
 let globalAbortController = new AbortController();
+import throttle from 'lodash-es/throttle';
+
+import {
+  getCurrentNativeRange,
+  getPopperPosition,
+} from '@blocksuite/affine-shared/utils';
+import { getDirection } from '../../../../../../src/claytapEditor/utils';
 
 function closeSlashMenu() {
   globalAbortController.abort();
@@ -33,6 +40,8 @@ const showSlashMenu = debounce(
     configItemTransform: (item: SlashMenuItem) => SlashMenuItem;
   }) => {
     globalAbortController = abortController;
+    const curRange = getCurrentNativeRange();
+    if (!curRange) return;
     const disposables = new DisposableGroup();
     abortController.signal.addEventListener('abort', () =>
       disposables.dispose()
@@ -48,11 +57,34 @@ const showSlashMenu = debounce(
       context,
       configItemTransform
     );
+
+    const updatePosition = throttle(() => {
+      /*const slashMenuElement = slashMenu.slashMenuElement;
+      assertExists(
+        slashMenuElement,
+        'You should render the slash menu node even if no position'
+      );
+      debugger;*/
+      //console.log(slashMenuElement, curRange, getDirection());
+      const position = getPopperPosition(
+        slashMenu.slashMenuElement,
+        curRange,
+        {},
+        getDirection()
+      );
+      //console.log('out', position);
+      slashMenu.updatePosition(position);
+    }, 10);
+
+    disposables.addFromEvent(window, 'resize', updatePosition);
     //console.log("aaaaaa",slashMenu,slashMenu.items)
     // FIXME(Flrande): It is not a best practice,
     // but merely a temporary measure for reusing previous components.
     // Mount
+    //console.log('1111', slashMenu);
     container.append(slashMenu);
+    setTimeout(updatePosition);
+    //console.log('2222', slashMenu);
     return slashMenu;
   },
   100,
@@ -129,9 +161,10 @@ export class AffineSlashMenuWidget extends WidgetComponent {
         : '';
 
       if (text) {
-        for (const item of  MahdaadObjectPickerWidget.DEFAULT_OPTIONS.triggerWords) {
+        for (const item of MahdaadObjectPickerWidget.DEFAULT_OPTIONS
+          .triggerWords) {
           //text.toLowerCase().startsWith(item.word.toLowerCase())
-          const temp= item.words.map(_=> _.toLowerCase())
+          const temp = item.words.map(_ => _.toLowerCase());
           if (temp.includes(text.toLowerCase())) {
             closeSlashMenu();
             return;

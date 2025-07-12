@@ -1,5 +1,5 @@
 import { MahdaadCalloutBlockModel } from '@blocksuite/affine-model';
-import { insertContent } from '@blocksuite/affine-rich-text'
+import { insertContent } from '@blocksuite/affine-rich-text';
 import {
   findAncestorModel,
   matchModels,
@@ -7,11 +7,10 @@ import {
 import { type SlashMenuConfig } from '@blocksuite/affine-widget-slash-menu';
 import type { BlockStdScope } from '@blocksuite/std';
 import type { BlockModel } from '@blocksuite/store';
-import { html } from 'lit'
-
-import { objectTriggerKey } from '../../../../../../../src/claytapEditor/utils'
-import type { IObjectType } from '../../../../../../../src/types/object'
-
+import { html } from 'lit';
+import { objectTriggerKey } from '../../../../../../../src/claytapEditor/utils';
+import type { IObjectType } from '../../../../../../../src/types/object';
+import { getInlineEditorByModel } from '@blocksuite/affine-rich-text';
 export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
   disableWhen: ({ model }) => {
     return (
@@ -32,7 +31,7 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       searchAlias: [''],
       group: '0_mahdaad@2',
       when: () => {
-        return true
+        return true;
         /*return (
           std.get(FeatureFlagService).getFlag('enable_callout') &&
           !isInsideBlockByFlavour(model.doc, model, 'affine:edgeless-text')
@@ -41,7 +40,7 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       action: ({ model, std }) => {
         const triggerKey = objectTriggerKey.value.page;
         insertContent(std, model, triggerKey);
-        openObjectPicker(std, model, 'document',triggerKey);
+        openObjectPicker(std, model, 'document', triggerKey);
       },
     },
     {
@@ -55,7 +54,7 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       searchAlias: [''],
       group: '0_mahdaad@3',
       when: () => {
-        return true
+        return true;
         /*return (
           std.get(FeatureFlagService).getFlag('enable_callout') &&
           !isInsideBlockByFlavour(model.doc, model, 'affine:edgeless-text')
@@ -64,7 +63,7 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       action: ({ model, std }) => {
         const triggerKey = objectTriggerKey.value.file;
         insertContent(std, model, triggerKey);
-        openObjectPicker(std, model, 'file',triggerKey);
+        openObjectPicker(std, model, 'file', triggerKey);
       },
     },
     {
@@ -78,7 +77,7 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       searchAlias: [''],
       group: '0_mahdaad@4',
       when: () => {
-        return true
+        return true;
         /*return (
           std.get(FeatureFlagService).getFlag('enable_callout') &&
           !isInsideBlockByFlavour(model.doc, model, 'affine:edgeless-text')
@@ -87,7 +86,7 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       action: ({ model, std }) => {
         const triggerKey = objectTriggerKey.value.weblink;
         insertContent(std, model, triggerKey);
-        openObjectPicker(std, model, 'weblink',triggerKey);
+        openObjectPicker(std, model, 'weblink', triggerKey);
       },
     },
     {
@@ -101,7 +100,7 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       searchAlias: [''],
       group: '0_mahdaad@5',
       when: () => {
-        return true
+        return true;
         /*return (
           std.get(FeatureFlagService).getFlag('enable_callout') &&
           !isInsideBlockByFlavour(model.doc, model, 'affine:edgeless-text')
@@ -110,7 +109,7 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       action: ({ model, std }) => {
         const triggerKey = objectTriggerKey.value.tag;
         insertContent(std, model, triggerKey);
-        openObjectPicker(std, model, 'tag',triggerKey);
+        openObjectPicker(std, model, 'tag', triggerKey);
       },
     },
     {
@@ -124,7 +123,7 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       searchAlias: [''],
       group: '0_mahdaad@6',
       when: () => {
-        return true
+        return true;
         /*return (
           std.get(FeatureFlagService).getFlag('enable_callout') &&
           !isInsideBlockByFlavour(model.doc, model, 'affine:edgeless-text')
@@ -133,7 +132,7 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       action: ({ model, std }) => {
         const triggerKey = objectTriggerKey.value.template;
         insertContent(std, model, triggerKey);
-        openObjectPicker(std, model, 'template',triggerKey);
+        openObjectPicker(std, model, 'template', triggerKey);
       },
     },
     {
@@ -147,7 +146,7 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       searchAlias: [''],
       group: '0_mahdaad@7',
       when: () => {
-        return true
+        return true;
         /*return (
           std.get(FeatureFlagService).getFlag('enable_callout') &&
           !isInsideBlockByFlavour(model.doc, model, 'affine:edgeless-text')
@@ -156,20 +155,18 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       action: ({ model, std }) => {
         const triggerKey = objectTriggerKey.value.image;
         insertContent(std, model, triggerKey);
-        openObjectPicker(std, model, 'image',triggerKey);
+        openObjectPicker(std, model, 'image', triggerKey);
       },
     },
   ],
 };
 
-
 function openObjectPicker(
-  std:  BlockStdScope,
-  model:  BlockModel,
+  std: BlockStdScope,
+  model: BlockModel,
   obj_type: IObjectType,
-  triggerKey:string
+  triggerKey: string
 ) {
-
   const root = model.doc.root;
   if (!root) return;
   const objectPickerWidget = std.view.getWidget(
@@ -177,9 +174,15 @@ function openObjectPicker(
     root.id
   );
   if (!objectPickerWidget) return;
-  setTimeout(()=>{
-    // TODO(@L-Sun): make linked-doc-widget as extension
+  setTimeout(() => {
+    const inlineEditor = getInlineEditorByModel(std, model);
+    console.log('11111', objectPickerWidget);
     // @ts-expect-error same as above
-    objectPickerWidget.show({ obj_type,primaryTriggerKey:triggerKey,model });
-  })
+    objectPickerWidget.showObjectPicker(
+      inlineEditor,
+      triggerKey,
+      obj_type,
+      model
+    );
+  });
 }

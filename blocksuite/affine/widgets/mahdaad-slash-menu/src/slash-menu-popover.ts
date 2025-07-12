@@ -9,8 +9,6 @@ import {
 import type { AffineInlineEditor } from '@blocksuite/affine-shared/types';
 import {
   createKeydownObserver,
-  getCurrentNativeRange,
-  getPopperPosition,
   isFuzzyMatch,
   substringMatchScore,
 } from '@blocksuite/affine-shared/utils';
@@ -19,13 +17,13 @@ import { ShadowlessElement } from '@blocksuite/std';
 import { html } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import throttle from 'lodash-es/throttle';
 
 //todo fix import ali ghasami
 import { prefixCls } from '../../../../../../src/claytapEditor/const';
-import { getDirection } from '../../../../../../src/claytapEditor/utils';
+//import { getDirection } from '../../../../../../src/claytapEditor/utils';
 import { AFFINE_SLASH_MENU_TRIGGER_KEY } from './consts.js';
 //import { actionsMenu } from './mahdaad_menu'
+import { query } from 'lit/decorators.js';
 import { styles } from './styles.js';
 import type {
   SlashMenuActionItem,
@@ -49,6 +47,10 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
   private get _editorMode() {
     return this.context.std.get(DocModeProvider).getEditorMode();
   }
+
+  updatePosition = (position: { x: string; y: string; height: number }) => {
+    this._position = position;
+  };
 
   private readonly _handleClickItem = (item: SlashMenuActionItem) => {
     // Need to remove the search string
@@ -285,8 +287,9 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
     });
   }
 
-  protected override willUpdate() {
+  /*protected override willUpdate() {
     if (!this.hasUpdated) {
+      console.log('element  in willUpdate', this);
       const currRage = getCurrentNativeRange();
       if (!currRage) {
         this.abortController.abort();
@@ -295,6 +298,10 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
 
       // Handle position
       const updatePosition = throttle(() => {
+        //const elm = this.querySelector('mahdaad-slash-menu');
+        //console.log('a', this, elm);
+        debugger;
+        console.log(this, this.firstChild, currRage, getDirection());
         this._position = getPopperPosition(this, currRage, {}, getDirection());
         console.log('aaaaa', this._position);
       }, 10);
@@ -302,7 +309,36 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
       this.disposables.addFromEvent(window, 'resize', updatePosition);
       updatePosition();
     }
-  }
+  }*/
+
+  /*protected override updated(_changedProperties: PropertyValues) {
+    console.log('11111', _changedProperties);
+    if (_changedProperties.size == 1 && _changedProperties.has('_position'))
+      return;
+    //if (!this.hasUpdated) {
+    console.log('element  in updated', this);
+    //console.log('element  in willUpdate', this);
+    const currRage = getCurrentNativeRange();
+    if (!currRage) {
+      this.abortController.abort();
+      return;
+    }
+
+    // Handle position
+    const updatePosition = throttle(() => {
+      //const elm = this.querySelector('mahdaad-slash-menu');
+      //console.log('a', this, elm);
+      debugger;
+      console.log(this, this.firstChild, currRage, getDirection());
+      this._position = getPopperPosition(this, currRage, {}, getDirection());
+      console.log('aaaaa', this._position);
+    }, 10);
+
+    this.disposables.addFromEvent(window, 'resize', updatePosition);
+    updatePosition();
+    //}
+    //super.updated(_changedProperties);
+  }*/
 
   checkKeys() {
     let allowKeys = ['*'];
@@ -319,6 +355,7 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
   }
 
   override render() {
+    //debugger;
     const { denyKeys, allowKeys } = this.checkKeys();
     const slashMenuStyles = this._position
       ? {
@@ -352,6 +389,7 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
 
       <div
         class="${prefixCls}-slash-menu-popover"
+        id="mahdaad-claytap-slash-menu"
         style="${styleMap(slashMenuStyles)}"
       >
         <mahdaad-slash-menu
@@ -422,4 +460,7 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
 
   @property({ attribute: false })
   accessor context!: SlashMenuContext;
+
+  @query('#mahdaad-claytap-slash-menu')
+  accessor slashMenuElement!: HTMLElement;
 }

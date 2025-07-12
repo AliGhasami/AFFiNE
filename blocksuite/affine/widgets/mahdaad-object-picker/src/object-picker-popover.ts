@@ -13,26 +13,36 @@ import {
   getViewportElement,
 } from '@blocksuite/affine-shared/utils';
 import { SignalWatcher, WithDisposable } from '@blocksuite/global/lit';
-import { PropTypes, requiredProperties } from '@blocksuite/std';
+import { EditorHost } from '@blocksuite/std';
 import { ShadowlessElement } from '@blocksuite/std';
 import { GfxControllerIdentifier } from '@blocksuite/std/gfx';
 import type { InlineEditor } from '@blocksuite/std/inline';
 import type { BlockModel } from '@blocksuite/store';
 import { html } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { property, state, query } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { get } from 'lodash-es';
 import throttle from 'lodash-es/throttle';
-
 import type { ObjectLink } from '../../../../../../src/claytapEditor/types';
-import type { ObjectPickerContext } from './config.js';
-@requiredProperties({
+import type { IObjectType, ObjectPickerContext } from './config.js';
+import type { AffineInlineEditor } from '@blocksuite/affine-shared/types';
+/*@requiredProperties({
   context: PropTypes.object,
-})
+})*/
 export class ObjectPickerPopover extends SignalWatcher(
   WithDisposable(ShadowlessElement)
 ) {
   //static override styles = objectPickerPopoverStyles;
+
+  constructor(
+    private editorHost: EditorHost,
+    private inlineEditor: AffineInlineEditor,
+    private abortController = new AbortController(),
+    private obj_type: IObjectType,
+    private model: BlockModel
+  ) {
+    super();
+  }
 
   private readonly _abort = () => {
     // remove popover dom
@@ -287,7 +297,10 @@ export class ObjectPickerPopover extends SignalWatcher(
           visibility: 'hidden',
         });
 
-    return html`<div class="object-picker-popover" style="${style}">
+    return html`<div
+      class="object-picker-popover object-popover-element"
+      style="${style}"
+    >
       <mahdaad-object-picker-component
         search-text="${this._query}"
         .inline-editor="${this.context.inlineEditor}"
@@ -354,4 +367,10 @@ export class ObjectPickerPopover extends SignalWatcher(
 
   @property({ attribute: false })
   accessor context!: ObjectPickerContext;
+
+  @property({ attribute: false })
+  accessor triggerKey!: string;
+
+  @query(`.object-popover-element`)
+  accessor PopOverElement: Element | null = null;
 }
