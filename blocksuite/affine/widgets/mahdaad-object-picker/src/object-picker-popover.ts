@@ -9,22 +9,20 @@ import {
 import { replaceIdMiddleware } from '@blocksuite/affine-shared/adapters';
 import {
   createKeydownObserver,
-  getPopperPosition,
-  getViewportElement,
 } from '@blocksuite/affine-shared/utils';
 import { SignalWatcher, WithDisposable } from '@blocksuite/global/lit';
-import { EditorHost } from '@blocksuite/std';
+import { BlockStdScope } from '@blocksuite/std'
 import { ShadowlessElement } from '@blocksuite/std';
-import { GfxControllerIdentifier } from '@blocksuite/std/gfx';
 import type { InlineEditor } from '@blocksuite/std/inline';
 import type { BlockModel } from '@blocksuite/store';
 import { html } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { get } from 'lodash-es';
-import throttle from 'lodash-es/throttle';
 import type { ObjectLink } from '../../../../../../src/claytapEditor/types';
-import type { IObjectType, ObjectPickerContext } from './config.js';
+import type { IObjectType,
+  //ObjectPickerContext
+} from './config.js';
 import type { AffineInlineEditor } from '@blocksuite/affine-shared/types';
 /*@requiredProperties({
   context: PropTypes.object,
@@ -35,7 +33,7 @@ export class ObjectPickerPopover extends SignalWatcher(
   //static override styles = objectPickerPopoverStyles;
 
   constructor(
-    private editorHost: EditorHost,
+    private editorHost:  BlockStdScope,
     private inlineEditor: AffineInlineEditor,
     private abortController = new AbortController(),
     private obj_type: IObjectType,
@@ -46,12 +44,13 @@ export class ObjectPickerPopover extends SignalWatcher(
 
   private readonly _abort = () => {
     // remove popover dom
-    this.context.close();
+    //this.context.close();
+    this.abortController.abort();
     // clear input query
     cleanSpecifiedTail(
-      this.context.std,
-      this.context.inlineEditor,
-      this.context.triggerKey + (this._query || '')
+      this.editorHost,
+      this.inlineEditor,
+      this.triggerKey + (this._query || '')
     );
   };
 
@@ -67,9 +66,9 @@ export class ObjectPickerPopover extends SignalWatcher(
 
   private readonly clearTrigger = () => {
     cleanSpecifiedTail(
-      this.context.std,
-      this.context.inlineEditor,
-      this.context.triggerKey + (this._query || '')
+      this.editorHost,
+      this.inlineEditor,
+      this.triggerKey + (this._query || '')
     );
     /*try {
       /!*const text = this._searchText ? this.triggerKey + this._searchText : this.triggerKey;
@@ -101,7 +100,7 @@ export class ObjectPickerPopover extends SignalWatcher(
       },
     });*/
 
-    const temp = model.doc.addSiblingBlocks(this.context.model, [
+    const temp = model.doc.addSiblingBlocks(this.model, [
       {
         flavour: 'affine:mahdaad-object',
         ...lnk,
@@ -119,7 +118,7 @@ export class ObjectPickerPopover extends SignalWatcher(
     if (deleteEmptyBlock) {
       setTimeout(() => {
         if (model.text?.length == 0) {
-          model.doc.deleteBlock(this.context.model);
+          model.doc.deleteBlock(this.model);
         }
       });
     }
@@ -127,20 +126,20 @@ export class ObjectPickerPopover extends SignalWatcher(
     const next = model.doc.getNext(temp[0]);
     //console.log("cccc",next);
 
-    if (next && this.context.std) {
+    if (next && this.editorHost) {
       //console.log("host",this.editorHost);
       const inline: InlineEditor | null = getInlineEditorByModel(
-        this.context.std,
+        this.editorHost,
         next
       );
       if (inline) {
         inline.focusEnd();
       }
     }
-    this.context.close();
-    /*if (this.abortController) {
+    //this.context.close();
+    if (this.abortController) {
       this.abortController.abort();
-    }*/
+    }
   }
 
   /* private get _query() {
@@ -171,7 +170,8 @@ export class ObjectPickerPopover extends SignalWatcher(
     this._disposables.addFromEvent(window, 'mousedown', e => {
       //if (e.target === this) return;
       // We don't clear the query when clicking outside the popover
-      this.context.close();
+      //this.context.close();
+      this.abortController.abort();
     });
 
     const keydownObserverAbortController = new AbortController();
@@ -195,7 +195,8 @@ export class ObjectPickerPopover extends SignalWatcher(
           return;
         }
         if (event.key === 'Escape') {
-          this.context.close();
+          //this.context.close();
+          this.abortController.abort();
           event.preventDefault();
           event.stopPropagation();
           return;
@@ -207,7 +208,7 @@ export class ObjectPickerPopover extends SignalWatcher(
           //this._updateLinkedDocGroup().catch(console.error);
         } else {
           const subscription =
-            this.context.inlineEditor.slots.renderComplete.subscribe(() => {
+            this.inlineEditor.slots.renderComplete.subscribe(() => {
               subscription.unsubscribe();
               //this._updateLinkedDocGroup().catch(console.error);
             });
@@ -219,15 +220,16 @@ export class ObjectPickerPopover extends SignalWatcher(
         }, 50);*/
       },
       onDelete: () => {
-        const curRange = this.context.inlineEditor.getInlineRange();
+        const curRange = this.inlineEditor.getInlineRange();
         if (!this._startRange || !curRange) {
           return;
         }
         if (curRange.index < this._startRange.index) {
-          this.context.close();
+          //this.context.close();
+          this.abortController.abort();
         }
         const subscription =
-          this.context.inlineEditor.slots.renderComplete.subscribe(() => {
+          this.inlineEditor.slots.renderComplete.subscribe(() => {
             subscription.unsubscribe();
             //this._updateLinkedDocGroup().catch(console.error);
           });
@@ -238,7 +240,8 @@ export class ObjectPickerPopover extends SignalWatcher(
           ?.catch(console.error);*/
       },
       onAbort: () => {
-        this.context.close();
+        //this.context.close();
+        this.abortController.abort();
       },
     });
   }
@@ -372,8 +375,8 @@ export class ObjectPickerPopover extends SignalWatcher(
     y: string;
   } | null = null;
 
-  @property({ attribute: false })
-  accessor context!: ObjectPickerContext;
+  //@property({ attribute: false })
+  //accessor context!: ObjectPickerContext;
 
   @property({ attribute: false })
   accessor triggerKey!: string;

@@ -35,21 +35,15 @@ import {
 import {
   type IObjectType,
   MAHDAAD_OBJECT_PICKER_WIDGET,
-  type ObjectPickerContext,
   type ObjectPickerWidgetConfig,
 } from './config.js';
 import { literal, unsafeStatic } from 'lit/static-html.js';
 import debounce from 'lodash-es/debounce';
-import type {
-  SlashMenuConfig,
-  SlashMenuContext,
-  SlashMenuItem,
-} from '@blocksuite/mahdaad-widget-slash-menu';
+
 import { DisposableGroup } from '@blocksuite/global/disposable';
 import { getInlineEditorByModel } from '@blocksuite/affine-rich-text';
 import throttle from 'lodash-es/throttle';
 import { ObjectPickerPopover } from './object-picker-popover';
-import type { AffineInlineEditor } from '@blocksuite/affine-shared/types';
 let globalAbortController = new AbortController();
 
 function closePopover() {
@@ -95,7 +89,7 @@ const showMenu = debounce(
     //private obj_type: IObjectType,
     //private model: BlockModel
 
-    disposables.add(() => objectPicker.remove());
+
     //objectPicker.options = options;
     objectPicker.triggerKey = triggerKey;
     //slashMenu.context = context;
@@ -105,6 +99,11 @@ const showMenu = debounce(
       configItemTransform
     );*/
 
+    container.append(objectPicker);
+    disposables.add(() => {
+      objectPicker.clearTrigger()
+      objectPicker.remove()
+    });
     const updatePosition = throttle(() => {
       /*const slashMenuElement = slashMenu.slashMenuElement;
       assertExists(
@@ -124,14 +123,49 @@ const showMenu = debounce(
     }, 10);
 
     disposables.addFromEvent(window, 'resize', updatePosition);
+    /*const scrollContainer = getViewportElement(context.std);
+    if (scrollContainer) {
+      // Note: in edgeless mode, the scroll container is not exist!
+      disposables.addFromEvent(scrollContainer, 'scroll', updatePosition, {
+        passive: true,
+      });
+    }*/
     //console.log("aaaaaa",slashMenu,slashMenu.items)
     // FIXME(Flrande): It is not a best practice,
     // but merely a temporary measure for reusing previous components.
     // Mount
     //console.log('1111', slashMenu);
-    container.append(objectPicker);
+
     setTimeout(updatePosition);
     //console.log('2222', slashMenu);
+
+    disposables.addFromEvent(
+      objectPicker,
+      'mousedown',
+      e => {
+        e.stopPropagation();
+        //console.log('this is objectPicker');
+        // console.log('555', e, e.target);
+        //if (e.target === objectPicker) return;
+        //abortController.abort();
+        //abortController.abort();
+      }
+      //{ passive: true }
+    );
+
+    disposables.addFromEvent(
+      window,
+      'mousedown',
+      e => {
+        //console.log('this is windows event');
+        //console.log('555', e, e.target);
+        //if (e.target === objectPicker) return;
+        abortController.abort();
+        //abortController.abort();
+      }
+      //{ passive: true }
+    );
+
     return objectPicker;
   },
   100,
