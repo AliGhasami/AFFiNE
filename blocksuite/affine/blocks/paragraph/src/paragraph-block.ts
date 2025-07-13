@@ -31,6 +31,7 @@ import { setDirectionOnBlock } from '../../../../../../src/claytapEditor/utils/b
 import quoteIcon from './assets/quote.svg?raw';
 import { ParagraphBlockConfigExtension } from './paragraph-block-config.js';
 import { paragraphBlockStyles } from './styles.js';
+import { getDirection, isRTL } from '../../../../../../src/claytapEditor/utils';
 
 export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBlockModel> {
   static override styles = paragraphBlockStyles;
@@ -313,7 +314,9 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
         .affine-paragraph-block-container[data-has-collapsed-siblings='false']
           affine-paragraph-heading-icon
           .heading-icon {
-          transform: translateX(-48px);
+          transform: translateX(
+            ${this._dir == 'ltr' ? '-48px' : '48px'}
+          ) !important;
         }
       </style>
       <div
@@ -332,6 +335,7 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
             ? html`
                 <affine-paragraph-heading-icon
                   .model=${this.model}
+                  .direction=${this._dir}
                 ></affine-paragraph-heading-icon>
               `
             : nothing}
@@ -365,6 +369,10 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
         ${children}
       </div>
     `;
+  }
+
+  private get _dir() {
+    return this.model.props.dir ? this.model.props.dir : getDirection();
   }
 
   @state()

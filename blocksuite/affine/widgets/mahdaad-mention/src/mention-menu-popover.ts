@@ -2,67 +2,60 @@ import {
   cleanSpecifiedTail,
   getTextContentFromInlineRange,
 } from '@blocksuite/affine-rich-text';
+import { createKeydownObserver } from '@blocksuite/affine-shared/utils';
+import { SignalWatcher, WithDisposable } from '@blocksuite/global/lit';
+import { BlockStdScope } from '@blocksuite/std';
+import { ShadowlessElement } from '@blocksuite/std';
+import { html } from 'lit';
+import { property, state, query } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import type { AffineInlineEditor } from '@blocksuite/affine-shared/types';
 import { insertContent } from '@blocksuite/affine-rich-text';
 import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts';
-import {
-  createKeydownObserver,
-  getPopperPosition,
-  getViewportElement,
-} from '@blocksuite/affine-shared/utils';
-import { SignalWatcher, WithDisposable } from '@blocksuite/global/lit';
-import { PropTypes, requiredProperties } from '@blocksuite/std';
-import { ShadowlessElement } from '@blocksuite/std';
-import { GfxControllerIdentifier } from '@blocksuite/std/gfx';
-import { html } from 'lit';
-import { property, state } from 'lit/decorators.js';
-import { styleMap } from 'lit/directives/style-map.js';
-import throttle from 'lodash-es/throttle';
+import { BlockModel } from '@blocksuite/store';
+import { prefixCls } from '../../../../../../src/claytapEditor/const';
 
-import type { MahdaadMentionContext } from './config.js';
-
-@requiredProperties({
-  context: PropTypes.object,
-})
 export class MentionMenuPopover extends SignalWatcher(
   WithDisposable(ShadowlessElement)
 ) {
-  //static override styles = objectPickerPopoverStyles;
+  constructor(
+    private editorHost: BlockStdScope,
+    private inlineEditor: AffineInlineEditor,
+    private abortController = new AbortController(),
+    private model: BlockModel
+  ) {
+    super();
+  }
 
   private readonly _abort = () => {
     // remove popover dom
-    this.context.close();
+    //this.context.close();
+    this.abortController.abort();
     // clear input query
     cleanSpecifiedTail(
-      this.context.std,
-      this.context.inlineEditor,
-      this.context.triggerKey + (this._query || '')
+      this.editorHost,
+      this.inlineEditor,
+      this.triggerKey + (this._query || '')
     );
   };
 
-  private readonly clearTrigger = () => {
-    //console.log("11111",this.context.triggerKey + (this._query || ''),this.context.triggerKey,this._query)
-    // + (this._query || '')
-    cleanSpecifiedTail(
-      this.context.std,
-      this.context.inlineEditor,
-      this.context.triggerKey + (this._query || '')
-    );
-    /*try {
-      /!*const text = this._searchText ? this.triggerKey + this._searchText : this.triggerKey;
-      cleanSpecifiedTail(this.editorHost, this.inlineEditor, text);*!/
-
-
-    } catch (e) {
-      console.log(e);
-    }*/
+  updatePosition = (position: { x: string; y: string; height: number }) => {
+    this._position = position;
   };
+
+  private readonly _startRange = this.inlineEditor.getInlineRange();
 
   private get _query() {
-    return getTextContentFromInlineRange(
-      this.context.inlineEditor,
-      this.context.startRange
-    );
+    return getTextContentFromInlineRange(this.inlineEditor, this._startRange);
   }
+
+  private readonly clearTrigger = () => {
+    cleanSpecifiedTail(
+      this.editorHost,
+      this.inlineEditor,
+      this.triggerKey + (this._query || '')
+    );
+  };
 
   override connectedCallback() {
     super.connectedCallback();
@@ -88,13 +81,14 @@ export class MentionMenuPopover extends SignalWatcher(
     this._disposables.addFromEvent(window, 'mousedown', e => {
       //if (e.target === this) return;
       // We don't clear the query when clicking outside the popover
-      this.context.close();
+      //this.context.close();
+      this.abortController.abort();
     });
 
     const keydownObserverAbortController = new AbortController();
     this._disposables.add(() => keydownObserverAbortController.abort());
 
-    const { eventSource } = this.context.inlineEditor;
+    const { eventSource } = this.inlineEditor;
     if (!eventSource) return;
 
     createKeydownObserver({
@@ -106,86 +100,73 @@ export class MentionMenuPopover extends SignalWatcher(
           return;
         }
 
-        if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+        /*if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
           event.preventDefault();
           event.stopPropagation();
           return;
-        }
-        if (event.key === 'Escape') {
-          this.context.close();
+        }*/
+        /*if (event.key === 'Escape') {
+          //this.context.close();
+          this.abortController.abort();
           event.preventDefault();
           event.stopPropagation();
           return;
-        }
+        }*/
         next();
       },
-      onInput: isComposition => {
+      onInput: () => {
         setTimeout(() => {
           // console.log("22222",this._query);
           this._searchText = this._query;
         }, 50);
-
-        if (isComposition) {
+        /*if (isComposition) {
           //this._updateLinkedDocGroup().catch(console.error);
         } else {
-          const subscription =
-            this.context.inlineEditor.slots.renderComplete.subscribe(() => {
+          const subscription = this.inlineEditor.slots.renderComplete.subscribe(
+            () => {
               subscription.unsubscribe();
               //this._updateLinkedDocGroup().catch(console.error);
-            });
-        }
-      },
-      onPaste: () => {
-        /*setTimeout(() => {
-          this._updateLinkedDocGroup().catch(console.error);
-        }, 50);*/
-      },
-      onDelete: () => {
-        /* setTimeout(() => {
-          //console.log("22222",this._query);
-          this._searchText = this._query;
-        }, 50);*/
-        /* const curRange = this.context.inlineEditor.getInlineRange();
-        if (!this.context.startRange || !curRange) {
-          return;
-        }
-        if (curRange.index < this.context.startRange.index) {
-          this.context.close();
+            }
+          );
         }*/
-        /*const subscription =
-          this.context.inlineEditor.slots.renderComplete.subscribe(() => {
-            subscription.unsubscribe();
-            //this._updateLinkedDocGroup().catch(console.error);
-          });*/
+      },
 
-        /*************************/
+      onDelete: () => {
         setTimeout(() => {
           //console.log("22222",this._query);
           this._searchText = this._query;
         }, 50);
-        //const curIndex = inlineEditor.getInlineRange()?.index ?? 0;
-        const curRange = this.context.inlineEditor.getInlineRange();
-        if (!this.context.startRange || !curRange) {
+
+        const curRange = this.inlineEditor.getInlineRange();
+        if (!this._startRange || !curRange) {
           return;
         }
-        /*if (curIndex < this._startIndex) {
+        if (curRange.index - 1 < this._startRange.index) {
+          //this.context.close();
           this.abortController.abort();
-        }*/
-        //console.log("1111",curRange.index);
-        //console.log("22222",this._startRange.index);
-        if (curRange.index - 1 < this.context.startRange.index) {
-          this._abort();
         }
+        /*const subscription = this.inlineEditor.slots.renderComplete.subscribe(
+          () => {
+            subscription.unsubscribe();
+            //this._updateLinkedDocGroup().catch(console.error);
+          }
+        );*/
       },
       onConfirm: () => {
+        this.abortController.abort();
         /*this._flattenActionList[this._activatedItemIndex]
           .action()
           ?.catch(console.error);*/
       },
       onAbort: () => {
-        this._abort();
         //this.context.close();
+        this.abortController.abort();
       },
+    });
+
+    this._disposables.addFromEvent(this, 'mousedown', e => {
+      e.stopPropagation();
+      e.preventDefault();
     });
   }
 
@@ -205,125 +186,95 @@ export class MentionMenuPopover extends SignalWatcher(
       : styleMap({
           visibility: 'hidden',
         });
-    //console.log('{1111', this._query, this.context.triggerKey);
-    return html`<div class="object-picker-popover" style="${style}">
-      <mahdaad-user-picker
-        search-text="${this._query}"
-        .inline-editor="${this.context.inlineEditor}"
-        @select="${(event: CustomEvent) => {
-          //return;
-          this.context.close();
-          this.clearTrigger();
-          setTimeout(() => {
-            insertContent(
-              this.context.std,
-              this.context.model,
-              REFERENCE_NODE,
-              {
+    return html`<div
+      class="${prefixCls}-command-popover popover-element"
+      style="${style}"
+    >
+      <div class="${prefixCls}-command-popover-container">
+        <mahdaad-user-picker
+          search-text="${this._searchText}"
+          .inline-editor="${this.inlineEditor}"
+          @select="${(event: CustomEvent) => {
+            //return;
+            //this.
+            this.abortController.abort();
+            this.clearTrigger();
+            setTimeout(() => {
+              insertContent(this.editorHost, this.model, REFERENCE_NODE, {
                 mention: {
                   user_id: event.detail.user_id,
                   id: event.detail.id,
                 },
-              }
-            );
-            /* const inlineEditor = this.context.inlineEditor
-                const inlineRange = inlineEditor.getInlineRange();
-                if (!inlineRange) return;
+              });
+              /* const inlineEditor = this.context.inlineEditor
+             const inlineRange = inlineEditor.getInlineRange();
+             if (!inlineRange) return;
 
-                inlineEditor.insertText(inlineRange, REFERENCE_NODE, {
-                  mention: {
-                    user_id: event.detail.user_id,
-                    id: event.detail.id,
-                  },
-                });
-                inlineEditor.setInlineRange({
-                  index: inlineRange.index+1,
-                  length: 0,
-                });*/
-          }, 1);
+             inlineEditor.insertText(inlineRange, REFERENCE_NODE, {
+               mention: {
+                 user_id: event.detail.user_id,
+                 id: event.detail.id,
+               },
+             });
+             inlineEditor.setInlineRange({
+               index: inlineRange.index+1,
+               length: 0,
+             });*/
+            }, 1);
 
-          /*return;
-              const inlineEditor = this.context.inlineEditor
-              if (!inlineEditor) return;
-              this.context.inlineEditor
-                .waitForUpdate()
-                .then(() => {
-                  const inlineRange = inlineEditor.getInlineRange();
-                  if (!inlineRange) return;
+            /*return;
+           const inlineEditor = this.context.inlineEditor
+           if (!inlineEditor) return;
+           this.context.inlineEditor
+             .waitForUpdate()
+             .then(() => {
+               const inlineRange = inlineEditor.getInlineRange();
+               if (!inlineRange) return;
 
-                  inlineEditor.insertText(inlineRange, REFERENCE_NODE, {
-                    mention: {
-                      user_id: event.detail.user_id,
-                      id: event.detail.id,
-                    },
-                  });
-                  inlineEditor.setInlineRange({
-                    index: inlineRange.index+1,
-                    length: 0,
-                  });
-                  //inlineEditor.deleteText({index:inlineRange.index-1,length:1})
-                })*/
-          //return
-          /*insertContent(this.context.std, this.context.model, REFERENCE_NODE, {
-                mention: {
-                  user_id: event.detail.user_id,
-                  id: event.detail.id,
-                },
-              });*/
+               inlineEditor.insertText(inlineRange, REFERENCE_NODE, {
+                 mention: {
+                   user_id: event.detail.user_id,
+                   id: event.detail.id,
+                 },
+               });
+               inlineEditor.setInlineRange({
+                 index: inlineRange.index+1,
+                 length: 0,
+               });
+               //inlineEditor.deleteText({index:inlineRange.index-1,length:1})
+             })*/
+            //return
+            /*insertContent(this.context.std, this.context.model, REFERENCE_NODE, {
+             mention: {
+               user_id: event.detail.user_id,
+               id: event.detail.id,
+             },
+           });*/
 
-          //this.context.close();
-          //return
-          /*this.context.inlineEditor
-              .waitForUpdate()
-              .then(() => {
-                //console.log("11111",this.context)
-                //item.action(this.context)?.catch(console.error);
-                //this.abortController.abort();
-                insertContent(this.context.std, this.context.model, REFERENCE_NODE, {
-                  mention: {
-                    user_id: event.detail.user_id,
-                    id: event.detail.id,
-                  },
-                });
-                this.context.close();
-              })
-              .catch(console.error);*/
-        }}"
-        @close="${() => {
-          this._abort();
-          //this.context.close();
-        }}"
-      ></mahdaad-user-picker>
+            //this.context.close();
+            //return
+            /*this.context.inlineEditor
+           .waitForUpdate()
+           .then(() => {
+             //console.log("11111",this.context)
+             //item.action(this.context)?.catch(console.error);
+             //this.abortController.abort();
+             insertContent(this.context.std, this.context.model, REFERENCE_NODE, {
+               mention: {
+                 user_id: event.detail.user_id,
+                 id: event.detail.id,
+               },
+             });
+             this.context.close();
+           })
+           .catch(console.error);*/
+          }}"
+          @close="${() => {
+            this._abort();
+          }}"
+        ></mahdaad-user-picker>
+      </div>
     </div>`;
-  }
-
-  override willUpdate() {
-    if (!this.hasUpdated) {
-      const updatePosition = throttle(() => {
-        this._position = getPopperPosition(this, this.context.startNativeRange);
-      }, 10);
-
-      this.disposables.addFromEvent(window, 'resize', updatePosition);
-      const scrollContainer = getViewportElement(this.context.std.host);
-      if (scrollContainer) {
-        // Note: in edgeless mode, the scroll container is not exist!
-        this.disposables.addFromEvent(
-          scrollContainer,
-          'scroll',
-          updatePosition,
-          {
-            passive: true,
-          }
-        );
-      }
-
-      const gfx = this.context.std.get(GfxControllerIdentifier);
-      this.disposables.add(
-        gfx.viewport.viewportUpdated.subscribe(updatePosition)
-      );
-
-      updatePosition();
-    }
   }
 
   @state()
@@ -334,8 +285,11 @@ export class MentionMenuPopover extends SignalWatcher(
   } | null = null;
 
   @property({ attribute: false })
-  accessor context!: MahdaadMentionContext;
+  accessor triggerKey!: string;
 
   @state()
   private accessor _searchText = '';
+
+  @query(`.popover-element`)
+  accessor PopOverElement: Element | null = null;
 }

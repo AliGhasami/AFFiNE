@@ -1,6 +1,6 @@
 import { insertContent } from '@blocksuite/affine-rich-text';
-import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts'
-import {uuidv4 } from '@blocksuite/store'
+import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts';
+import { uuidv4 } from '@blocksuite/store';
 
 import type { SlashMenuConfig } from './types';
 
@@ -23,11 +23,10 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
             root.id
           );
           if (!mahdaadMentionWidget) return;
-          setTimeout(()=>{
-            // TODO(@L-Sun): make linked-doc-widget as extension
+          setTimeout(() => {
             // @ts-expect-error same as above
-            mahdaadMentionWidget.show({ primaryTriggerKey:triggerKey });
-          })
+            mahdaadMentionWidget.showPicker(std, triggerKey, model);
+          });
         },
       },
       {
@@ -70,16 +69,16 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
           const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Get minutes in UTC and pad with leading zero if needed
           const day = String(date.getUTCDate()).padStart(2, '0'); // Get seconds in UTC and pad with leading zero if needed
           const triggerKey = `${year}-${month}-${day}`;
-          const hour = String(date.getUTCHours()).padStart(2, '0')
-          const minute = String(date.getUTCMinutes()).padStart(2, '0')
-          const second = String(date.getUTCSeconds()).padStart(2, '0')
-          const time = `${hour}:${minute}:${second}`
+          const hour = String(date.getUTCHours()).padStart(2, '0');
+          const minute = String(date.getUTCMinutes()).padStart(2, '0');
+          const second = String(date.getUTCSeconds()).padStart(2, '0');
+          const time = `${hour}:${minute}:${second}`;
           const temp = {
             date: triggerKey,
             time,
             id: uuidv4(),
           };
-          window.focusedDateTime = temp.id
+          window.focusedDateTime = temp.id;
           /*{
             const triggerKey = '$';
             insertContent(rootComponent.host, model, triggerKey);
@@ -89,7 +88,7 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
           });
         },
       },
-     /* {
+      /* {
         name: 'Today',
         icon: TodayIcon(),
         tooltip: slashMenuToolTips['Today'],

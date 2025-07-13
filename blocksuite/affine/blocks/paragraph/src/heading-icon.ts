@@ -12,6 +12,7 @@ import { ShadowlessElement } from '@blocksuite/std';
 import { cssVarV2 } from '@toeverything/theme/v2';
 import { css, html, nothing, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
+import { getDirection } from '../../../../../../src/claytapEditor/utils';
 
 function HeadingIcon(i: number) {
   switch (i) {
@@ -41,8 +42,8 @@ export class ParagraphHeadingIcon extends SignalWatcher(
       align-items: start;
       margin-top: 0.3em;
       position: absolute;
-      left: 0;
-      transform: translateX(-64px);
+      //left: 0;
+      //transform: translateX(-64px);
       border-radius: 4px;
       padding: 2px;
       cursor: pointer;
@@ -71,14 +72,21 @@ export class ParagraphHeadingIcon extends SignalWatcher(
     if (!type.startsWith('h')) return nothing;
 
     const i = parseInt(type.slice(1));
-
-    return html`<div class="heading-icon" data-testid="heading-icon-${i}">
+    const translateX = this.direction === 'ltr' ? '-64px' : '64px';
+    return html`<div
+      class="heading-icon"
+      style="transform: translateX(${translateX});"
+      data-testid="heading-icon-${i}"
+    >
       ${HeadingIcon(i)}
     </div>`;
   }
 
   @property({ attribute: false })
   accessor model!: ParagraphBlockModel;
+
+  @property({ attribute: false })
+  accessor direction!: 'rtl' | 'ltr';
 }
 
 export function effects() {

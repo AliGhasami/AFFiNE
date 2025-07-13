@@ -1,29 +1,16 @@
 import type { RootBlockModel } from '@blocksuite/affine-model';
 import {
-  getRangeRects,
-  type SelectionRect,
-} from '@blocksuite/affine-shared/commands';
-import { FeatureFlagService } from '@blocksuite/affine-shared/services';
-import {
   getCurrentNativeRange,
   getPopperPosition,
-  getViewportElement,
 } from '@blocksuite/affine-shared/utils';
-import { IS_MOBILE } from '@blocksuite/global/env';
-import {
-  type BlockComponent,
-  BlockStdScope,
-  EditorHost,
-} from '@blocksuite/std';
+import { type BlockComponent, BlockStdScope } from '@blocksuite/std';
 import {
   BLOCK_ID_ATTR,
   WidgetComponent,
   WidgetViewExtension,
 } from '@blocksuite/std';
-import { GfxControllerIdentifier } from '@blocksuite/std/gfx';
 import {
   INLINE_ROOT_ATTR,
-  type InlineEditor,
   type InlineRootElement,
 } from '@blocksuite/std/inline';
 import { BlockModel } from '@blocksuite/store';
@@ -44,11 +31,11 @@ import { DisposableGroup } from '@blocksuite/global/disposable';
 import { getInlineEditorByModel } from '@blocksuite/affine-rich-text';
 import throttle from 'lodash-es/throttle';
 import { ObjectPickerPopover } from './object-picker-popover';
-let globalAbortController = new AbortController();
+//let globalAbortController = new AbortController();
 
-function closePopover() {
+/*function closePopover() {
   globalAbortController.abort();
-}
+}*/
 
 const showMenu = debounce(
   ({
@@ -68,7 +55,7 @@ const showMenu = debounce(
     abortController?: AbortController;
     //configItemTransform: (item: SlashMenuItem) => SlashMenuItem;
   }) => {
-    globalAbortController = abortController;
+    //globalAbortController = abortController;
     const curRange = getCurrentNativeRange();
     if (!curRange) return;
     const disposables = new DisposableGroup();
@@ -89,7 +76,6 @@ const showMenu = debounce(
     //private obj_type: IObjectType,
     //private model: BlockModel
 
-
     //objectPicker.options = options;
     objectPicker.triggerKey = triggerKey;
     //slashMenu.context = context;
@@ -101,8 +87,8 @@ const showMenu = debounce(
 
     container.append(objectPicker);
     disposables.add(() => {
-      objectPicker.clearTrigger()
-      objectPicker.remove()
+      objectPicker.clearTrigger();
+      objectPicker.remove();
     });
     const updatePosition = throttle(() => {
       /*const slashMenuElement = slashMenu.slashMenuElement;
@@ -112,13 +98,13 @@ const showMenu = debounce(
       );
       debugger;*/
       //console.log(slashMenuElement, curRange, getDirection());
+      //@ts-ignore
       const position = getPopperPosition(
-        objectPicker.PopOverElement,
+        objectPicker.popOverElement,
         curRange,
         {},
         getDirection()
       );
-      //console.log('out', position);
       objectPicker.updatePosition(position);
     }, 10);
 
@@ -130,14 +116,10 @@ const showMenu = debounce(
         passive: true,
       });
     }*/
-    //console.log("aaaaaa",slashMenu,slashMenu.items)
     // FIXME(Flrande): It is not a best practice,
     // but merely a temporary measure for reusing previous components.
     // Mount
-    //console.log('1111', slashMenu);
-
     setTimeout(updatePosition);
-    //console.log('2222', slashMenu);
 
     disposables.addFromEvent(
       objectPicker,
@@ -156,12 +138,8 @@ const showMenu = debounce(
     disposables.addFromEvent(
       window,
       'mousedown',
-      e => {
-        //console.log('this is windows event');
-        //console.log('555', e, e.target);
-        //if (e.target === objectPicker) return;
+      () => {
         abortController.abort();
-        //abortController.abort();
       }
       //{ passive: true }
     );

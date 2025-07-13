@@ -29,6 +29,7 @@ import {
   isOutOfNoteBlock,
   updateDragHandleClassName,
 } from '../utils.js';
+import { isRTL } from '../../../../../../../src/claytapEditor/utils';
 
 /**
  * Used to control the drag handle visibility in page mode
@@ -135,7 +136,10 @@ export class PointerEventWatcher {
       paddingTop: `${paddingTop}px`,
       paddingBottom: `${paddingBottom}px`,
       width: `${DRAG_HANDLE_CONTAINER_WIDTH * scaleInNote}px`,
-      left: `${draggingAreaRect.left}px`,
+      /*left: `${draggingAreaRect.left}px`,
+      top: `${draggingAreaRect.top}px`,
+      height: `${draggingAreaRect.height}px`,*/
+      left: `${isRTL() ? draggingAreaRect.right + 4 : draggingAreaRect.left}px`,
       top: `${draggingAreaRect.top}px`,
       height: `${draggingAreaRect.height}px`,
     };
@@ -262,7 +266,7 @@ export class PointerEventWatcher {
       this.widget.noteScale.value =
         this.widget.mode === 'page'
           ? 1
-          : (closestNoteBlock?.model.props.edgeless.scale ?? 1);
+          : closestNoteBlock?.model.props.edgeless.scale ?? 1;
 
       if (
         closestNoteBlock &&

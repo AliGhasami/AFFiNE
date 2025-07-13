@@ -1,82 +1,127 @@
 import type { RootBlockModel } from '@blocksuite/affine-model';
 import {
-  getRangeRects,
-  type SelectionRect,
-} from '@blocksuite/affine-shared/commands';
-import { FeatureFlagService } from '@blocksuite/affine-shared/services';
-import { getViewportElement } from '@blocksuite/affine-shared/utils';
-import { IS_MOBILE } from '@blocksuite/global/env';
-import type { BlockComponent } from '@blocksuite/std';
+  getCurrentNativeRange,
+  getPopperPosition,
+} from '@blocksuite/affine-shared/utils';
+import { type BlockComponent, BlockStdScope } from '@blocksuite/std';
 import {
   BLOCK_ID_ATTR,
   WidgetComponent,
   WidgetViewExtension,
 } from '@blocksuite/std';
-import { GfxControllerIdentifier } from '@blocksuite/std/gfx';
 import {
   INLINE_ROOT_ATTR,
-  type InlineEditor,
   type InlineRootElement,
 } from '@blocksuite/std/inline';
-import type { BlockModel } from '@blocksuite/store';
+import { BlockModel } from '@blocksuite/store';
 import { signal } from '@preact/signals-core';
-import { html, nothing } from 'lit';
-import { choose } from 'lit/directives/choose.js';
-import { literal, unsafeStatic } from 'lit/static-html.js';
+import { getDirection } from '../../../../../../src/claytapEditor/utils.ts';
 
+import { literal, unsafeStatic } from 'lit/static-html.js';
+import debounce from 'lodash-es/debounce';
 import {
   MAHDAAD_MENTION_WIDGET,
-  type MahdaadMentionContext,
+  //type MahdaadMentionContext,
   type MahdaadMentionWidgetConfig,
-} from './config.js'
+} from './config.js';
+import { DisposableGroup } from '@blocksuite/global/disposable';
+import { getInlineEditorByModel } from '@blocksuite/affine-rich-text';
+import throttle from 'lodash-es/throttle';
+import { MentionMenuPopover } from './mention-menu-popover';
+
+let globalAbortController = new AbortController();
+
+export function closeMentionMenu() {
+  globalAbortController.abort();
+}
+
+const showMenu = debounce(
+  ({
+    context,
+    container = document.body,
+    abortController = new AbortController(),
+    triggerKey,
+  }: {
+    context: any; //: { model }
+    //obj_type: string;
+    triggerKey: string;
+    //config: SlashMenuConfig;
+    container?: HTMLElement;
+    abortController?: AbortController;
+    //configItemTransform: (item: SlashMenuItem) => SlashMenuItem;
+  }) => {
+    globalAbortController = abortController;
+    const curRange = getCurrentNativeRange();
+    if (!curRange) return;
+    const disposables = new DisposableGroup();
+    abortController.signal.addEventListener('abort', () =>
+      disposables.dispose()
+    );
+
+    const inlineEditor = getInlineEditorByModel(context.std, context.model);
+    if (!inlineEditor) return;
+    const mentionPopover = new MentionMenuPopover(
+      context.std,
+      inlineEditor,
+      abortController,
+      context.model
+    );
+    disposables.add(() => {
+      mentionPopover.remove();
+    });
+    mentionPopover.triggerKey = triggerKey;
+
+    const updatePosition = throttle(() => {
+      const menuElement = mentionPopover.PopOverElement;
+      if (!menuElement) return;
+      const position = getPopperPosition(
+        menuElement,
+        curRange,
+        {},
+        getDirection()
+      );
+      mentionPopover.updatePosition(position);
+    }, 10);
+
+    disposables.addFromEvent(window, 'resize', updatePosition);
+
+    container.append(mentionPopover);
+
+    setTimeout(updatePosition);
+    /*disposables.addFromEvent(
+      mentionPopover,
+      'mousedown',
+      e => {
+        e.stopPropagation();
+      }
+      //{ passive: true }
+    );*/
+
+    disposables.addFromEvent(
+      window,
+      'mousedown',
+      () => {
+        abortController.abort();
+      }
+      //{ passive: true }
+    );
+
+    return mentionPopover;
+  },
+  100
+  //{ leading: true }
+);
 
 export class MahdaadMentionMenuWidget extends WidgetComponent<RootBlockModel> {
-  //static override styles = linkedDocWidgetStyles;
-
-  private _context: MahdaadMentionContext | null = null;
-
-  private readonly _inputRects$ = signal<SelectionRect[]>([]);
-
   private readonly _mode$ = signal<'desktop' | 'mobile' | 'none'>('none');
 
   static DEFAULT_OPTIONS: MahdaadMentionWidgetConfig = {
     /**
      * The first item of the trigger keys will be the primary key
      */
-    triggerKeys: [
-      '@'
-    ],
+    triggerKeys: ['@'],
     ignoreBlockTypes: ['affine:code'],
   };
-
-
-
-  private _updateInputRects() {
-    if (!this._context) return;
-    const { inlineEditor, startRange, triggerKey } = this._context;
-
-    const currentInlineRange = inlineEditor.getInlineRange();
-    if (!currentInlineRange) return;
-
-    const startIndex = startRange.index - triggerKey.length;
-    const range = inlineEditor.toDomRange({
-      index: startIndex,
-      length: currentInlineRange.index - startIndex,
-    });
-    if (!range) return;
-
-    this._inputRects$.value = getRangeRects(
-      range,
-      getViewportElement(this.host)
-    );
-  }
-
-  private readonly _renderLinkedDocPopover = () => {
-    return html`<mahdaad-mention-popover
-      .context=${this._context}
-    ></mahdaad-mention-popover>`;
-  };
-
 
   private _watchInput() {
     this.handleEvent('beforeInput', ctx => {
@@ -116,148 +161,45 @@ export class MahdaadMentionMenuWidget extends WidgetComponent<RootBlockModel> {
       const inlineRange = inlineEditor.getInlineRange();
       if (!inlineRange) return;
       const text = inlineEditor.yTextString;
+
       const matchedKey = this.config.triggerKeys.find(triggerKey =>
         text.endsWith(triggerKey)
       );
       if (!matchedKey) return;
 
+      closeMentionMenu();
+
       inlineEditor
         .waitForUpdate()
         .then(() => {
-          this.show({
-            inlineEditor,
-            primaryTriggerKey:this.config.triggerKeys[0],
-            mode: IS_MOBILE ? 'mobile' : 'desktop',
-            model
+          showMenu({
+            context: {
+              model,
+              std: this.std,
+            },
+            triggerKey: matchedKey,
           });
         })
         .catch(console.error);
-      /*if (text) {
-        this.config.triggerWords.forEach(item => {
-          const temp=item.words.map(_=>_.toLowerCase())
-          if (temp.includes(text.toLowerCase())) {
-            const triggerKey= temp.find(key=>key==text.toLowerCase())
-              ?? ''
-
-          }
-        });
-      }*/
     });
   }
 
-  private _watchViewportChange() {
-    const gfx = this.std.get(GfxControllerIdentifier);
-    this.disposables.add(
-      gfx.viewport.viewportUpdated.subscribe(() => {
-        this._updateInputRects();
-      })
-    );
-  }
-
   get config(): MahdaadMentionWidgetConfig {
-    return  MahdaadMentionMenuWidget.DEFAULT_OPTIONS
+    return MahdaadMentionMenuWidget.DEFAULT_OPTIONS;
   }
 
   override connectedCallback() {
     super.connectedCallback();
 
     this._watchInput();
-    this._watchViewportChange();
   }
 
-  show(props?: {
-    inlineEditor?: InlineEditor;
-    primaryTriggerKey?: string;
-    mode?: 'desktop' | 'mobile';
-    addTriggerKey?: boolean;
-    model:BlockModel
-  }) {
-    const host = this.host;
-    const {
-      primaryTriggerKey = '@',
-      mode = 'desktop',
-     // obj_type='document'
-      //addTriggerKey = false,
-    } = props ?? {};
-    let inlineEditor: InlineEditor;
-    if (!props?.inlineEditor) {
-      const range = host.range.value;
-      if (!range || !range.collapsed) return;
-      const containerElement =
-        range.commonAncestorContainer instanceof Element
-          ? range.commonAncestorContainer
-          : range.commonAncestorContainer.parentElement;
-      if (!containerElement) return;
-      const inlineRoot = containerElement.closest<InlineRootElement>(
-        `[${INLINE_ROOT_ATTR}]`
-      );
-      if (!inlineRoot) return;
-      inlineEditor = inlineRoot.inlineEditor;
-    } else {
-      inlineEditor = props.inlineEditor;
-    }
-
-    /*if (addTriggerKey) {
-      this._addTriggerKey(inlineEditor, primaryTriggerKey);
-      // we need to wait the range sync to get the correct startNativeRange
-      const subscription = inlineEditor.slots.inlineRangeSync.subscribe(() => {
-        this.show({ ...props, addTriggerKey: false });
-        subscription.unsubscribe();
-      });
-      return;
-    }*/
-
-    const startRange = inlineEditor.getInlineRange();
-    if (!startRange) return;
-
-    const startNativeRange = inlineEditor.getNativeRange();
-    if (!startNativeRange) return;
-
-    const disposable = inlineEditor.slots.renderComplete.subscribe(() => {
-      this._updateInputRects();
+  showPicker = (std: BlockStdScope, triggerKey: string, model: BlockModel) => {
+    showMenu({
+      context: { model, std },
+      triggerKey,
     });
-    this._context = {
-      std: this.std,
-      inlineEditor,
-      startRange,
-      startNativeRange,
-      triggerKey: primaryTriggerKey,
-      config: this.config,
-      //obj_type,
-      model:props.model,
-      close: () => {
-        disposable.unsubscribe();
-        this._inputRects$.value = [];
-        this._mode$.value = 'none';
-        this._context = null;
-      },
-    };
-
-    this._updateInputRects();
-
-    const enableMobile = this.doc
-      .get(FeatureFlagService)
-      .getFlag('enable_mobile_linked_doc_menu');
-    this._mode$.value = enableMobile ? mode : 'desktop';
-  }
-
-  override render() {
-    if (this._mode$.value === 'none') return nothing;
-    //${this._renderInputMask()}
-    return html`
-      <blocksuite-portal
-        .shadowDom=${false}
-        .template=${choose(
-          this._mode$.value,
-          [
-            ['desktop', this._renderLinkedDocPopover],
-            //['mobile', this._renderLinkedDocMenu],
-            ['mobile', this._renderLinkedDocPopover],
-          ],
-          () => html`${nothing}`
-        )}
-      ></blocksuite-portal>`;
-  }
+  };
 }
 
 export const mahdaadMentionWidget = WidgetViewExtension(

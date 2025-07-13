@@ -4,6 +4,8 @@ import { ShadowlessElement } from '@blocksuite/std';
 import { css, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import { html } from 'lit-html';
+import { styleMap } from 'lit/directives/style-map.js';
+import { getDirection } from '../../../../../../src/claytapEditor/utils';
 
 export const TOGGLE_BUTTON_PARENT_CLASS = 'blocksuite-toggle-button-parent';
 
@@ -17,8 +19,8 @@ export class ToggleButton extends WithDisposable(ShadowlessElement) {
       width: 16px;
       height: 16px;
       top: calc((1em - 16px) / 2 + 5px);
-      left: 0;
-      transform: translateX(-100%);
+      //left: 0;
+      //transform: translateX(100%);
       border-radius: 4px;
       cursor: pointer;
       opacity: 0;
@@ -45,9 +47,22 @@ export class ToggleButton extends WithDisposable(ShadowlessElement) {
     }
   `;
 
+  get _dir() {
+    return this.direction ? this.direction : getDirection();
+  }
+
   override render() {
+    const style = {
+      transform: `translateX(${this._dir == 'ltr' ? '-100%' : '100%'})`,
+    };
+
+    const toggleRightStyle = {
+      transform: `translateX(${this._dir == 'ltr' ? '-100%' : '100%'}) rotate(${this._dir == 'ltr' ? '0deg' : '-180deg'} )`,
+    };
+
     const toggleDownTemplate = html`
       <div
+        style="${styleMap(style)}"
         contenteditable="false"
         class="toggle-icon"
         @click=${() => this.updateCollapsed(!this.collapsed)}
@@ -62,6 +77,7 @@ export class ToggleButton extends WithDisposable(ShadowlessElement) {
 
     const toggleRightTemplate = html`
       <div
+        style="${styleMap(toggleRightStyle)}"
         contenteditable="false"
         class="toggle-icon"
         data-collapsed=${this.collapsed}
@@ -80,6 +96,9 @@ export class ToggleButton extends WithDisposable(ShadowlessElement) {
 
   @property({ attribute: false })
   accessor collapsed!: boolean;
+
+  @property({ attribute: false })
+  accessor direction!: 'rtl' | 'ltr' | null;
 
   @property({ attribute: false })
   accessor updateCollapsed!: (collapsed: boolean) => void;
