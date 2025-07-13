@@ -15,7 +15,7 @@ import {
 } from '@blocksuite/std/inline';
 import { BlockModel } from '@blocksuite/store';
 import { signal } from '@preact/signals-core';
-import { getDirection } from '../../../../../../src/claytapEditor/utils.ts';
+import { getDirection } from '../../../../../../src/claytapEditor/utils/index.ts';
 
 import { literal, unsafeStatic } from 'lit/static-html.js';
 import debounce from 'lodash-es/debounce';

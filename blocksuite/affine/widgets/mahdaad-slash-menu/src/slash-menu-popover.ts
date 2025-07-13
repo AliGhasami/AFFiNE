@@ -32,6 +32,11 @@ import type {
   SlashMenuSubMenu,
 } from './types.js';
 import { isSubMenuItem } from './utils.js';
+import { checkParentIs } from '../../../../../../src/claytapEditor/utils/is';
+import {
+  MahdaadCalloutBlockSchema,
+  MahdaadMultiColumnBlockSchema,
+} from '@blocksuite/affine-model';
 type InnerSlashMenuContext = SlashMenuContext & {
   onClickItem: (item: SlashMenuActionItem) => void;
   searching: boolean;
@@ -225,12 +230,12 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
           return;
         }
 
-        if (key !== 'Backspace' && this._queryState === 'no_result') {
+        /*if (key !== 'Backspace' && this._queryState === 'no_result') {
           // if the following key is not the backspace key,
           // the slash menu will be closed
           this.abortController.abort();
           return;
-        }
+        }*/
 
         if (key === 'Escape') {
           this.abortController.abort();
@@ -245,8 +250,12 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
 
         next();
       },
-      onInput: isComposition => {
-        if (isComposition) {
+      onInput: () => {
+        setTimeout(() => {
+          // console.log("22222",this._query);
+          this._searchText = this._query;
+        }, 50);
+        /*if (isComposition) {
           this._updateFilteredItems();
         } else {
           const subscription = this.inlineEditor.slots.renderComplete.subscribe(
@@ -255,7 +264,7 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
               this._updateFilteredItems();
             }
           );
-        }
+        }*/
       },
       onPaste: () => {
         setTimeout(() => {
@@ -263,19 +272,17 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
         }, 50);
       },
       onDelete: () => {
+        setTimeout(() => {
+          this._searchText = this._query;
+        }, 50);
         const curRange = this.inlineEditor.getInlineRange();
         if (!this._startRange || !curRange) {
           return;
         }
-        if (curRange.index < this._startRange.index) {
+
+        if (curRange.index - 1 < this._startRange.index) {
           this.abortController.abort();
         }
-        const subscription = this.inlineEditor.slots.renderComplete.subscribe(
-          () => {
-            subscription.unsubscribe();
-            this._updateFilteredItems();
-          }
-        );
       },
       onAbort: () => this.abortController.abort(),
     });
@@ -343,19 +350,33 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
   checkKeys() {
     let allowKeys = ['*'];
     const denyKeys: string[] = [];
-    //const temp = []
     //todo ali ghasami
-    /*if(checkParentIs(this.context.model,MahdaadMultiColumnBlockSchema.model.flavour)) {
-      denyKeys.push('two_columns','three_columns','four_columns')
+    if (
+      checkParentIs(
+        this.context.model,
+        MahdaadMultiColumnBlockSchema.model.flavour
+      )
+    ) {
+      denyKeys.push('two_columns', 'three_columns', 'four_columns');
     }
-    if(checkParentIs(this.context.model,MahdaadCalloutBlockSchema.model.flavour)) {
-      allowKeys=['text','h1','h2','h3','bullet_list','number_list','check_list','quote']
-    }*/
+    if (
+      checkParentIs(this.context.model, MahdaadCalloutBlockSchema.model.flavour)
+    ) {
+      allowKeys = [
+        'text',
+        'h1',
+        'h2',
+        'h3',
+        'bullet_list',
+        'number_list',
+        'check_list',
+        'quote',
+      ];
+    }
     return { allowKeys, denyKeys };
   }
 
   override render() {
-    //debugger;
     const { denyKeys, allowKeys } = this.checkKeys();
     const slashMenuStyles = this._position
       ? {
@@ -366,22 +387,6 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
           visibility: 'hidden',
         };
 
-    /*return html`${this._queryState !== 'no_result'
-        ? html` <div
-            class="overlay-mask"
-            @click="${() => this.abortController.abort()}"
-          ></div>`
-        : nothing}
-      <inner-slash-menu
-        .context=${this._innerSlashMenuContext}
-        .menu=${this._queryState === 'off' ? this.items : this._filteredItems}
-        .mainMenuStyle=${slashMenuStyles}
-        .abortController=${this.abortController}
-      >
-      </inner-slash-menu>`;*/
-    // .tools-list="${this._toolsList()}"
-    //vue-block-board-editor-popover ${Prefix}-slash-menu
-    //console.log("1111111",this.inlineEditor)
     return html`${html` <div
         class="overlay-mask"
         @click="${() => this.abortController.abort()}"
@@ -393,14 +398,12 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
         style="${styleMap(slashMenuStyles)}"
       >
         <mahdaad-slash-menu
-          search-text="${this._query}"
+          search-text="${this._searchText}"
           .inline-editor="${this.inlineEditor}"
           deny-keys="${JSON.stringify(denyKeys)}"
           allow-keys="${JSON.stringify(allowKeys)}"
           @select="${(event: CustomEvent) => {
             const key = event.detail;
-            //console.log("1111",key)
-            //todo ali ghasami
             const temp = this.actionMap[key]; //actionsMenu.find(i => i.key == key);
             if (temp) {
               const item = this.items.find(i => i.group == temp);
@@ -463,4 +466,7 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
 
   @query('#mahdaad-claytap-slash-menu')
   accessor slashMenuElement!: HTMLElement;
+
+  @state()
+  private accessor _searchText = '';
 }

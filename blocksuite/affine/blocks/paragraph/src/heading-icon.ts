@@ -12,7 +12,6 @@ import { ShadowlessElement } from '@blocksuite/std';
 import { cssVarV2 } from '@toeverything/theme/v2';
 import { css, html, nothing, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
-import { getDirection } from '../../../../../../src/claytapEditor/utils';
 
 function HeadingIcon(i: number) {
   switch (i) {

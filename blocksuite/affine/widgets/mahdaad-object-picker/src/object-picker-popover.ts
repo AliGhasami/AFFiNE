@@ -58,11 +58,19 @@ export class ObjectPickerPopover extends SignalWatcher(
   }
 
   readonly clearTrigger = () => {
-    cleanSpecifiedTail(
+    /*cleanSpecifiedTail(
       this.editorHost,
       this.inlineEditor,
       this.triggerKey + (this._query || '')
-    );
+    );*/
+    try {
+      const text = this._searchText
+        ? this.triggerKey + this._searchText
+        : this.triggerKey;
+      cleanSpecifiedTail(this.editorHost, this.inlineEditor, text);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   addObjectLink(
@@ -134,8 +142,15 @@ export class ObjectPickerPopover extends SignalWatcher(
 
         next();
       },
-      onInput: () => {},
+      onInput: () => {
+        setTimeout(() => {
+          this._searchText = this._query;
+        }, 50);
+      },
       onDelete: () => {
+        setTimeout(() => {
+          this._searchText = this._query;
+        }, 50);
         const curRange = this.inlineEditor.getInlineRange();
         if (!this._startRange || !curRange) {
           return;
@@ -218,7 +233,7 @@ export class ObjectPickerPopover extends SignalWatcher(
     >
       <div class="${prefixCls}-command-popover-container">
         <mahdaad-object-picker-component
-          search-text="${this._query}"
+          search-text="${this._searchText}"
           .inline-editor="${this.inlineEditor}"
           type="${this.obj_type}"
           .model="${this.model}"
@@ -284,6 +299,9 @@ export class ObjectPickerPopover extends SignalWatcher(
 
   @property({ attribute: false })
   accessor triggerKey!: string;
+
+  @state()
+  private accessor _searchText = '';
 
   @query(`.popover-element`)
   accessor popOverElement: Element | null = null;

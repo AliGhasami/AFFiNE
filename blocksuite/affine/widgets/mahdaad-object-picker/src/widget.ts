@@ -18,7 +18,7 @@ import { signal } from '@preact/signals-core';
 import {
   getDirection,
   objectTriggerWords,
-} from '../../../../../../src/claytapEditor/utils.ts';
+} from '../../../../../../src/claytapEditor/utils/index';
 import {
   type IObjectType,
   MAHDAAD_OBJECT_PICKER_WIDGET,

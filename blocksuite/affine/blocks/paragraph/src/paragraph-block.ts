@@ -31,7 +31,7 @@ import { setDirectionOnBlock } from '../../../../../../src/claytapEditor/utils/b
 import quoteIcon from './assets/quote.svg?raw';
 import { ParagraphBlockConfigExtension } from './paragraph-block-config.js';
 import { paragraphBlockStyles } from './styles.js';
-import { getDirection, isRTL } from '../../../../../../src/claytapEditor/utils';
+import { getDirection } from '../../../../../../src/claytapEditor/utils';
 
 export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBlockModel> {
   static override styles = paragraphBlockStyles;
