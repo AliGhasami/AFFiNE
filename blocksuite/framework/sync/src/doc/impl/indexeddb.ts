@@ -57,7 +57,6 @@ export class IndexedDBDocSource implements DocSource {
     docId: string,
     state: Uint8Array
   ): Promise<{ data: Uint8Array; state?: Uint8Array | undefined } | null> {
-    debugger;
     const db = await this.getDb();
     const store = db
       .transaction('collection', 'readonly')
@@ -77,7 +76,6 @@ export class IndexedDBDocSource implements DocSource {
   }
 
   async push(docId: string, data: Uint8Array): Promise<void> {
-    debugger;
     const db = await this.getDb();
     const store = db
       .transaction('collection', 'readwrite')
