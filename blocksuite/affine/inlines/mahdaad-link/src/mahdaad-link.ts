@@ -132,7 +132,7 @@ export class MahdaadLink extends SignalWatcher(
       <mahdaad-link-inline
         url="${this.url}"
         title="${this.title}"
-        object-id="${this.block.doc.meta.object_id}"
+        object-id="${this.block.doc.meta.id}"
         @removeLink="${this._removeLink}"
         @generateWeblink="${this.generateWeblink}"
         @changeViewMode="${(event: CustomEvent) => {

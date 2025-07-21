@@ -39,6 +39,7 @@ import mergeWith from 'lodash-es/mergeWith';
 import orderBy from 'lodash-es/orderBy';
 import partition from 'lodash-es/partition';
 import toPairs from 'lodash-es/toPairs';
+import type { AffineTextAttributes } from '@blocksuite/affine-shared/types';
 
 export const sideMap = new Map([
   // includes frame element
@@ -58,13 +59,17 @@ export function autoUpdatePosition(
   sideOptions: Partial<SideObject> | null,
   options: AutoUpdateOptions = { elementResize: false, animationFrame: true }
 ) {
-  //console.log("autoUpdatePosition",placement)
+  console.log('toolbar', toolbar);
+  console.log('referenceElement', referenceElement);
+  console.log('placement', placement);
+  console.log('sideOptions', sideOptions);
+  console.log('options', options);
   const isInline = flavour === 'affine:note';
-  //const hasSurfaceScope = flavour.includes('surface');
+  const hasSurfaceScope = flavour.includes('surface');
   const isInner = placement === 'inner';
   const offsetTop = sideOptions?.top ?? 0;
   const offsetBottom = sideOptions?.bottom ?? 0;
-  //const offsetY = offsetTop + (hasSurfaceScope ? 2 : 0);
+  const offsetY = offsetTop + (hasSurfaceScope ? 2 : 0);
   const config: Partial<ComputePositionConfig> = isInner
     ? {
         placement: 'top-start',
@@ -79,21 +84,14 @@ export function autoUpdatePosition(
         ],
       }
     : {
-        //strategy:"fixed",
-        //placement,
+        placement,
         middleware: [
-          offset(10),
-          inline(),
-          shift({
-            padding: 6,
-          }),
-          /*offset(10 + offsetY),
+          offset(10 + offsetY),
           size({
             apply: ({ elements }) => {
               elements.floating.style.width = 'fit-content';
             },
           }),
-
           isInline ? inline() : undefined,
           shift(state => ({
             padding: {
@@ -106,7 +104,7 @@ export function autoUpdatePosition(
             limiter: limitShift(),
           })),
           flip({ padding: 10 }),
-          hide(),*/
+          hide(),
         ],
       };
   const update = async () => {
@@ -124,18 +122,15 @@ export function autoUpdatePosition(
     ]);
 
     if (signal.aborted) return;
-    //console.log("this is config ",config,referenceElement.getClientRects(),referenceElement.getBoundingClientRect())
+
     const result = await computePosition(referenceElement, toolbar, config);
 
-    const { x,middlewareData, placement: currentPlacement } = result;
+    const { x, middlewareData, placement: currentPlacement } = result;
     const y =
       result.y -
       (currentPlacement.includes('top') ? 0 : offsetTop + offsetBottom);
 
-    //toolbar.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-    toolbar.style.position = 'absolute';
-    toolbar.style.top = `${y}px`;
-    toolbar.style.left = `${x}px`;
+    toolbar.style.transform = `translate3d(${x}px, ${y}px, 0)`;
 
     if (middlewareData.hide) {
       if (toolbar.dataset.open) {
@@ -222,6 +217,7 @@ export function renderToolbar(
   context: ToolbarContext,
   flavour: string
 ) {
+  //console.log('aaaaa', toolbar, context, flavour);
   const hasSurfaceScope = flavour.includes('surface');
   const toolbarRegistry = context.toolbarRegistry;
 
@@ -238,7 +234,7 @@ export function renderToolbar(
     .filter(module =>
       typeof module.config.when === 'function'
         ? module.config.when(context)
-        : (module.config.when ?? true)
+        : module.config.when ?? true
     )
     .map<ToolbarActions>(module => module.config.actions)
     .flat();
@@ -262,9 +258,9 @@ export function renderToolbar(
     return;
   }
 
-  //const innerToolbar = context.placement$.value === 'inner';
+  const innerToolbar = context.placement$.value === 'inner';
 
-  /*if (moreActionGroup.length) {
+  if (moreActionGroup.length) {
     const moreMenuItems = renderActions(
       moreActionGroup,
       context,
@@ -303,83 +299,87 @@ export function renderToolbar(
         )}`,
       });
     }
-  }*/
+  }
 
-  const _toolbar=html`
-    <mahdaad-format-bar
-      @changeParagraph="${(event: CustomEvent) => {
-    //this._displayType = 'none';
-    const val = event.detail;
-    let flavour: BlockSuite.Flavour = 'affine:paragraph';
-    if (['bulleted', 'numbered', 'todo'].includes(val)) {
-      flavour = 'affine:list';
-    }
-    this.std.command
-      .chain()
-      .updateBlockType({
-        flavour,
-        props: val != null ? { type: val } : undefined,
-      })
-      .run();
-  }}"
-        @changeInline="${(event: CustomEvent) => {
-    const key = event.detail;
-    const chain = this.std.command.chain();
-    switch (key) {
-      case 'bold':
-        chain.toggleBold().run();
-        this.requestUpdate();
-        break;
-      case 'italic':
-        chain.toggleItalic().run();
-        break;
-      case 'underline':
-        chain.toggleUnderline().run();
-        break;
-      case 'strike':
-        chain.toggleStrike().run();
-        break;
-      case 'link':
-        this.reset();
-        //this._abortController.abort();
-        chain.toggleLink().run();
-        break;
-      case 'rtl':
-        this._selectedBlocks.forEach(block => {
-          this.std.doc.updateBlock(block.model, { dir: 'rtl' })
-        });
-        break;
-      case 'ltr':
-        this._selectedBlocks.forEach(block => {
-          this.std.doc.updateBlock(block.model, { dir: 'ltr' })
-        });
-        break;
-    }
-  }}"
-        @changeColor="${(event: CustomEvent) => {
-    const styles = event.detail;
-    const payload: {
-      styles: AffineTextAttributes;
-    } = {
-      styles,
-    };
-    this.std.command
-      .chain()
-      .try(chain => [
-        chain.getTextSelection().formatText(payload),
-        chain.getBlockSelections().formatBlock(payload),
-        chain.formatNative(payload),
-      ])
-      .run();
-  }}"
+  //console.log('1111', primaryActionGroup, context);
 
-        active-paragraph-tool="text"
-        active-inline-tools="[]"
-      ></mahdaad-format-bar>`
-//${this.activeParagraphTool()}
-//${this.activeInlineTools()}
+  const _toolbar = html` <mahdaad-format-bar
+    @changeParagraph="${(event: CustomEvent) => {
+      //this._displayType = 'none';
+      const val = event.detail;
+      let flavour: BlockSuite.Flavour = 'affine:paragraph';
+      if (['bulleted', 'numbered', 'todo'].includes(val)) {
+        flavour = 'affine:list';
+      }
+      this.std.command
+        .chain()
+        .updateBlockType({
+          flavour,
+          props: val != null ? { type: val } : undefined,
+        })
+        .run();
+    }}"
+    @changeInline="${(event: CustomEvent) => {
+      const key = event.detail;
+      const chain = this.std.command.chain();
+      switch (key) {
+        case 'bold':
+          chain.toggleBold().run();
+          this.requestUpdate();
+          break;
+        case 'italic':
+          chain.toggleItalic().run();
+          break;
+        case 'underline':
+          chain.toggleUnderline().run();
+          break;
+        case 'strike':
+          chain.toggleStrike().run();
+          break;
+        case 'link':
+          this.reset();
+          //this._abortController.abort();
+          chain.toggleLink().run();
+          break;
+        case 'rtl':
+          this._selectedBlocks.forEach(block => {
+            this.std.doc.updateBlock(block.model, { dir: 'rtl' });
+          });
+          break;
+        case 'ltr':
+          this._selectedBlocks.forEach(block => {
+            this.std.doc.updateBlock(block.model, { dir: 'ltr' });
+          });
+          break;
+      }
+    }}"
+    @changeColor="${(event: CustomEvent) => {
+      const styles = event.detail;
+      const payload: {
+        styles: AffineTextAttributes;
+      } = {
+        styles,
+      };
+      this.std.command
+        .chain()
+        .try(chain => [
+          chain.getTextSelection().formatText(payload),
+          chain.getBlockSelections().formatBlock(payload),
+          chain.formatNative(payload),
+        ])
+        .run();
+    }}"
+    active-paragraph-tool="text"
+    active-inline-tools="[]"
+  ></mahdaad-format-bar>`;
+
   render(
-    _toolbar,
+    flavour.includes('note')
+      ? _toolbar
+      : join(
+          renderActions(primaryActionGroup, context),
+          innerToolbar ? nothing : renderToolbarSeparator()
+        ),
     toolbar
   );
 
@@ -387,7 +387,7 @@ export function renderToolbar(
   toolbar.dataset.open = 'true';
 }
 
-/*function renderActions(
+function renderActions(
   actions: ToolbarActions,
   context: ToolbarContext,
   render = renderActionItem
@@ -432,10 +432,10 @@ export function renderToolbar(
       return null;
     })
     .filter(action => action !== null);
-}*/
+}
 
 // TODO(@fundon): supports templates
-/*function renderActionItem(action: ToolbarAction, context: ToolbarContext) {
+function renderActionItem(action: ToolbarAction, context: ToolbarContext) {
   const innerToolbar = context.placement$.value === 'inner';
   const ids = action.id.split('.');
   const id = ids[ids.length - 1];
@@ -458,9 +458,9 @@ export function renderToolbar(
         : null}
     </editor-icon-button>
   `;
-}*/
+}
 
-/*function renderMenuActionItem(action: ToolbarAction, context: ToolbarContext) {
+function renderMenuActionItem(action: ToolbarAction, context: ToolbarContext) {
   const innerToolbar = context.placement$.value === 'inner';
   const ids = action.id.split('.');
   const id = ids[ids.length - 1];
@@ -484,4 +484,4 @@ export function renderToolbar(
       ${action.label ? html`<span class="label">${action.label}</span>` : null}
     </editor-menu-action>
   `;
-}*/
+}

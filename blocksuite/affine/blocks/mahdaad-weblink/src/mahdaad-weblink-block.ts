@@ -71,7 +71,7 @@ export class MahdaadWeblinkBlockComponent extends CaptionedBlockComponent<Mahdaa
     return html`<div contenteditable="false">
       <mahdaad-weblink
         .model="${this.model}"
-        object-id="${this.doc.meta.object_id}"
+        object-id="${this.doc.meta.id}"
         read-only="${this.doc.readonly}"
         show-type="${this.model.props.show_type}"
         url="${this.model.props.url}"

@@ -1,17 +1,17 @@
 import { CaptionedBlockComponent } from '@blocksuite/affine-components/caption';
 import type { MahdaadObjectBlockModel } from '@blocksuite/affine-model';
 import {
-  EDGELESS_TOP_CONTENTEDITABLE_SELECTOR, REFERENCE_NODE,
+  EDGELESS_TOP_CONTENTEDITABLE_SELECTOR,
+  REFERENCE_NODE,
 } from '@blocksuite/affine-shared/consts';
 import { DocModeProvider } from '@blocksuite/affine-shared/services';
-import type {AffineTextAttributes} from "@blocksuite/affine-shared/types";
+import type { AffineTextAttributes } from '@blocksuite/affine-shared/types';
 import type { BlockComponent } from '@blocksuite/std';
-import {type DeltaInsert, Text} from "@blocksuite/store";
+import { type DeltaInsert, Text } from '@blocksuite/store';
 import { html, type TemplateResult } from 'lit';
-import {merge} from 'lodash-es'
+import { merge } from 'lodash-es';
 
 export class MahdaadObjectBlockComponent extends CaptionedBlockComponent<MahdaadObjectBlockModel> {
-
   override get topContenteditableElement() {
     if (this.std.get(DocModeProvider).getEditorMode() === 'edgeless') {
       return this.closest<BlockComponent>(
@@ -29,10 +29,9 @@ export class MahdaadObjectBlockComponent extends CaptionedBlockComponent<Mahdaad
     this.doc.deleteBlock(this.model);
   }
 
-  //todo ali ghasami
   parentId() {
     //todo ali ghasami for meta object id in doc meta
-    return (this.doc.meta && this.doc.meta?.object_id) ?? null;
+    return (this.doc.meta && this.doc.meta?.id) ?? null;
   }
 
   duplicate() {
@@ -54,7 +53,6 @@ export class MahdaadObjectBlockComponent extends CaptionedBlockComponent<Mahdaad
   setDirection(event: CustomEvent) {
     this.doc.updateBlock(this.model, { dir: event.detail[0] });
   }
-
 
   //todo ali ghasami
   _convertLink(event: CustomEvent) {
@@ -81,7 +79,6 @@ export class MahdaadObjectBlockComponent extends CaptionedBlockComponent<Mahdaad
     doc.deleteBlock(this.model);*/
   }
 
-
   override renderBlock(): TemplateResult<1> {
     return html`<div contenteditable="false">
       <mahdaad-object-link-component
@@ -96,11 +93,11 @@ export class MahdaadObjectBlockComponent extends CaptionedBlockComponent<Mahdaad
         show-type="${this.model.props.show_type}"
         meta="${JSON.stringify(this.model.props.meta ?? {})}"
         @remove="${() => {
-           this.removeBlock();
+          this.removeBlock();
         }}"
         @setDirection="${this.setDirection}"
         @duplicate="${() => {
-            this.duplicate();
+          this.duplicate();
         }}"
         @changeViewMode="${this.changeViewMode}"
         @convertToLink="${this._convertLink}"

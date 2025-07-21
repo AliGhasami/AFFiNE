@@ -254,7 +254,6 @@ export class AffineToolbarWidget extends WidgetComponent {
     super.connectedCallback();
 
     this.setAttribute(RANGE_SYNC_EXCLUDE_ATTR, 'true');
-    //this.shadowRoot!.mode="closed"
 
     const {
       sideOptions$,
@@ -271,7 +270,7 @@ export class AffineToolbarWidget extends WidgetComponent {
     // TODO(@fundon): fix toolbar position shaking when the wheel scrolls
     //document.body.append(toolbar);
     //this.shadowRoot!.append(toolbar);
-    this.renderRoot!.append(toolbar)
+    this.renderRoot!.append(toolbar);
 
     // Formatting
     // Selects text in note.
@@ -634,7 +633,6 @@ export class AffineToolbarWidget extends WidgetComponent {
 
     disposables.add(
       effect(() => {
-
         const value = flags.value$.value;
 
         // Hides toolbar

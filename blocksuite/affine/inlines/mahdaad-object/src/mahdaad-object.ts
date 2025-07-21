@@ -1,23 +1,26 @@
-import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts'
+import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts';
 import type { AffineTextAttributes } from '@blocksuite/affine-shared/types';
 import { SignalWatcher, WithDisposable } from '@blocksuite/global/lit';
-import { BLOCK_ID_ATTR, type BlockComponent, type BlockStdScope } from '@blocksuite/std'
+import {
+  BLOCK_ID_ATTR,
+  type BlockComponent,
+  type BlockStdScope,
+} from '@blocksuite/std';
 import { ShadowlessElement } from '@blocksuite/std';
 import {
   INLINE_ROOT_ATTR,
   type InlineRootElement,
   ZERO_WIDTH_FOR_EMBED_NODE,
   ZERO_WIDTH_FOR_EMPTY_LINE,
-} from '@blocksuite/std/inline'
+} from '@blocksuite/std/inline';
 import type { DeltaInsert } from '@blocksuite/store';
-import {  html } from 'lit';
+import { html } from 'lit';
 import { property } from 'lit/decorators.js';
-import {cloneDeep,merge} from 'lodash-es'
+import { cloneDeep, merge } from 'lodash-es';
 
 export class MahdaadObject extends SignalWatcher(
   WithDisposable(ShadowlessElement)
 ) {
-
   get block() {
     if (!this.inlineEditor?.rootElement) return null;
     const block = this.inlineEditor.rootElement.closest<BlockComponent>(
@@ -66,7 +69,7 @@ export class MahdaadObject extends SignalWatcher(
     doc.deleteBlock(this.model);*/
   }
 
-
+  //todo ali ghasami
   changeViewMode(event: CustomEvent) {
     const mode = event.detail[0];
 
@@ -75,7 +78,7 @@ export class MahdaadObject extends SignalWatcher(
     const block = this.block;
     const doc = block.host.doc;
     const parent = doc.getParent(block.model);
-    assertExists(parent);
+    //assertExists(parent);
 
     const index = parent.children.indexOf(block.model);
     //const docId = this.referenceDocId;
@@ -105,9 +108,8 @@ export class MahdaadObject extends SignalWatcher(
   parentId() {
     const block = this.block;
     const doc = block.host.doc;
-    return (doc.meta && doc.meta?.object_id) ?? null
+    return (doc.meta && doc.meta?.id) ?? null;
   }
-
 
   remove() {
     this.inlineEditor.insertText(this.selfInlineRange, REFERENCE_NODE);
@@ -117,22 +119,21 @@ export class MahdaadObject extends SignalWatcher(
     return this.delta.attributes?.mahdaadObjectLink;
   }
 
-
   updateProps(event) {
     const data = event?.detail;
     const format = this.inlineEditor.getFormat(this.selfInlineRange);
-    if(format.mahdaadObjectLink) {
-      merge(format.mahdaadObjectLink,{meta:data.meta})
+    if (format.mahdaadObjectLink) {
+      merge(format.mahdaadObjectLink, { meta: data.meta });
     }
     //console.log("this is format",format,cloneDeep(format));
     //
     this.inlineEditor.formatText(this.selfInlineRange, {
-      ...cloneDeep(format)  /*{
+      ...cloneDeep(format) /*{
         object_id: '11111',
         link_id: '225',
         type: 'image',
         //meta?:Record<string, string | null | number> | undefined
-      } //cloneDeep(format.mahdaadObjectLink)*/
+      } //cloneDeep(format.mahdaadObjectLink)*/,
     });
     /*if (data && data.key && data.hasOwnProperty('value')) {
 
@@ -157,9 +158,7 @@ export class MahdaadObject extends SignalWatcher(
     return blockElement;
   }
 
-
   override render() {
-
     const meta = this.getMeta();
 
     return html`<span
@@ -181,15 +180,6 @@ export class MahdaadObject extends SignalWatcher(
       ></mahdaad-object-link-component
       ><v-text .str=${ZERO_WIDTH_FOR_EMBED_NODE}></v-text>
     </span>`;
-
-   /* return html`this is object link <span
-          data-selected=${this.selected}
-          data-type="default"
-          class="affine-mention"
-          >@aaaaaaa<v-text
-            .str=${ZERO_WIDTH_FOR_EMBED_NODE}
-          ></v-text
-        ></span>`;*/
   }
 
   @property({ type: Object })
