@@ -254,6 +254,11 @@ export class AffineToolbarWidget extends WidgetComponent {
     return this.std.get(ToolbarRegistryIdentifier);
   }
 
+  override disconnectedCallback() {
+    super.disconnectedCallback();
+    this.toolbar?.remove();
+  }
+
   override connectedCallback() {
     super.connectedCallback();
 
