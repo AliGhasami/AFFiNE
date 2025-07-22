@@ -40,6 +40,18 @@ import orderBy from 'lodash-es/orderBy';
 import partition from 'lodash-es/partition';
 import toPairs from 'lodash-es/toPairs';
 import type { AffineTextAttributes } from '@blocksuite/affine-shared/types';
+import {
+  formatBlockCommand,
+  formatNativeCommand,
+  formatTextCommand,
+  textFormatConfigs,
+} from '@blocksuite/affine-inline-preset';
+import { updateBlockType } from '@blocksuite/affine-block-note';
+import {
+  getBlockSelectionsCommand,
+  getSelectedModelsCommand,
+  getTextSelectionCommand,
+} from '@blocksuite/affine-shared/commands';
 
 export const sideMap = new Map([
   // includes frame element
@@ -59,16 +71,19 @@ export function autoUpdatePosition(
   sideOptions: Partial<SideObject> | null,
   options: AutoUpdateOptions = { elementResize: false, animationFrame: true }
 ) {
-  console.log('toolbar', toolbar);
+  /*console.log('toolbar', toolbar);
   console.log('referenceElement', referenceElement);
+  console.log('referenceElement', referenceElement.getClientRects());
   console.log('placement', placement);
   console.log('sideOptions', sideOptions);
-  console.log('options', options);
+  console.log('options', options);*/
+  //debugBoundingClientRect(referenceElement);
+  //debugClientRects(referenceElement);
   const isInline = flavour === 'affine:note';
   const hasSurfaceScope = flavour.includes('surface');
   const isInner = placement === 'inner';
   const offsetTop = sideOptions?.top ?? 0;
-  const offsetBottom = sideOptions?.bottom ?? 0;
+  //const offsetBottom = sideOptions?.bottom ?? 0;
   const offsetY = offsetTop + (hasSurfaceScope ? 2 : 0);
   const config: Partial<ComputePositionConfig> = isInner
     ? {
@@ -124,13 +139,12 @@ export function autoUpdatePosition(
     if (signal.aborted) return;
 
     const result = await computePosition(referenceElement, toolbar, config);
-
-    const { x, middlewareData, placement: currentPlacement } = result;
-    const y =
+    const { x, y, middlewareData, placement: currentPlacement } = result;
+    /*const y =
       result.y -
-      (currentPlacement.includes('top') ? 0 : offsetTop + offsetBottom);
-
-    toolbar.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      (currentPlacement.includes('top') ? 0 : offsetTop + offsetBottom);*/
+    toolbar.style.top = `${y}px`;
+    toolbar.style.left = `${x}px`;
 
     if (middlewareData.hide) {
       if (toolbar.dataset.open) {
@@ -217,7 +231,6 @@ export function renderToolbar(
   context: ToolbarContext,
   flavour: string
 ) {
-  //console.log('aaaaa', toolbar, context, flavour);
   const hasSurfaceScope = flavour.includes('surface');
   const toolbarRegistry = context.toolbarRegistry;
 
@@ -301,13 +314,45 @@ export function renderToolbar(
     }
   }
 
-  //console.log('1111', primaryActionGroup, context);
+  const { chain, host, std } = context;
 
-  const _toolbar = html` <mahdaad-format-bar
+  const update = (flavour: string, type?: string) => {
+    chain
+      .pipe(updateBlockType, {
+        flavour,
+        ...(type && { props: { type } }),
+      })
+      .run();
+  };
+
+  const updateHighlight = (styles: AffineTextAttributes) => {
+    const payload = { styles };
+    chain
+      .try(chain => [
+        chain.pipe(getTextSelectionCommand).pipe(formatTextCommand, payload),
+        chain.pipe(getBlockSelectionsCommand).pipe(formatBlockCommand, payload),
+        chain.pipe(formatNativeCommand, payload),
+      ])
+      .run();
+  };
+
+  const [ok, { selectedModels = [] }] = chain
+    .tryAll(chain => [
+      chain.pipe(getTextSelectionCommand),
+      chain.pipe(getBlockSelectionsCommand),
+    ])
+    .pipe(getSelectedModelsCommand, { types: ['text', 'block'] })
+    .run();
+
+  const noteToolbar = html` <mahdaad-format-bar
     @changeParagraph="${(event: CustomEvent) => {
-      //this._displayType = 'none';
-      const val = event.detail;
-      let flavour: BlockSuite.Flavour = 'affine:paragraph';
+      const val = event.detail[0];
+      let flavour: string = 'affine:paragraph';
+      if (['bulleted', 'numbered', 'todo'].includes(val)) {
+        flavour = 'affine:list';
+      }
+      update(flavour, val);
+      /*let flavour: BlockSuite.Flavour = 'affine:paragraph';
       if (['bulleted', 'numbered', 'todo'].includes(val)) {
         flavour = 'affine:list';
       }
@@ -317,69 +362,79 @@ export function renderToolbar(
           flavour,
           props: val != null ? { type: val } : undefined,
         })
-        .run();
+        .run();*/
     }}"
     @changeInline="${(event: CustomEvent) => {
-      const key = event.detail;
-      const chain = this.std.command.chain();
+      const key = event.detail[0];
       switch (key) {
         case 'bold':
-          chain.toggleBold().run();
-          this.requestUpdate();
+          textFormatConfigs.find(item => item.id == 'bold')?.action(host);
           break;
         case 'italic':
-          chain.toggleItalic().run();
+          textFormatConfigs.find(item => item.id == 'italic')?.action(host);
           break;
         case 'underline':
-          chain.toggleUnderline().run();
+          textFormatConfigs.find(item => item.id == 'underline')?.action(host);
           break;
         case 'strike':
-          chain.toggleStrike().run();
+          textFormatConfigs.find(item => item.id == 'strike')?.action(host);
           break;
         case 'link':
-          this.reset();
-          //this._abortController.abort();
-          chain.toggleLink().run();
+          textFormatConfigs.find(item => item.id == 'link')?.action(host);
           break;
         case 'rtl':
-          this._selectedBlocks.forEach(block => {
-            this.std.doc.updateBlock(block.model, { dir: 'rtl' });
+          selectedModels.forEach(model => {
+            std.host.doc.updateBlock(model, { dir: 'rtl' });
           });
           break;
         case 'ltr':
-          this._selectedBlocks.forEach(block => {
-            this.std.doc.updateBlock(block.model, { dir: 'ltr' });
+          selectedModels.forEach(model => {
+            std.host.doc.updateBlock(model, { dir: 'ltr' });
           });
           break;
       }
     }}"
     @changeColor="${(event: CustomEvent) => {
-      const styles = event.detail;
-      const payload: {
+      const styles = event.detail[0];
+      /*const payload: {
         styles: AffineTextAttributes;
       } = {
         styles,
-      };
-      this.std.command
+      };*/
+      updateHighlight(styles as AffineTextAttributes);
+      /* this.std.command
         .chain()
         .try(chain => [
           chain.getTextSelection().formatText(payload),
           chain.getBlockSelections().formatBlock(payload),
           chain.formatNative(payload),
         ])
-        .run();
+        .run();*/
     }}"
     active-paragraph-tool="text"
     active-inline-tools="[]"
   ></mahdaad-format-bar>`;
+  const edgelessToolbar = join(
+    renderActions(primaryActionGroup, context),
+    innerToolbar ? nothing : renderToolbarSeparator()
+  );
 
   render(
-    flavour.includes('note')
-      ? _toolbar
-      : join(
-          renderActions(primaryActionGroup, context),
-          innerToolbar ? nothing : renderToolbarSeparator()
-        ),
+    html`<style>
+        editor-toolbar {
+          //border: 1px solid red;
+          position: absolute;
+          display: flex;
+          display: none;
+        }
+
+        editor-toolbar[data-open] {
+          display: flex;
+          opacity: 1;
+          transition-timing-function: ease-in;
+        }
+      </style>
+      ${flavour.includes('note') ? noteToolbar : edgelessToolbar}`,
     toolbar
   );
 

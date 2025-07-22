@@ -41,7 +41,7 @@ import {
 import { RANGE_SYNC_EXCLUDE_ATTR } from '@blocksuite/std/inline';
 import type { ReferenceElement, SideObject } from '@floating-ui/dom';
 import { batch, effect, signal } from '@preact/signals-core';
-import { css, unsafeCSS } from 'lit';
+//import { css, unsafeCSS } from 'lit';
 import groupBy from 'lodash-es/groupBy';
 import throttle from 'lodash-es/throttle';
 import toPairs from 'lodash-es/toPairs';
@@ -51,7 +51,7 @@ import { autoUpdatePosition, renderToolbar, sideMap } from './utils';
 export const AFFINE_TOOLBAR_WIDGET = 'affine-toolbar-widget';
 
 export class AffineToolbarWidget extends WidgetComponent {
-  static override styles = css`
+  /* static override styles = css`
     editor-toolbar {
       position: absolute;
       top: 0;
@@ -106,13 +106,14 @@ export class AffineToolbarWidget extends WidgetComponent {
 
     ${unsafeCSS(darkToolbarStyles('editor-toolbar'))}
     ${unsafeCSS(lightToolbarStyles('editor-toolbar'))}
-  `;
+  `;*/
 
   sideOptions$ = signal<Partial<SideObject> | null>(null);
 
   referenceElement$ = signal<(() => ReferenceElement | null) | null>(null);
 
   setReferenceElementWithRange(range: Range | null) {
+    //console.log('setReferenceElementWithRange');
     this.referenceElement$.value = range
       ? () => ({
           getBoundingClientRect: () => range.getBoundingClientRect(),
@@ -125,10 +126,12 @@ export class AffineToolbarWidget extends WidgetComponent {
   }
 
   setReferenceElementWithHtmlElement(element: Element | null) {
+    //console.log('setReferenceElementWithHtmlElement');
     this.referenceElement$.value = element ? () => element : null;
   }
 
   setReferenceElementWithBlocks(blocks: BlockComponent[]) {
+    //console.log('setReferenceElementWithBlocks');
     const getClientRects = () => blocks.map(e => e.getBoundingClientRect());
 
     this.referenceElement$.value = blocks.length
@@ -149,6 +152,7 @@ export class AffineToolbarWidget extends WidgetComponent {
   }
 
   setReferenceElementWithElements(gfx: GfxController, elements: GfxModel[]) {
+    //console.log('setReferenceElementWithElements');
     const getBoundingClientRect = () => {
       const bounds = getCommonBoundWithRotation(elements);
       const { x: offsetX, y: offsetY } = this.getBoundingClientRect();
@@ -268,9 +272,8 @@ export class AffineToolbarWidget extends WidgetComponent {
     const context = new ToolbarContext(std);
 
     // TODO(@fundon): fix toolbar position shaking when the wheel scrolls
-    //document.body.append(toolbar);
+    document.body.append(toolbar);
     //this.shadowRoot!.append(toolbar);
-    this.renderRoot!.append(toolbar);
 
     // Formatting
     // Selects text in note.
@@ -634,7 +637,6 @@ export class AffineToolbarWidget extends WidgetComponent {
     disposables.add(
       effect(() => {
         const value = flags.value$.value;
-
         // Hides toolbar
         if (Flag.None === value || flags.check(Flag.Hiding, value)) {
           if (toolbar.dataset.open) delete toolbar.dataset.open;
