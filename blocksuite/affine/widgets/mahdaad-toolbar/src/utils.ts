@@ -420,7 +420,7 @@ export function renderToolbar(
   );
 
   render(
-    html`<style>
+    html`<!-- <style>
         editor-toolbar {
           //border: 1px solid red;
           position: absolute;
@@ -433,8 +433,10 @@ export function renderToolbar(
           opacity: 1;
           transition-timing-function: ease-in;
         }
-      </style>
-      ${flavour.includes('note') ? noteToolbar : edgelessToolbar}`,
+      </style> -->
+      ${flavour.includes('note')
+        ? noteToolbar
+        : html`<div class="edgeless">${edgelessToolbar}</div>`}`,
     toolbar
   );
 
