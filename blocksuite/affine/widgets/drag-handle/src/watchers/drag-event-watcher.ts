@@ -12,6 +12,7 @@ import {
   DEFAULT_NOTE_WIDTH,
   type EmbedCardStyle,
   ListBlockModel,
+  MahdaadMultiColumnBlockSchema,
   NoteBlockModel,
   RootBlockModel,
 } from '@blocksuite/affine-model';
@@ -85,6 +86,16 @@ import {
   includeTextSelection,
   isOutOfNoteBlock,
 } from '../utils.js';
+import {
+  checkParentIs,
+  getParent,
+} from '../../../../../../../src/claytapEditor/utils/is';
+import {
+  isEndLeft,
+  isEndRight,
+  isPointInElement,
+  isRTL,
+} from '../../../../../../../src/claytapEditor/utils/index.js';
 
 export type DragBlockEntity = {
   type: 'blocks';
@@ -105,6 +116,7 @@ declare module '@blocksuite/std' {
 }
 export class DragEventWatcher {
   dropIndicator: null | DropIndicator = null;
+  isVerticalIndicator: boolean = false;
 
   previewHelper = new PreviewHelper(this.widget);
 
@@ -166,6 +178,8 @@ export class DragEventWatcher {
     dropPayload: DropPayload,
     block: BlockComponent
   ) => {
+    console.log('on drag move', block);
+    //return;
     this._createDropIndicator();
     this._updateDropIndicator(point, payload, dropPayload, block);
   };
@@ -193,7 +207,8 @@ export class DragEventWatcher {
   private readonly _getDropResult = (
     dropBlock: BlockComponent,
     dragPayload: DragBlockPayload,
-    dropPayload: DropPayload
+    dropPayload: DropPayload,
+    isVerticalIndicator = false
   ): DropResult | null => {
     const dropModel = dropBlock.model;
 
@@ -202,7 +217,7 @@ export class DragEventWatcher {
       !snapshot ||
       snapshot.content.length === 0 ||
       !dragPayload?.from ||
-      matchModels(dropModel, [DatabaseBlockModel])
+      (matchModels(dropModel, [DatabaseBlockModel]) && !isVerticalIndicator)
     )
       return null;
 
@@ -212,6 +227,7 @@ export class DragEventWatcher {
     const edge = dropPayload.edge;
     const scale = this.widget.scale.peek();
     let result: DropResult | null = null;
+    console.log('this is edge', edge);
 
     if (edge === 'right' && matchModels(dropModel, [ListBlockModel])) {
       const domRect = getRectByBlockComponent(dropBlock);
@@ -289,13 +305,61 @@ export class DragEventWatcher {
     return result;
   };
 
+  private readonly _getBlockView = (blockId: string) => {
+    return this.host.view.getBlock(blockId);
+  };
+
   private readonly _updateDropIndicator = (
     point: Point,
     dragPayload: DragBlockPayload,
     dropPayload: DropPayload,
     dropBlock: BlockComponent
   ) => {
+    window.allowDrop = true;
+
     const closestNoteBlock = dropBlock && getParentNoteBlock(dropBlock);
+    const rootComponent = this._getBlockView(this.widget.doc.root?.id);
+    /*console.log(
+      'closestNoteBlock',
+      this.widget.doc.root,
+      this._getBlockView(this.widget.doc.root?.id),
+      closestNoteBlock,
+      getParentNoteBlock(dropBlock),
+      dragPayload,
+      dropPayload,
+      dropBlock
+    );*/
+
+    let checkElement: BlockComponent | null =
+      closestNoteBlock as BlockComponent;
+    if (
+      checkElement &&
+      checkParentIs(
+        checkElement.model,
+        MahdaadMultiColumnBlockSchema.model.flavour
+      )
+    ) {
+      const parent = getParent(
+        checkElement?.model,
+        MahdaadMultiColumnBlockSchema.model.flavour
+      );
+      if (
+        parent &&
+        parent.flavour == MahdaadMultiColumnBlockSchema.model.flavour
+      ) {
+        checkElement = this._getBlockView(parent.id);
+      }
+    }
+    this.isVerticalIndicator = !!(
+      checkElement &&
+      (!isPointInElement(point, checkElement) &&
+      isPointInElement(point, rootComponent) &&
+      isRTL()
+        ? isEndLeft(point, checkElement)
+        : isEndRight(point, checkElement))
+    );
+
+    //console.log('aaaaaa', this.isVerticalIndicator);
 
     if (
       !closestNoteBlock ||
@@ -311,8 +375,10 @@ export class DragEventWatcher {
       const dropResult = this._getDropResult(
         dropBlock,
         dragPayload,
-        dropPayload
+        dropPayload,
+        this.isVerticalIndicator
       );
+      console.log('dropResult', dropResult);
       this._updateDropResult(dropResult);
     }
   };
@@ -1545,13 +1611,16 @@ export class DragEventWatcher {
   }
 
   private _monitorBlockDrag() {
+    console.log('_monitorBlockDrag');
     return this.std.dnd.monitor<DragBlockEntity>({
       canMonitor: ({ source }) => {
+        //console.log('canMonitor');
         const entity = source.data?.bsEntity;
 
         return entity?.type === 'blocks' && !!entity.snapshot;
       },
       onDropTargetChange: ({ location }) => {
+        console.log('onDropTargetChange');
         this._clearDropIndicator();
 
         if (
@@ -1563,6 +1632,8 @@ export class DragEventWatcher {
         }
       },
       onDrop: ({ location, source }) => {
+        //return;
+        console.log('onDrop');
         this._clearDropIndicator();
 
         if (
@@ -1574,10 +1645,12 @@ export class DragEventWatcher {
         }
 
         const target = location.current.dropTargets[0];
+
         const point = new Point(
           location.current.input.clientX,
           location.current.input.clientY
         );
+
         const dragPayload = source.data;
         const dropPayload = target.data;
 
@@ -1589,6 +1662,11 @@ export class DragEventWatcher {
         );
       },
       onDrag: ({ location, source }) => {
+        //console.log('onDrag');
+        /*   setTimeout(() => {
+          debugger;
+        }, 5000);
+*/
         if (
           !this._isDropOnCurrentEditor(
             (location.current.dropTargets[0]?.element as BlockComponent)?.std
@@ -1599,12 +1677,17 @@ export class DragEventWatcher {
         }
 
         const target = location.current.dropTargets[0];
+        console.log('target', target);
         const point = new Point(
           location.current.input.clientX,
           location.current.input.clientY
         );
+        console.log('point', point);
         const dragPayload = source.data;
         const dropPayload = target.data;
+        console.log('dragPayload', dragPayload);
+        console.log('dragPayload', dropPayload);
+        //return;
 
         this._onDragMove(
           point,
@@ -1618,6 +1701,7 @@ export class DragEventWatcher {
 
   watch() {
     this.widget.handleEvent('pointerDown', ctx => {
+      console.log('pointerDown');
       const state = ctx.get('pointerState');
       const event = state.raw;
       const target = captureEventTarget(event.target);
@@ -1631,6 +1715,11 @@ export class DragEventWatcher {
     });
 
     this.widget.handleEvent('dragStart', ctx => {
+      console.log('drag start');
+      /*setTimeout(() => {
+        debugger;
+      }, 5000);*/
+
       const state = ctx.get('pointerState');
       const event = state.raw;
       const target = captureEventTarget(event.target);
