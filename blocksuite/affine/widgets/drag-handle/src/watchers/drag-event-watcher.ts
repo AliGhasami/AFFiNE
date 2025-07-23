@@ -228,7 +228,7 @@ export class DragEventWatcher {
     const scale = this.widget.scale.peek();
     let result: DropResult | null = null;
     console.log('this is edge', edge);
-
+    console.log('11111111', getRectByBlockComponent(dropBlock));
     if (edge === 'right' && matchModels(dropModel, [ListBlockModel])) {
       const domRect = getRectByBlockComponent(dropBlock);
       const placement = 'in';
@@ -1632,7 +1632,7 @@ export class DragEventWatcher {
         }
       },
       onDrop: ({ location, source }) => {
-        //return;
+        return;
         console.log('onDrop');
         this._clearDropIndicator();
 
