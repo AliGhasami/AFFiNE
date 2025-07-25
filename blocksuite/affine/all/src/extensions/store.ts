@@ -57,11 +57,11 @@ import type { ExtensionType } from '@blocksuite/store';
 
 import {
   getAdapterFactoryExtensions,
-  getHtmlAdapterExtensions,
+  getHtmlAdapterExtensions, getMahdaadHtmlAdapterExtensions,
   getMarkdownAdapterExtensions,
   getNotionHtmlAdapterExtensions,
   getPlainTextAdapterExtensions,
-} from '../adapters/extension.js';
+} from '../adapters/extension.js'
 
 export const StoreExtensions: ExtensionType[] = [
   CodeBlockSchemaExtension,
@@ -106,6 +106,7 @@ export const StoreExtensions: ExtensionType[] = [
   TableSelectionExtension,
 
   getHtmlAdapterExtensions(),
+  getMahdaadHtmlAdapterExtensions(),
   getMarkdownAdapterExtensions(),
   getNotionHtmlAdapterExtensions(),
   getPlainTextAdapterExtensions(),

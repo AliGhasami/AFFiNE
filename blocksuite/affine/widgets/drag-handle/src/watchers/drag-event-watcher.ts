@@ -80,12 +80,12 @@ import { newIdCrossDoc } from '../middleware/new-id-cross-doc.js';
 import { reorderList } from '../middleware/reorder-list';
 import {
   containBlock,
-  extractIdsFromSnapshot,
+  extractIdsFromSnapshot, getClosestBlockByPoint,
   getParentNoteBlock,
   getSnapshotRect,
   includeTextSelection,
   isOutOfNoteBlock,
-} from '../utils.js';
+} from '../utils.js'
 import {
   checkParentIs,
   getParent,
@@ -210,6 +210,7 @@ export class DragEventWatcher {
     dropPayload: DropPayload,
     isVerticalIndicator = false
   ): DropResult | null => {
+
     const dropModel = dropBlock.model;
 
     const snapshot = dragPayload?.bsEntity?.snapshot;
@@ -227,7 +228,7 @@ export class DragEventWatcher {
     const edge = dropPayload.edge;
     const scale = this.widget.scale.peek();
     let result: DropResult | null = null;
-    console.log('this is edge', edge);
+    console.log('this is edge', edge,dropBlock);
     console.log('11111111', getRectByBlockComponent(dropBlock));
     if (edge === 'right' && matchModels(dropModel, [ListBlockModel])) {
       const domRect = getRectByBlockComponent(dropBlock);
@@ -372,14 +373,25 @@ export class DragEventWatcher {
     ) {
       this._resetDropResult();
     } else {
+      let block=dropBlock
+      if(this.isVerticalIndicator){
+        block= getClosestBlockByPoint(this.host,rootComponent,point)
+      }
+      console.log("ttttttttttttt",block)
+      //return
+
+      //console.log("2222222222",temp)
       const dropResult = this._getDropResult(
-        dropBlock,
+        block,
         dragPayload,
         dropPayload,
         this.isVerticalIndicator
       );
       console.log('dropResult', dropResult);
-      this._updateDropResult(dropResult);
+      setTimeout(()=>{
+        debugger
+      },5000)
+      this._updateDropResult(dropResult,this.isVerticalIndicator);
     }
   };
 
@@ -387,16 +399,26 @@ export class DragEventWatcher {
     if (this.dropIndicator) this.dropIndicator.rect = null;
   };
 
-  private readonly _updateDropResult = (dropResult: DropResult | null) => {
+  private readonly _updateDropResult = (dropResult: DropResult | null,showVerticalIndicator =  false) => {
     if (!this.dropIndicator) return;
+    let result=null
 
     if (dropResult?.rect) {
       const { left, top, width, height } = dropResult.rect;
       const rect = Rect.fromLWTH(left, width, top, height);
-
-      this.dropIndicator.rect = rect;
+      result= rect
+      //this.dropIndicator.rect = rect;
     } else {
-      this.dropIndicator.rect = dropResult?.rect ?? null;
+     // this.dropIndicator.rect = dropResult?.rect ?? null;
+      result= dropResult?.rect ?? null;
+    }
+    if(showVerticalIndicator) {
+      this.dropIndicator.rect = null;
+      //console.log("qqqqqqq",dropResult);
+      this.dropIndicator.rectVertical= result
+    }else{
+      this.dropIndicator.rectVertical=null
+      this.dropIndicator.rect = result;
     }
   };
 

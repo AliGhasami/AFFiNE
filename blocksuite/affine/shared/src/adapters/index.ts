@@ -16,6 +16,22 @@ export {
   type InlineDeltaToHtmlAdapterMatcher,
   InlineDeltaToHtmlAdapterMatcherIdentifier,
 } from './html';
+export {
+  BlockMahdaadHtmlAdapterExtension,
+  type BlockMahdaadHtmlAdapterMatcher,
+  BlockMahdaadHtmlAdapterMatcherIdentifier,
+  type MahdaadHtml,
+  MahdaadHtmlAdapter,
+  MahdaadHtmlAdapterFactoryExtension,
+  MahdaadHtmlAdapterFactoryIdentifier,
+  MahdaadHtmlASTToDeltaExtension,
+  type MahdaadHtmlASTToDeltaMatcher,
+  MahdaadHtmlASTToDeltaMatcherIdentifier,
+  MahdaadHtmlDeltaConverter,
+  MahdaadInlineDeltaToHtmlAdapterExtension,
+  type MahdaadInlineDeltaToHtmlAdapterMatcher,
+  MahdaadInlineDeltaToHtmlAdapterMatcherIdentifier,
+} from './mahdaad-html';
 export * from './image';
 export {
   BlockMarkdownAdapterExtension,

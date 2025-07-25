@@ -15,10 +15,12 @@ import {
   NotionHtmlAdapterFactoryExtension,
   NotionTextAdapterFactoryExtension,
   PlainTextAdapterFactoryExtension,
+  MahdaadHtmlAdapterFactoryExtension
 } from '@blocksuite/affine-shared/adapters';
 import type { ExtensionType } from '@blocksuite/store';
 
 import { defaultBlockHtmlAdapterMatchers } from './html/block-matcher';
+import {  defaultBlockMahdaadHtmlAdapterMatchers } from './mahdaad-html/block-matcher';
 import { defaultBlockMarkdownAdapterMatchers } from './markdown/block-matcher';
 import { defaultMarkdownPreprocessors } from './markdown/preprocessor';
 import { defaultBlockNotionHtmlAdapterMatchers } from './notion-html/block-matcher';
@@ -34,6 +36,7 @@ export function getAdapterFactoryExtensions(): ExtensionType[] {
     NotionTextAdapterFactoryExtension,
     NotionHtmlAdapterFactoryExtension,
     MixTextAdapterFactoryExtension,
+    MahdaadHtmlAdapterFactoryExtension
   ];
 }
 
@@ -41,6 +44,15 @@ export function getHtmlAdapterExtensions(): ExtensionType[] {
   return [
     ...HtmlInlineToDeltaAdapterExtensions,
     ...defaultBlockHtmlAdapterMatchers,
+    ...InlineDeltaToHtmlAdapterExtensions,
+  ];
+}
+
+//todo ali ghasami
+export function getMahdaadHtmlAdapterExtensions(): ExtensionType[] {
+  return [
+    ...HtmlInlineToDeltaAdapterExtensions,
+    ...defaultBlockMahdaadHtmlAdapterMatchers,
     ...InlineDeltaToHtmlAdapterExtensions,
   ];
 }
