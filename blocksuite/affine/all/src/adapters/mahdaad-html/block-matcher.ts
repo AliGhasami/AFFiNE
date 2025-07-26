@@ -1,4 +1,4 @@
-import { BookmarkBlockHtmlAdapterExtension } from '@blocksuite/affine-block-bookmark';
+/*import { BookmarkBlockHtmlAdapterExtension } from '@blocksuite/affine-block-bookmark';
 import { CodeBlockHtmlAdapterExtension } from '@blocksuite/affine-block-code';
 import { DatabaseBlockHtmlAdapterExtension } from '@blocksuite/affine-block-database';
 import { DividerBlockHtmlAdapterExtension } from '@blocksuite/affine-block-divider';
@@ -12,13 +12,14 @@ import {
   EmbedYoutubeBlockHtmlAdapterExtension,
 } from '@blocksuite/affine-block-embed';
 import { ImageBlockHtmlAdapterExtension } from '@blocksuite/affine-block-image';
-import { ListBlockHtmlAdapterExtension } from '@blocksuite/affine-block-list';
-import { ParagraphBlockHtmlAdapterExtension } from '@blocksuite/affine-block-paragraph';
-import { RootBlockHtmlAdapterExtension } from '@blocksuite/affine-block-root';
-import { TableBlockHtmlAdapterExtension } from '@blocksuite/affine-block-table';
+import { ListBlockHtmlAdapterExtension } from '@blocksuite/affine-block-list';*/
+import { ParagraphBlockMahdaadHtmlAdapterExtension } from '@blocksuite/affine-block-paragraph';
+/*import { RootBlockHtmlAdapterExtension } from '@blocksuite/affine-block-root';
+import { TableBlockHtmlAdapterExtension } from '@blocksuite/affine-block-table';*/
 
 export const defaultBlockMahdaadHtmlAdapterMatchers = [
-  ListBlockHtmlAdapterExtension,
+  ParagraphBlockMahdaadHtmlAdapterExtension,
+  /*ListBlockHtmlAdapterExtension,
   ParagraphBlockHtmlAdapterExtension,
   CodeBlockHtmlAdapterExtension,
   DividerBlockHtmlAdapterExtension,
@@ -33,5 +34,5 @@ export const defaultBlockMahdaadHtmlAdapterMatchers = [
   DatabaseBlockHtmlAdapterExtension,
   TableBlockHtmlAdapterExtension,
   EmbedLinkedDocHtmlAdapterExtension,
-  EmbedSyncedDocBlockHtmlAdapterExtension,
+  EmbedSyncedDocBlockHtmlAdapterExtension,*/
 ];

@@ -125,7 +125,7 @@ export class MahdaadHtmlAdapter extends BaseAdapter<MahdaadHtml> {
           const adapterContext: AdapterContext<
             BlockSnapshot,
             HtmlAST,
-             MahdaadHtmlDeltaConverter
+            MahdaadHtmlDeltaConverter
           > = {
             walker,
             walkerContext: context,
@@ -149,7 +149,7 @@ export class MahdaadHtmlAdapter extends BaseAdapter<MahdaadHtml> {
           const adapterContext: AdapterContext<
             BlockSnapshot,
             HtmlAST,
-           MahdaadHtmlDeltaConverter
+            MahdaadHtmlDeltaConverter
           > = {
             walker,
             walkerContext: context,
@@ -380,7 +380,8 @@ export class MahdaadHtmlAdapter extends BaseAdapter<MahdaadHtml> {
   }
 }
 
-export const MahdaadHtmlAdapterFactoryIdentifier = AdapterFactoryIdentifier('Html');
+export const MahdaadHtmlAdapterFactoryIdentifier =
+  AdapterFactoryIdentifier('MahdaadHtml');
 
 export const MahdaadHtmlAdapterFactoryExtension: ExtensionType = {
   setup: di => {

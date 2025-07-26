@@ -15,12 +15,12 @@ import {
   NotionHtmlAdapterFactoryExtension,
   NotionTextAdapterFactoryExtension,
   PlainTextAdapterFactoryExtension,
-  MahdaadHtmlAdapterFactoryExtension
+  MahdaadHtmlAdapterFactoryExtension,
 } from '@blocksuite/affine-shared/adapters';
 import type { ExtensionType } from '@blocksuite/store';
 
 import { defaultBlockHtmlAdapterMatchers } from './html/block-matcher';
-import {  defaultBlockMahdaadHtmlAdapterMatchers } from './mahdaad-html/block-matcher';
+import { defaultBlockMahdaadHtmlAdapterMatchers } from './mahdaad-html/block-matcher';
 import { defaultBlockMarkdownAdapterMatchers } from './markdown/block-matcher';
 import { defaultMarkdownPreprocessors } from './markdown/preprocessor';
 import { defaultBlockNotionHtmlAdapterMatchers } from './notion-html/block-matcher';
@@ -36,7 +36,7 @@ export function getAdapterFactoryExtensions(): ExtensionType[] {
     NotionTextAdapterFactoryExtension,
     NotionHtmlAdapterFactoryExtension,
     MixTextAdapterFactoryExtension,
-    MahdaadHtmlAdapterFactoryExtension
+    MahdaadHtmlAdapterFactoryExtension,
   ];
 }
 
@@ -51,9 +51,9 @@ export function getHtmlAdapterExtensions(): ExtensionType[] {
 //todo ali ghasami
 export function getMahdaadHtmlAdapterExtensions(): ExtensionType[] {
   return [
-    ...HtmlInlineToDeltaAdapterExtensions,
+    //...HtmlInlineToDeltaAdapterExtensions,
     ...defaultBlockMahdaadHtmlAdapterMatchers,
-    ...InlineDeltaToHtmlAdapterExtensions,
+    //...InlineDeltaToHtmlAdapterExtensions,
   ];
 }
 
