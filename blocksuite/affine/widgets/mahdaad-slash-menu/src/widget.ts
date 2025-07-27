@@ -143,7 +143,7 @@ export class AffineSlashMenuWidget extends WidgetComponent {
       if (!block) return;
       const model = block.model;
 
-      if (this.config.disableWhen?.({ model, std: this.std })) return;
+      //if (this.config.disableWhen?.({ model, std: this.std })) return;
 
       const inlineRange = inlineEditor.getInlineRange();
       if (!inlineRange) return;
