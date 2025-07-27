@@ -1,26 +1,31 @@
-/*import { BookmarkBlockHtmlAdapterExtension } from '@blocksuite/affine-block-bookmark';
-import { CodeBlockHtmlAdapterExtension } from '@blocksuite/affine-block-code';
-import { DatabaseBlockHtmlAdapterExtension } from '@blocksuite/affine-block-database';
-import { DividerBlockHtmlAdapterExtension } from '@blocksuite/affine-block-divider';
-import {
-  EmbedFigmaBlockHtmlAdapterExtension,
-  EmbedGithubBlockHtmlAdapterExtension,
-  EmbedIframeBlockHtmlAdapterExtension,
-  EmbedLinkedDocHtmlAdapterExtension,
-  EmbedLoomBlockHtmlAdapterExtension,
-  EmbedSyncedDocBlockHtmlAdapterExtension,
-  EmbedYoutubeBlockHtmlAdapterExtension,
-} from '@blocksuite/affine-block-embed';
-import { ImageBlockHtmlAdapterExtension } from '@blocksuite/affine-block-image';
-import { ListBlockHtmlAdapterExtension } from '@blocksuite/affine-block-list';*/
+import { ListBlockMahdaadHtmlAdapterExtension } from '@blocksuite/affine-block-list';
 import { ParagraphBlockMahdaadHtmlAdapterExtension } from '@blocksuite/affine-block-paragraph';
-/*import { RootBlockHtmlAdapterExtension } from '@blocksuite/affine-block-root';
-import { TableBlockHtmlAdapterExtension } from '@blocksuite/affine-block-table';*/
+import { RootBlockMahdaadHtmlAdapterExtension } from '@blocksuite/affine-block-root';
+import { NoteBlockMahdaadHtmlAdapterExtension } from '@blocksuite/affine-block-note';
+import { ObjectBlockMahdaadHtmlAdapterExtension } from '@blocksuite/mahdaad-object-block';
+import { DividerBlockMahdaadHtmlAdapterExtension } from '@blocksuite/affine-block-divider';
+import { WeblinkBlockMahdaadHtmlAdapterExtension } from '@blocksuite/mahdaad-weblink-block';
+import { MahdaadCalloutBlockMahdaadHtmlAdapterExtension } from '@blocksuite/mahdaad-callout-block';
+import { TableOfContentBlockMahdaadHtmlAdapterExtension } from '@blocksuite/mahdaad-table-of-content-block';
+import { MahdaadMultiColumnBlockHtmlAdapterExtension } from '@blocksuite/mahdaad-multi-column-block';
+import { DatabaseBlockMahdaadHtmlAdapterExtension } from '@blocksuite/affine-block-database';
 
 export const defaultBlockMahdaadHtmlAdapterMatchers = [
+  RootBlockMahdaadHtmlAdapterExtension,
   ParagraphBlockMahdaadHtmlAdapterExtension,
-  /*ListBlockHtmlAdapterExtension,
-  ParagraphBlockHtmlAdapterExtension,
+  ListBlockMahdaadHtmlAdapterExtension,
+  NoteBlockMahdaadHtmlAdapterExtension,
+  ObjectBlockMahdaadHtmlAdapterExtension,
+  DividerBlockMahdaadHtmlAdapterExtension,
+  WeblinkBlockMahdaadHtmlAdapterExtension,
+  MahdaadCalloutBlockMahdaadHtmlAdapterExtension,
+  TableOfContentBlockMahdaadHtmlAdapterExtension,
+  MahdaadMultiColumnBlockHtmlAdapterExtension,
+  DatabaseBlockMahdaadHtmlAdapterExtension,
+  /*
+  MahdaadAttachmentBlockHtmlAdapterExtension,
+  */
+  /*,
   CodeBlockHtmlAdapterExtension,
   DividerBlockHtmlAdapterExtension,
   ImageBlockHtmlAdapterExtension,

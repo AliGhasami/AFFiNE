@@ -4,10 +4,12 @@ import { DatabaseBlockHtmlAdapterExtension } from './html.js';
 import { DatabaseBlockMarkdownAdapterExtension } from './markdown.js';
 import { DatabaseBlockNotionHtmlAdapterExtension } from './notion-html.js';
 import { DatabaseBlockPlainTextAdapterExtension } from './plain-text.js';
+import { DatabaseBlockMahdaadHtmlAdapterExtension } from './mahdaad-html';
 
 export const DatabaseBlockAdapterExtensions: ExtensionType[] = [
   DatabaseBlockHtmlAdapterExtension,
   DatabaseBlockMarkdownAdapterExtension,
   DatabaseBlockNotionHtmlAdapterExtension,
   DatabaseBlockPlainTextAdapterExtension,
+  DatabaseBlockMahdaadHtmlAdapterExtension,
 ];

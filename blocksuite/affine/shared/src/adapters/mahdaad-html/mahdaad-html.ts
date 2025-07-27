@@ -24,6 +24,7 @@ import type { Root } from 'hast';
 import rehypeParse from 'rehype-parse';
 import rehypeStringify from 'rehype-stringify';
 import { unified } from 'unified';
+import rehypeRaw from 'rehype-raw';
 
 import {
   type AdapterContext,
@@ -52,7 +53,12 @@ type HtmlToSliceSnapshotPayload = {
 
 export class MahdaadHtmlAdapter extends BaseAdapter<MahdaadHtml> {
   private readonly _astToHtml = (ast: Root) => {
-    return unified().use(rehypeStringify).stringify(ast);
+    const processor = unified()
+      .use(rehypeRaw) // پردازش raw
+      .use(rehypeStringify); // تبدیل AST به HTML
+
+    const processedAst = processor.runSync(ast); // پردازش AST
+    return processor.stringify(processedAst); // خروجی HTML
   };
 
   private readonly _traverseHtml = async (
@@ -228,10 +234,7 @@ export class MahdaadHtmlAdapter extends BaseAdapter<MahdaadHtml> {
       assets: payload.assets,
     });
     return {
-      file: file.replace(
-        '<!--BlockSuiteDocTitlePlaceholder-->',
-        `<h1>${payload.snapshot.meta.title}</h1>`
-      ),
+      file,
       assetsIds,
     };
   }

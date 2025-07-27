@@ -1,15 +1,7 @@
-/*
 import type { ExtensionType } from '@blocksuite/store';
 
-import { ParagraphBlockHtmlAdapterExtension } from './html.js';
-import { ParagraphBlockMarkdownAdapterExtension } from './markdown.js';
-import { ParagraphBlockNotionHtmlAdapterExtension } from './notion-html.js';
-import { ParagraphBlockPlainTextAdapterExtension } from './plain-text.js';
+import { MahdaadMultiColumnBlockHtmlAdapterExtension } from './mahdaad-html';
 
-export const ParagraphBlockAdapterExtensions: ExtensionType[] = [
-  ParagraphBlockHtmlAdapterExtension,
-  ParagraphBlockMarkdownAdapterExtension,
-  ParagraphBlockPlainTextAdapterExtension,
-  ParagraphBlockNotionHtmlAdapterExtension,
+export const MahdaadMultiColumnBlockAdapterExtensions: ExtensionType[] = [
+  MahdaadMultiColumnBlockHtmlAdapterExtension,
 ];
-*/

@@ -48,7 +48,9 @@ export class RichText extends WithDisposable(ShadowlessElement) {
     }
 
     .inline-editor.readonly {
-      cursor: default;
+      //change for mahdaad
+      cursor: text;
+      //cursor: default;
     }
 
     rich-text .nowrap-lines v-text span,

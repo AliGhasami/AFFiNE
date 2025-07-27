@@ -16,6 +16,7 @@ import {
 export * from './html';
 export * from './markdown';
 export * from './plain-text';
+export * from './mahdaad-html';
 
 export const DocNoteBlockAdapterExtensions: ExtensionType[] = [
   DocNoteBlockMarkdownAdapterExtension,

@@ -1,12 +1,17 @@
-import { SlashMenuConfigExtension } from '@blocksuite/affine-widget-slash-menu'
+import { SlashMenuConfigExtension } from '@blocksuite/affine-widget-slash-menu';
 import { BlockViewExtension, FlavourExtension } from '@blocksuite/std';
 import type { ExtensionType } from '@blocksuite/store';
 import { literal } from 'lit/static-html.js';
 
-import {mahdaadCalloutSlashMenuConfig } from  './config/slash-menu'
+import { mahdaadCalloutSlashMenuConfig } from './config/slash-menu';
+import { MahdaadCalloutBlockAdapterExtensions } from './adapters/extension';
 
 export const MahdaadCalloutBlockSpec: ExtensionType[] = [
   FlavourExtension('affine:mahdaad-callout'),
   BlockViewExtension('affine:mahdaad-callout', literal`affine-mahdaad-callout`),
-  SlashMenuConfigExtension('affine:mahdaad-callout', mahdaadCalloutSlashMenuConfig),
+  SlashMenuConfigExtension(
+    'affine:mahdaad-callout',
+    mahdaadCalloutSlashMenuConfig
+  ),
+  MahdaadCalloutBlockAdapterExtensions,
 ].flat();
