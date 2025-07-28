@@ -5,6 +5,8 @@ import {
   InlineDeltaToPlainTextAdapterExtensions,
   MarkdownInlineToDeltaAdapterExtensions,
   NotionHtmlInlineToDeltaAdapterExtensions,
+  MahdaadHtmlInlineToDeltaAdapterExtensions,
+  InlineDeltaToMahdaadHtmlAdapterExtensions,
 } from '@blocksuite/affine-inline-preset';
 import {
   AttachmentAdapterFactoryExtension,
@@ -48,12 +50,11 @@ export function getHtmlAdapterExtensions(): ExtensionType[] {
   ];
 }
 
-//todo ali ghasami
 export function getMahdaadHtmlAdapterExtensions(): ExtensionType[] {
   return [
-    //...HtmlInlineToDeltaAdapterExtensions,
+    ...MahdaadHtmlInlineToDeltaAdapterExtensions,
     ...defaultBlockMahdaadHtmlAdapterMatchers,
-    //...InlineDeltaToHtmlAdapterExtensions,
+    ...InlineDeltaToMahdaadHtmlAdapterExtensions,
   ];
 }
 

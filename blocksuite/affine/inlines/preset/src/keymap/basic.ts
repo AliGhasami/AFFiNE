@@ -1,7 +1,7 @@
 import {
   focusTextModel,
   getInlineEditorByModel,
-  selectTextModel,
+  //selectTextModel,
 } from '@blocksuite/affine-rich-text';
 import {
   BlockSelection,
