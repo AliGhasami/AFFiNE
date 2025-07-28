@@ -171,7 +171,10 @@ export class RenderService<TextAttributes extends BaseTextAttributes> {
       .then(() => {
         this._rendering = false;
         this.editor.slots.renderComplete.next();
-        this.editor.syncInlineRange();
+        //todo ali ghasami if has bug
+        if (syncInlineRange) {
+          this.editor.syncInlineRange();
+        }
       })
       .catch(console.error);
   };

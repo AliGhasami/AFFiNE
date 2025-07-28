@@ -44,7 +44,7 @@ export class MahdaadDateTime extends SignalWatcher(
   }
 
   selfUpdate(event) {
-    const data = event?.detail;
+    const data = event?.detail[0];
     if (data && data.key && data.hasOwnProperty('value')) {
       const format = this.inlineEditor.getFormat(this.selfInlineRange);
       if (format?.date?.id) {

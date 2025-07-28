@@ -201,6 +201,46 @@ export class PageRootBlockComponent extends BlockComponent<
     });
   }
 
+  selectAllBlock() {
+    /*const blocks = this.model.children
+      .filter(model => {
+        if (matchFlavours(model, ['affine:note'])) {
+          const note = model as NoteBlockModel;
+          if (note.displayMode === NoteDisplayMode.EdgelessOnly) return false;
+
+          return true;
+        }
+        return false;
+      })
+      .flatMap(model => {
+        return model.children.map(child => {
+          return this.std.selection.create('block', {
+            blockId: child.id,
+          });
+        });
+      });
+    this.std.selection.setGroup('note', blocks);*/
+
+    const blocks = this.model.children
+      .filter(model => {
+        if (matchModels(model, [NoteBlockModel])) {
+          if (model.props.displayMode === NoteDisplayMode.EdgelessOnly)
+            return false;
+
+          return true;
+        }
+        return false;
+      })
+      .flatMap(model => {
+        return model.children.map(child => {
+          return this.std.selection.create(BlockSelection, {
+            blockId: child.id,
+          });
+        });
+      });
+    this.std.selection.setGroup('note', blocks);
+  }
+
   override connectedCallback() {
     super.connectedCallback();
 
@@ -208,7 +248,7 @@ export class PageRootBlockComponent extends BlockComponent<
 
     this.bindHotKey({
       'Mod-a': () => {
-        const blocks = this.model.children
+        /*const blocks = this.model.children
           .filter(model => {
             if (matchModels(model, [NoteBlockModel])) {
               if (model.props.displayMode === NoteDisplayMode.EdgelessOnly)
@@ -225,7 +265,8 @@ export class PageRootBlockComponent extends BlockComponent<
               });
             });
           });
-        this.std.selection.setGroup('note', blocks);
+        this.std.selection.setGroup('note', blocks);*/
+        this.selectAllBlock();
         return true;
       },
       ArrowUp: () => {

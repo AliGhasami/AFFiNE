@@ -45,15 +45,19 @@ export const textCommonKeymap = (
 
       ctx.get('keyboardState').raw.preventDefault();
 
-      if (
+      /** add for mahdaad  */
+      selectBlock(std, text.from.blockId);
+
+      /** disable for mahdaad  */
+      /*if (
         text.from.index === 0 &&
         text.from.length === model.text.yText.length
       ) {
         selectBlock(std, text.from.blockId);
         return true;
-      }
-
-      selectTextModel(std, text.from.blockId, 0, model.text.yText.length);
+      }*/
+      /** disable for mahdaad  */
+      //selectTextModel(std, text.from.blockId, 0, model.text.yText.length);
       return true;
     },
     Enter: ctx => {
