@@ -15,7 +15,8 @@ import {
 import type { HtmlAST, InlineHtmlAST } from '../types/hast.js';
 import { AdapterTextUtils } from '../utils/text.js';
 
-export type MahdaadInlineDeltaToHtmlAdapterMatcher = InlineDeltaMatcher<InlineHtmlAST>;
+export type MahdaadInlineDeltaToHtmlAdapterMatcher =
+  InlineDeltaMatcher<InlineHtmlAST>;
 
 export const MahdaadInlineDeltaToHtmlAdapterMatcherIdentifier =
   createIdentifier<MahdaadInlineDeltaToHtmlAdapterMatcher>(
@@ -27,7 +28,9 @@ export function MahdaadInlineDeltaToHtmlAdapterExtension(
 ): ExtensionType & {
   identifier: ServiceIdentifier<MahdaadInlineDeltaToHtmlAdapterMatcher>;
 } {
-  const identifier = MahdaadInlineDeltaToHtmlAdapterMatcherIdentifier(matcher.name);
+  const identifier = MahdaadInlineDeltaToHtmlAdapterMatcherIdentifier(
+    matcher.name
+  );
   return {
     setup: di => {
       di.addImpl(identifier, () => matcher);
@@ -39,7 +42,9 @@ export function MahdaadInlineDeltaToHtmlAdapterExtension(
 export type MahdaadHtmlASTToDeltaMatcher = ASTToDeltaMatcher<HtmlAST>;
 
 export const MahdaadHtmlASTToDeltaMatcherIdentifier =
-  createIdentifier<MahdaadHtmlASTToDeltaMatcher>('MahdaadHtmlASTToDeltaMatcher');
+  createIdentifier<MahdaadHtmlASTToDeltaMatcher>(
+    'MahdaadHtmlASTToDeltaMatcher'
+  );
 
 export function MahdaadHtmlASTToDeltaExtension(
   matcher: MahdaadHtmlASTToDeltaMatcher
@@ -71,7 +76,59 @@ export class MahdaadHtmlDeltaConverter extends DeltaASTConverter<
   private _applyTextFormatting(
     delta: DeltaInsert<AffineTextAttributes>
   ): InlineHtmlAST {
+    //console.log("tt",delta)
+    let style = '';
+    /*const properties={
+      style:
+    }*/
+    if (delta && delta.attributes) {
+      if (delta.attributes.background) {
+        style += `background:${delta.attributes.background};`;
+      }
+      if (delta.attributes.color) {
+        style += `color:${delta.attributes.color};`;
+      }
+    }
+    // @ts-ignore
     let hast: InlineHtmlAST = {
+      //type: 'text',
+      //value: delta.insert,
+      type: 'element',
+      tagName: 'span',
+      properties: {
+        style,
+      },
+      //@ts-ignore
+      children: [
+        {
+          type: 'element',
+          tagName: 'pre',
+          children: [
+            {
+              type: 'text',
+              value: delta.insert,
+            },
+          ],
+        },
+      ],
+    };
+
+    const context: {
+      configs: Map<string, string>;
+      current: InlineHtmlAST;
+    } = {
+      configs: this.configs,
+      current: hast,
+    };
+    for (const matcher of this.inlineDeltaMatchers) {
+      if (matcher.match(delta)) {
+        hast = matcher.toAST(delta, context);
+        context.current = hast;
+      }
+    }
+
+    return hast;
+    /*let hast: InlineHtmlAST = {
       type: 'text',
       value: delta.insert,
     };
@@ -90,7 +147,7 @@ export class MahdaadHtmlDeltaConverter extends DeltaASTConverter<
       }
     }
 
-    return hast;
+    return hast;*/
   }
 
   private _spreadAstToDelta(

@@ -87,13 +87,33 @@ export const databaseBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatc
           }),
         };
 
-        walkerContext
+        /*walkerContext
           .openNode({
             type: 'element',
             tagName: 'table',
             properties: Object.create(null),
             children: [tableHeaderAst, tableBodyAst],
           })
+          .closeNode();*/
+
+        walkerContext
+          .openNode({
+            type: 'element',
+            tagName: 'div',
+            properties: {
+              className: ['mahdaad-block-container mahdaad-table'],
+            },
+            children: [],
+          })
+          .openNode({
+            type: 'element',
+            tagName: 'table',
+            properties: {
+              className: [],
+            }, // Object.create(null)
+            children: [tableHeaderAst, tableBodyAst],
+          })
+          .closeNode()
           .closeNode();
 
         walkerContext.skipAllChildren();

@@ -3,11 +3,11 @@ import {
   BlockMahdaadHtmlAdapterExtension,
   type BlockMahdaadHtmlAdapterMatcher,
   HastUtils,
-  type HtmlAST,
 } from '@blocksuite/affine-shared/adapters';
-import type { DeltaInsert, NodeProps } from '@blocksuite/store';
+import type { DeltaInsert } from '@blocksuite/store';
 import { nanoid } from '@blocksuite/store';
-
+//@ts-ignore
+import quoteIcon from '../assets/quote.svg?raw';
 const paragraphBlockMatchTags = new Set([
   'p',
   'h1',
@@ -23,7 +23,7 @@ const paragraphBlockMatchTags = new Set([
   'footer',
 ]);
 
-const tagsInAncestor = (o: NodeProps<HtmlAST>, tagNames: Array<string>) => {
+/*const tagsInAncestor = (o: NodeProps<HtmlAST>, tagNames: Array<string>) => {
   let parent = o.parent;
   while (parent) {
     if (
@@ -35,7 +35,7 @@ const tagsInAncestor = (o: NodeProps<HtmlAST>, tagNames: Array<string>) => {
     parent = parent.parent;
   }
   return false;
-};
+};*/
 
 export const paragraphBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatcher =
   {
@@ -87,7 +87,7 @@ export const paragraphBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMat
           case 'footer': {
             if (
               o.parent?.node.type === 'element' &&
-              !tagsInAncestor(o, ['p', 'li']) &&
+              !['li', 'p'].includes(o.parent.node.tagName) &&
               HastUtils.isParagraphLike(o.node)
             ) {
               walkerContext
@@ -169,7 +169,6 @@ export const paragraphBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMat
         const { walkerContext } = context;
         switch (o.node.tagName) {
           case 'div': {
-            // eslint-disable-next-line sonarjs/no-collapsible-if
             if (
               o.parent?.node.type === 'element' &&
               o.parent.node.tagName !== 'li' &&
@@ -214,10 +213,18 @@ export const paragraphBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMat
     },
     fromBlockSnapshot: {
       enter: (o, context) => {
+        //console.log("qqqqq",o,context);
         const text = (o.node.props.text ?? { delta: [] }) as {
           delta: DeltaInsert[];
         };
         const { walkerContext, deltaConverter } = context;
+        //console.log("bb",deltaConverter.deltaToAST(text.delta));
+
+        const temp = deltaConverter.deltaToAST(text.delta);
+        const children =
+          temp.length == 0 ? [{ type: 'text', value: ' ' }] : temp;
+        //console.log("bb children",children,o.node.props.type);
+
         switch (o.node.props.type) {
           case 'text': {
             walkerContext
@@ -226,7 +233,8 @@ export const paragraphBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMat
                   type: 'element',
                   tagName: 'div',
                   properties: {
-                    className: ['affine-paragraph-block-container'],
+                    dir: o.node.props.dir as string,
+                    className: ['mahdaad-block-container mahdaad-text'],
                   },
                   children: [],
                 },
@@ -235,9 +243,9 @@ export const paragraphBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMat
               .openNode(
                 {
                   type: 'element',
-                  tagName: 'p',
+                  tagName: 'pre',
                   properties: {},
-                  children: deltaConverter.deltaToAST(text.delta),
+                  children, //children.length==0 ? [{type:'raw',value:'&nbsp;'}]: children,
                 },
                 'children'
               )
@@ -247,7 +255,7 @@ export const paragraphBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMat
                   type: 'element',
                   tagName: 'div',
                   properties: {
-                    className: ['affine-block-children-container'],
+                    className: ['mahdaad-children-container'],
                     style: 'padding-left: 26px;',
                   },
                   children: [],
@@ -268,7 +276,10 @@ export const paragraphBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMat
                   type: 'element',
                   tagName: 'div',
                   properties: {
-                    className: ['affine-paragraph-block-container'],
+                    dir: o.node.props.dir as string,
+                    className: [
+                      `mahdaad-block-container mahdaad-${o.node.props.type}`,
+                    ],
                   },
                   children: [],
                 },
@@ -277,19 +288,37 @@ export const paragraphBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMat
               .openNode(
                 {
                   type: 'element',
-                  tagName: o.node.props.type,
-                  properties: {},
-                  children: deltaConverter.deltaToAST(text.delta),
+                  tagName: 'a',
+                  properties: {
+                    name: `${o.node.id}`,
+                  },
+                  children: [],
                 },
                 'children'
               )
+              .openNode(
+                {
+                  type: 'element',
+                  tagName: 'pre',
+                  children: [
+                    //@ts-ignore
+                    {
+                      type: 'element',
+                      tagName: o.node.props.type,
+                      children, //: deltaConverter.deltaToAST(text.delta)
+                    },
+                  ],
+                },
+                'children'
+              )
+              .closeNode()
               .closeNode()
               .openNode(
                 {
                   type: 'element',
                   tagName: 'div',
                   properties: {
-                    className: ['affine-block-children-container'],
+                    className: ['mahdaad-children-container'],
                     style: 'padding-left: 26px;',
                   },
                   children: [],
@@ -305,12 +334,30 @@ export const paragraphBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMat
                   type: 'element',
                   tagName: 'div',
                   properties: {
-                    className: ['affine-paragraph-block-container'],
+                    dir: o.node.props.dir as string,
+                    className: ['mahdaad-block-container mahdaad-blockquote'],
                   },
                   children: [],
                 },
                 'children'
               )
+              .openNode(
+                {
+                  type: 'element',
+                  tagName: 'span',
+                  properties: {
+                    className: ['quote-icon'],
+                  },
+                  children: [
+                    {
+                      type: 'raw',
+                      value: quoteIcon,
+                    },
+                  ],
+                },
+                'children'
+              )
+              .closeNode()
               .openNode(
                 {
                   type: 'element',
@@ -325,9 +372,9 @@ export const paragraphBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMat
               .openNode(
                 {
                   type: 'element',
-                  tagName: 'p',
+                  tagName: 'pre',
                   properties: {},
-                  children: deltaConverter.deltaToAST(text.delta),
+                  children, //deltaConverter.deltaToAST(text.delta),
                 },
                 'children'
               )
@@ -339,7 +386,7 @@ export const paragraphBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMat
                   tagName: 'div',
                   properties: {
                     className: ['affine-block-children-container'],
-                    style: 'padding-left: 26px;',
+                    // style: 'padding-left: 26px;',
                   },
                   children: [],
                 },
