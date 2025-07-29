@@ -160,7 +160,15 @@ export class MahdaadMentionMenuWidget extends WidgetComponent<RootBlockModel> {
       const inlineEditor = inlineRoot.inlineEditor;
       const inlineRange = inlineEditor.getInlineRange();
       if (!inlineRange) return;
-      const text = inlineEditor.yTextString;
+
+      const textPoint = inlineEditor.getTextPoint(inlineRange.index);
+      if (!textPoint) return;
+
+      const [leafStart, offsetStart] = textPoint;
+
+      const text = leafStart.textContent
+        ? leafStart.textContent.slice(0, offsetStart)
+        : '';
 
       const matchedKey = this.config.triggerKeys.find(triggerKey =>
         text.endsWith(triggerKey)
