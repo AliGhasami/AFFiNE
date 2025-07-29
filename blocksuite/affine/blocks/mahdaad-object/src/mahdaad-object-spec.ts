@@ -5,6 +5,7 @@ import { literal } from 'lit/static-html.js';
 
 import { mahdaadObjectSlashMenuConfig } from './config/slash-menu';
 import { ObjectBlockAdapterExtensions } from './adapters/extension';
+import { ImageDropOption } from './mahdaad-object-service';
 
 export const MahdaadObjectBlockSpec: ExtensionType[] = [
   FlavourExtension('affine:mahdaad-object'),
@@ -14,4 +15,5 @@ export const MahdaadObjectBlockSpec: ExtensionType[] = [
     mahdaadObjectSlashMenuConfig
   ),
   ObjectBlockAdapterExtensions,
+  ImageDropOption,
 ].flat();

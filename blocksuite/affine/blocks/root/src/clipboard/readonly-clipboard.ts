@@ -1,6 +1,6 @@
 import { defaultImageProxyMiddleware } from '@blocksuite/affine-block-image';
 import {
-  AttachmentAdapter,
+  //AttachmentAdapter,
   ClipboardAdapter,
   copyMiddleware,
   HtmlAdapter,
@@ -15,6 +15,8 @@ import {
   getSelectedModelsCommand,
 } from '@blocksuite/affine-shared/commands';
 import { DisposableGroup } from '@blocksuite/global/disposable';
+import { mahdaadCalloutMiddleware } from '@blocksuite/mahdaad-callout-block';
+import { mahdaadMultiColumnMiddleware } from '@blocksuite/mahdaad-multi-column-block';
 import {
   ClipboardAdapterConfigExtension,
   LifeCycleWatcher,
@@ -40,14 +42,15 @@ const HtmlClipboardConfig = ClipboardAdapterConfigExtension({
   priority: 90,
 });
 
+/** change for mahdaad */
 const imageClipboardConfigs = [
-  'image/apng',
-  'image/avif',
-  'image/gif',
+  //'image/apng',
+  //'image/avif',
+  //'image/gif',
   'image/jpeg',
   'image/png',
-  'image/svg+xml',
-  'image/webp',
+  //'image/svg+xml',
+  //'image/webp',
 ].map(mimeType => {
   return ClipboardAdapterConfigExtension({
     mimeType,
@@ -62,11 +65,12 @@ const PlainTextClipboardConfig = ClipboardAdapterConfigExtension({
   priority: 70,
 });
 
-const AttachmentClipboardConfig = ClipboardAdapterConfigExtension({
-  mimeType: '*/*',
+/** disable for mahdaad */
+/*const AttachmentClipboardConfig = ClipboardAdapterConfigExtension({
+  mimeType: '*!/!*',
   adapter: AttachmentAdapter,
   priority: 60,
-});
+});*/
 
 export const clipboardConfigs: ExtensionType[] = [
   SnapshotClipboardConfig,
@@ -74,7 +78,7 @@ export const clipboardConfigs: ExtensionType[] = [
   HtmlClipboardConfig,
   ...imageClipboardConfigs,
   PlainTextClipboardConfig,
-  AttachmentClipboardConfig,
+  //AttachmentClipboardConfig,
 ];
 
 /**
@@ -102,6 +106,8 @@ export class ReadOnlyClipboard extends LifeCycleWatcher {
       titleMiddleware(this.std.store.workspace.meta.docMetas)
     );
     this.std.clipboard.use(defaultImageProxyMiddleware);
+    //this.std.clipboard.use(mahdaadCalloutMiddleware);
+    //this.std.clipboard.use(mahdaadMultiColumnMiddleware);
 
     this._disposables.add({
       dispose: () => {
@@ -110,6 +116,7 @@ export class ReadOnlyClipboard extends LifeCycleWatcher {
           titleMiddleware(this.std.store.workspace.meta.docMetas)
         );
         this.std.clipboard.unuse(defaultImageProxyMiddleware);
+        //this.std.clipboard.unuse(mahdaadCalloutMiddleware);
       },
     });
   };

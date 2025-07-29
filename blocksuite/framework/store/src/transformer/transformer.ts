@@ -250,6 +250,9 @@ export class Transformer {
       this._slots.beforeImport.next({
         type: 'slice',
         snapshot,
+        /** add for mahdaad  */
+        parent: parent,
+        index: index,
       });
 
       const { content, workspaceId, pageId } = snapshot;

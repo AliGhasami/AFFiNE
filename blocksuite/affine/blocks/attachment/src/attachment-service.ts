@@ -16,6 +16,8 @@ import { addAttachments, addSiblingAttachmentBlocks } from './utils.js';
 export const AttachmentDropOption = FileDropConfigExtension({
   flavour: AttachmentBlockSchema.model.flavour,
   onDrop: ({ files, targetModel, placement, point, std }) => {
+    /** disable for mahdaad */
+    return;
     // generic attachment block for all files except images
     const attachmentFiles = files.filter(
       file => !file.type.startsWith('image/')

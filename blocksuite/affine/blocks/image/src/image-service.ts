@@ -16,6 +16,8 @@ import { addImages, addSiblingImageBlock } from './utils.js';
 export const ImageDropOption = FileDropConfigExtension({
   flavour: ImageBlockSchema.model.flavour,
   onDrop: ({ files, targetModel, placement, point, std }) => {
+    /** disable for mahdaad */
+    return;
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
     if (!imageFiles.length) return false;
 

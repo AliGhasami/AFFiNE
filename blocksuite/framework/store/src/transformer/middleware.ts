@@ -20,6 +20,8 @@ export type BeforeImportPayload =
     }
   | {
       snapshot: SliceSnapshot;
+      /** add for mahdaad  */
+      parent?: string;
       type: 'slice';
     }
   | {

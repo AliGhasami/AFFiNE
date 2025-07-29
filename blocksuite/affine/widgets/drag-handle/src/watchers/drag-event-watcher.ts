@@ -179,7 +179,7 @@ export class DragEventWatcher {
     dropPayload: DropPayload,
     block: BlockComponent
   ) => {
-    console.log('on drag move', block);
+    //console.log('on drag move', block);
     //return;
     this._createDropIndicator();
     this._updateDropIndicator(point, payload, dropPayload, block);
@@ -377,7 +377,7 @@ export class DragEventWatcher {
       if (this.isVerticalIndicator) {
         block = getClosestBlockByPoint(this.host, rootComponent, point);
       }
-      console.log('ttttttttttttt', block);
+      //console.log('ttttttttttttt', block);
       //return
 
       //console.log("2222222222",temp)
@@ -388,9 +388,9 @@ export class DragEventWatcher {
         this.isVerticalIndicator
       );
       console.log('dropResult', dropResult);
-      setTimeout(() => {
+      /* setTimeout(() => {
         debugger;
-      }, 5000);
+      }, 5000);*/
       this._updateDropResult(dropResult, this.isVerticalIndicator);
     }
   };
@@ -1657,7 +1657,7 @@ export class DragEventWatcher {
         }
       },
       onDrop: ({ location, source }) => {
-        return;
+        //return;
         console.log('onDrop');
         this._clearDropIndicator();
 
@@ -1740,7 +1740,7 @@ export class DragEventWatcher {
     });
 
     this.widget.handleEvent('dragStart', ctx => {
-      console.log('drag start');
+      //console.log('drag start');
       /*setTimeout(() => {
         debugger;
       }, 5000);*/

@@ -67,7 +67,7 @@ export class NotionTextAdapter extends BaseAdapter<NotionText> {
       file: JSON.stringify({
         blockType: 'text',
         editing: [
-          ['Notion Text is not supported to be exported from BlockSuite', []],
+          ['Notion Text is not supported to be exported from BlockEditor', []],
         ],
       }),
       assetsIds: [],

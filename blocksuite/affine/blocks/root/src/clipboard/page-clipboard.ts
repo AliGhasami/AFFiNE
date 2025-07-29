@@ -17,8 +17,10 @@ import {
 import { DisposableGroup } from '@blocksuite/global/disposable';
 import type { UIEventHandler } from '@blocksuite/std';
 import type { BlockSnapshot, Store } from '@blocksuite/store';
+import { mahdaadCalloutMiddleware } from '@blocksuite/mahdaad-callout-block';
 
 import { ReadOnlyClipboard } from './readonly-clipboard';
+import { mahdaadMultiColumnMiddleware } from '@blocksuite/mahdaad-multi-column-block';
 
 /**
  * PageClipboard is a class that provides a clipboard for the page root block.
@@ -34,14 +36,20 @@ export class PageClipboard extends ReadOnlyClipboard {
     // When pastina a surface-ref block to another doc
     const surfaceRefToEmbedMiddleware = surfaceRefToEmbed(this.std);
     const replaceId = replaceIdMiddleware(this.std.store.workspace.idGenerator);
+    const mahdaadCallout = mahdaadCalloutMiddleware();
+    const mahdaadMultiColumn = mahdaadMultiColumnMiddleware();
     this.std.clipboard.use(paste);
     this.std.clipboard.use(surfaceRefToEmbedMiddleware);
     this.std.clipboard.use(replaceId);
+    this.std.clipboard.use(mahdaadCallout);
+    this.std.clipboard.use(mahdaadMultiColumn);
     this._disposables.add({
       dispose: () => {
         this.std.clipboard.unuse(paste);
         this.std.clipboard.unuse(surfaceRefToEmbedMiddleware);
         this.std.clipboard.unuse(replaceId);
+        this.std.clipboard.unuse(mahdaadCallout);
+        this.std.clipboard.unuse(mahdaadMultiColumn);
       },
     });
   };
@@ -77,6 +85,11 @@ export class PageClipboard extends ReadOnlyClipboard {
   };
 
   onPagePaste: UIEventHandler = ctx => {
+    const target = ctx.get('defaultState').event.target;
+    const host = this.std.host;
+    /** prevent other element paste for mahdaad */
+    if (!(target == host || host.contains(target))) return;
+
     const e = ctx.get('clipboardState').raw;
     e.preventDefault();
 

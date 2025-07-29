@@ -92,7 +92,50 @@ export class ImageAdapter extends BaseAdapter<Image> {
     payload: ImageToSliceSnapshotPayload
   ): Promise<SliceSnapshot | null> {
     const content: SliceSnapshot['content'] = [];
+    if (!window.$mahdaadEditor.files) {
+      window.$mahdaadEditor.files = [];
+    }
     for (const item of payload.file) {
+      /** comment for mahdaad */
+      //const blobId = await sha(await item.arrayBuffer());
+      //payload.assets?.getAssets().set(blobId, item);
+      //await payload.assets?.writeToBlob(blobId);
+      // content.push({
+      //   type: 'block',
+      //   flavour: 'affine:image',
+      //   id: nanoid(),
+      //   props: {
+      //     sourceId: blobId,
+      //   },
+      //   children: [],
+      // });
+      const id = nanoid();
+      window.$mahdaadEditor.files.push({ id, file: item });
+
+      content.push({
+        type: 'block',
+        flavour: 'affine:mahdaad-object',
+        id: nanoid(),
+        props: {
+          //sourceId: blobId,
+          //file:item,
+          file_id: id,
+          type: 'image',
+          show_type: 'embed',
+        },
+        children: [],
+      });
+    }
+    if (content.length === 0) {
+      return null;
+    }
+    return {
+      type: 'slice',
+      content,
+      workspaceId: payload.workspaceId,
+      pageId: payload.pageId,
+    };
+    /*for (const item of payload.file) {
       const blobId = await sha(await item.arrayBuffer());
       payload.assets?.getAssets().set(blobId, item);
       await payload.assets?.writeToBlob(blobId);
@@ -114,7 +157,7 @@ export class ImageAdapter extends BaseAdapter<Image> {
       content,
       workspaceId: payload.workspaceId,
       pageId: payload.pageId,
-    };
+    };*/
   }
 }
 
