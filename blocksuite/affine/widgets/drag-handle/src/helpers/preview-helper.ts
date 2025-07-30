@@ -17,6 +17,7 @@ import { signal } from '@preact/signals-core';
 import { literal } from 'lit/static-html.js';
 
 import { EdgelessDndPreviewElement } from '../components/edgeless-preview/preview.js';
+import { DocDndPreviewElement } from '../components/doc-preview/preview.js';
 import type { AffineDragHandleWidget } from '../drag-handle.js';
 
 export class PreviewHelper {
@@ -154,16 +155,27 @@ export class PreviewHelper {
     mode: 'block' | 'gfx';
   }) => {
     const { blockIds, snapshot, mode } = options;
-
+    //console.log('111111', mode);
     if (mode === 'block') {
-      const { previewStd, width, height } = this.getPreviewStd(blockIds);
+      //const blockTypes = this._extractBlockTypes(snapshot);
+
+      const docPreview = new DocDndPreviewElement();
+      docPreview.text = '1444444'; // blocks.length>1 ? `${blocks.length} Blocks` : blocks.length>0 ? blocks[0].previewName() : '-'
+      //edgelessPreview.elementTypes = blockTypes;
+
+      return {
+        left: -20,
+        top: -30,
+        element: docPreview,
+      };
+      /*const { previewStd, width, height } = this.getPreviewStd(blockIds);
       const previewTemplate = previewStd.render();
 
       return {
         width,
         height,
         element: previewTemplate,
-      };
+      };*/
     } else {
       const blockTypes = this._extractBlockTypes(snapshot);
 
