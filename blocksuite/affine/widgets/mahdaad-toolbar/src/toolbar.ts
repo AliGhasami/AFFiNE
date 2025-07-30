@@ -2,10 +2,10 @@ import { DatabaseSelection } from '@blocksuite/affine-block-database';
 import { EdgelessLegacySlotIdentifier } from '@blocksuite/affine-block-surface';
 import { TableSelection } from '@blocksuite/affine-block-table';
 import {
-  darkToolbarStyles,
+  //darkToolbarStyles,
   type EditorMenuButton,
   EditorToolbar,
-  lightToolbarStyles,
+  //lightToolbarStyles,
 } from '@blocksuite/affine-components/toolbar';
 import {
   CodeBlockModel,
@@ -18,7 +18,7 @@ import {
   ToolbarFlag as Flag,
   ToolbarRegistryIdentifier,
 } from '@blocksuite/affine-shared/services';
-import { unsafeCSSVar, unsafeCSSVarV2 } from '@blocksuite/affine-shared/theme';
+//import { unsafeCSSVar, unsafeCSSVarV2 } from '@blocksuite/affine-shared/theme';
 import { matchModels } from '@blocksuite/affine-shared/utils';
 import {
   Bound,

@@ -381,6 +381,12 @@ export function renderToolbar(
           break;
         case 'link':
           textFormatConfigs.find(item => item.id == 'link')?.action(host);
+          //this.s signal.aborted;
+          //toolbar.dataset.open = 'false';
+          /*setTimeout(() => {
+            console.log('11111');
+            delete toolbar.dataset.open;
+          });*/
           break;
         case 'rtl':
           selectedModels.forEach(model => {

@@ -15,6 +15,7 @@ import {
 import type { DeltaInsert } from '@blocksuite/store';
 import { html } from 'lit';
 import { property } from 'lit/decorators.js';
+import { normalizeUrl } from '@blocksuite/affine-shared/utils';
 
 export class MahdaadLink extends SignalWatcher(
   WithDisposable(ShadowlessElement)
@@ -86,7 +87,7 @@ export class MahdaadLink extends SignalWatcher(
   };
 
   generateWeblink(event: CustomEvent) {
-    const lnk = event.detail;
+    const lnk = event.detail[0];
     if (!this.inlineEditor.isValidInlineRange(this.selfInlineRange)) return;
     this.inlineEditor.insertText(this.selfInlineRange, REFERENCE_NODE, {
       mahdaadObjectLink: {
@@ -127,12 +128,26 @@ export class MahdaadLink extends SignalWatcher(
     }
   }
 
+  private handleSave(event: CustomEvent) {
+    debugger;
+    const data = event.detail[0];
+    const link = normalizeUrl(data.url);
+    this.inlineEditor.insertText(this.selfInlineRange, data.title, {
+      link: link,
+      reference: null,
+    });
+    this.inlineEditor.setInlineRange(this.selfInlineRange);
+    //this._onConfirm(data.title, data.url);
+    //console.log('this is handle save', data);
+  }
+
   override render() {
     return html`
       <mahdaad-link-inline
         url="${this.url}"
         title="${this.title}"
         object-id="${this.block.doc.meta.id}"
+        @save="${this.handleSave}"
         @removeLink="${this._removeLink}"
         @generateWeblink="${this.generateWeblink}"
         @changeViewMode="${(event: CustomEvent) => {

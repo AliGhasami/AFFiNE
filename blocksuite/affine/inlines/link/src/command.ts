@@ -4,8 +4,8 @@ import {
   INLINE_ROOT_ATTR,
   type InlineRootElement,
 } from '@blocksuite/std/inline';
-
-import { toggleLinkPopup } from './link-node/link-popup/toggle-link-popup';
+//@ts-ignore
+import { toggleLinkPopup } from '../../mahdaad-link/src/link-popup/toggle-link-popup';
 
 export const toggleLink: Command = (ctx, next) => {
   const selection = document.getSelection();
