@@ -133,6 +133,7 @@ export class FileDropExtension extends LifeCycleWatcher {
   };
 
   onDragOver = (event: DragEvent) => {
+    debugger
     event.preventDefault();
 
     if (this.shouldIgnoreEvent(event)) return;

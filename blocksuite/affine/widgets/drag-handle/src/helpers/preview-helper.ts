@@ -161,6 +161,7 @@ export class PreviewHelper {
 
       const docPreview = new DocDndPreviewElement();
       docPreview.text = '1444444'; // blocks.length>1 ? `${blocks.length} Blocks` : blocks.length>0 ? blocks[0].previewName() : '-'
+      docPreview.tooltipMessage = 'aaaaaaaaaaaaaa'; // blocks.length>1 ? `${blocks.length} Blocks` : blocks.length>0 ? blocks[0].previewName() : '-'
       //edgelessPreview.elementTypes = blockTypes;
 
       return {

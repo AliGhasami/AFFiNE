@@ -68,6 +68,11 @@ export class BlockComponent<
     return this.dataset.blockId as string;
   }
 
+
+  previewName() {
+    return  this.model.flavour
+  }
+
   get childBlocks() {
     const childModels = this.model.children;
     return childModels

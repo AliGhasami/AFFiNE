@@ -2,6 +2,7 @@ import {
   EMBED_IFRAME_DEFAULT_HEIGHT_IN_SURFACE,
   EMBED_IFRAME_DEFAULT_WIDTH_IN_SURFACE,
 } from '@blocksuite/affine-block-embed';
+import {insertMultiColumn,addColumnToMultiColumn} from '@blocksuite/mahdaad-multi-column-block'
 import { ParagraphBlockComponent } from '@blocksuite/affine-block-paragraph';
 import { DropIndicator } from '@blocksuite/affine-components/drop-indicator';
 import {
@@ -11,11 +12,11 @@ import {
   DEFAULT_NOTE_HEIGHT,
   DEFAULT_NOTE_WIDTH,
   type EmbedCardStyle,
-  ListBlockModel,
+  ListBlockModel, MahdaadCalloutBlockSchema,
   MahdaadMultiColumnBlockSchema,
   NoteBlockModel,
   RootBlockModel,
-} from '@blocksuite/affine-model';
+} from '@blocksuite/affine-model'
 import { surfaceRefToEmbed } from '@blocksuite/affine-shared/adapters';
 import {
   BLOCK_CHILDREN_CONTAINER_PADDING_LEFT,
@@ -97,6 +98,8 @@ import {
   isPointInElement,
   isRTL,
 } from '../../../../../../../src/claytapEditor/utils/index.js';
+import { DocDndPreviewElement } from '../components/doc-preview/preview'
+import { t } from 'i18next'
 
 export type DragBlockEntity = {
   type: 'blocks';
@@ -121,9 +124,13 @@ export class DragEventWatcher {
 
   previewHelper = new PreviewHelper(this.widget);
 
+  docPreview :  null | DocDndPreviewElement= null
+
   dropTargetCleanUps: Map<string, (() => void)[]> = new Map();
 
   resetOpacityCallbacks: (() => void)[] = [];
+
+  _dropResult :  DropResult | null =  null
 
   get host() {
     return this.widget.host;
@@ -211,6 +218,15 @@ export class DragEventWatcher {
     dropPayload: DropPayload,
     isVerticalIndicator = false
   ): DropResult | null => {
+    //console.log("eeeee",dropBlock,)
+    //console.log("dragPayload",dragPayload,)
+    //console.log("dropPayload",dropPayload,)
+
+    // @ts-ignore
+    if(dragPayload && dragPayload.bsEntity?.modelIds.includes(dropBlock.model.id)){
+      return null
+    }
+
     const dropModel = dropBlock.model;
 
     const snapshot = dragPayload?.bsEntity?.snapshot;
@@ -316,7 +332,10 @@ export class DragEventWatcher {
     dropPayload: DropPayload,
     dropBlock: BlockComponent
   ) => {
-    window.allowDrop = true;
+    if(this.docPreview) {
+      this.docPreview.tooltipMessage=""
+    }
+    //window.allowDrop = true;
 
     const closestNoteBlock = dropBlock && getParentNoteBlock(dropBlock);
     const rootComponent = this._getBlockView(this.widget.doc.root?.id);
@@ -376,8 +395,23 @@ export class DragEventWatcher {
       let block = dropBlock;
       if (this.isVerticalIndicator) {
         block = getClosestBlockByPoint(this.host, rootComponent, point);
+        let parent= null
+        if(checkParentIs(block.model,MahdaadCalloutBlockSchema.model.flavour)) {
+          parent= getParent(block.model,MahdaadCalloutBlockSchema.model.flavour)
+        }
+
+        if(checkParentIs(block.model,MahdaadMultiColumnBlockSchema.model.flavour)) {
+          parent= getParent(block.model,MahdaadMultiColumnBlockSchema.model.flavour)
+        }
+        if(parent)
+        {
+          const parentBlockComponent= this.std.view.getBlock(parent.id)
+          if(parentBlockComponent)
+            block = parentBlockComponent
+        }
       }
-      //console.log('ttttttttttttt', block);
+
+      //console.log('ttttttttttttt', block,dragPayload);
       //return
 
       //console.log("2222222222",temp)
@@ -387,10 +421,88 @@ export class DragEventWatcher {
         dropPayload,
         this.isVerticalIndicator
       );
-      console.log('dropResult', dropResult);
+      this._dropResult= dropResult
+      //console.log('dropResult', dropResult);
       /* setTimeout(() => {
         debugger;
       }, 5000);*/
+
+      /***
+       check for prevent drop
+       **/
+      if(dropResult ) {
+        const dropBlockId=dropResult.modelState.model.id
+        const target= this._getBlockView(dropBlockId)
+        const draggingElements= dragPayload.bsEntity.modelIds.map(item=> this.std.view.getBlock(item)) //(item=> dragPayload.bsEntity.modelIds.includes(item.id))
+        const isContainMultiColumn=!!draggingElements.find(item=> item.model.flavour==MahdaadMultiColumnBlockSchema.model.flavour)
+        //console.log("ttttttttt",target,checkParentIs(target.model,MahdaadMultiColumnBlockSchema.model.flavour));
+        if(target) {
+          if(checkParentIs(target.model,MahdaadMultiColumnBlockSchema.model.flavour)) {
+            if(isContainMultiColumn) {
+              //window.allowDrop=false
+              if(this.docPreview) {
+                this.docPreview.tooltipMessage=t('not_allow_drop_column_in_block_column') //"You can not add columns inside another column block ."
+              }
+            }
+            //const temp= getParent(target.model,)
+
+
+          }
+        }
+
+        if(this.isVerticalIndicator) {
+          //this.verticalIndicatorDropBlockId= dropResult.dropBlockId
+          //const sourceLength=
+          //console.log('1000000', target,this.draggingElements);
+
+          if(draggingElements.length>1 && isContainMultiColumn) {
+            //window.allowDrop=false
+            /*if(this.dragPreview) {
+              this.dragPreview.tooltipMessage="You can not add more than 4 columns."
+            }*/
+          }else if(draggingElements.length==1) {
+            if(target) {
+              const sourceLength =
+                draggingElements[0].model.flavour ==
+                MahdaadMultiColumnBlockSchema.model.flavour
+                  ? draggingElements[0].model.children.length
+                  : 1;
+              const targetLength=target.model.flavour==MahdaadMultiColumnBlockSchema.model.flavour ?  target.model.children.length : 1
+              if(sourceLength+targetLength>4) {
+                //window.allowDrop=false
+                if(this.docPreview) {
+                  this.docPreview.tooltipMessage= t('not_allow_more_column')//'You can not add more than 4 columns.'
+                }
+              }
+            }
+          }
+
+          /*if(isContainMultiColumn){
+            window.allowDrop=false
+            //this.dragPreview.tooltipMessage="You can not add more than 4 columns."
+          }*/
+
+
+          /***
+           check for active drop hover
+           ***/
+
+        }
+        //this.applyBlockDropStyle(dropResult.dropBlockId)
+
+
+
+        /*if(this.lastBlockDropStyle) {
+          this.lastBlockDropStyle.classList.remove('active-drop')
+        }
+        this.lastBlockDropStyle = this._getBlockView(dropResult.dropBlockId)
+        if(this.lastBlockDropStyle) {
+          this.lastBlockDropStyle.classList.add('active-drop')
+        }
+        console.log("_dragMoveHandler block vuew",this.lastBlockDropStyle)*/
+      }
+
+
       this._updateDropResult(dropResult, this.isVerticalIndicator);
     }
   };
@@ -416,8 +528,10 @@ export class DragEventWatcher {
       result = dropResult?.rect ?? null;
     }
     if (showVerticalIndicator) {
+
       this.dropIndicator.rect = null;
       //console.log("qqqqqqq",dropResult);
+      result = Rect.fromLWTH(result?.left, result?.width, dropResult?.modelState.rect.top-10, dropResult?.modelState.rect.height);
       this.dropIndicator.rectVertical = result;
     } else {
       this.dropIndicator.rectVertical = null;
@@ -621,7 +735,10 @@ export class DragEventWatcher {
     dropPayload: DropPayload,
     _: Point
   ) => {
+    //console.log("qqqqqq",dropBlock,dropPayload,dragPayload)
     const result = this._getDropResult(dropBlock, dragPayload, dropPayload);
+    //console.log("55555555",result)
+    //return
     const snapshot = dragPayload?.bsEntity?.snapshot;
 
     if (!result || !snapshot || snapshot.content.length === 0) return;
@@ -1515,17 +1632,60 @@ export class DragEventWatcher {
 
   private _makeDraggable(target: HTMLElement) {
     const std = this.std;
+    console.log("11111",target)
 
     return std.dnd.draggable<DragBlockEntity>({
       element: target,
-      canDrag: () => (this.widget.anchorBlockId.peek() ? true : false),
-      onDragStart: () => {
+      canDrag: () => {
+        console.log("canDrag")
+        //return  false
+        return (this.widget.anchorBlockId.peek() ? true : false)
+      },
+      onDrag:({ location, source })=>{
+        //return false
+        if (this.docPreview) {
+          this.docPreview.style.display = 'unset';
+          this.docPreview.style.top = `${location.current.input.clientY + 10}px`;
+          this.docPreview.style.left = `${location.current.input.clientX + 10}px`;
+        }
+
+        //console.log("rrrrrrrrrrrrrrr")
+      },
+      onDragStart: ({ location, source }) => {
+        const dragPayload = source.data;
+        const draggingElements= dragPayload.bsEntity.modelIds.map(item=> this.std.view.getBlock(item)) //(item=> dragPayload.bsEntity.modelIds.includes(item.id))
+        console.log("tttttttttt",dragPayload)
         this.widget.dragging = true;
+        if (!this.docPreview) {
+          this.docPreview = new DocDndPreviewElement();
+          Object.assign(this.docPreview.style, {
+            position: 'fixed',
+            display:'none',
+            top: '0px',
+            left: '0px',
+            //padding: '10px 15px',
+            //backgroundColor: 'crimson',
+            //color: 'white',
+            //borderRadius: '6px',
+            pointerEvents: 'none',
+            zIndex: 9999,
+            userSelect: 'none',
+          });
+          this.docPreview.text = draggingElements.length>1 ? `${draggingElements.length} Blocks` : draggingElements.length>0 ? draggingElements[0].previewName() : '-'
+          //this.docPreview.tooltipMessage = 'aaaaaaaaaaaaaa'; // blocks.length>1 ? `${blocks.length} Blocks` : blocks.length>0 ? blocks[0].previewName() : '-'
+          document.body.append(this.docPreview)
+        }
       },
       onDrop: () => {
+        console.log("onDrop")
         this._cleanup();
+        if(this.docPreview){
+          this.docPreview.remove();
+          this.docPreview = null;
+        }
       },
       setDragPreview: ({ source, container, setOffset }) => {
+
         if (
           !source.data?.bsEntity?.modelIds.length ||
           !source.data.bsEntity.snapshot
@@ -1533,7 +1693,11 @@ export class DragEventWatcher {
           return;
         }
 
+        if(source.data.bsEntity.type=='blocks')
+          return
+
         const { snapshot, fromMode } = source.data.bsEntity;
+
 
         const offset = this.previewHelper.renderDragPreview({
           blockIds: source.data?.bsEntity?.modelIds,
@@ -1560,6 +1724,7 @@ export class DragEventWatcher {
   }
 
   private _makeDropTarget(view: BlockComponent) {
+    console.log("_makeDropTarget")
     const isUnderNote = this._isUnderNoteBlock(view.model);
     const isNote = matchModels(view.model, [NoteBlockModel]);
 
@@ -1589,10 +1754,14 @@ export class DragEventWatcher {
       >({
         element: view,
         getIsSticky: () => {
+          console.log("getIsSticky")
           const result = this.mode === 'page' || isUnderNote;
           return result;
         },
         canDrop: ({ source }) => {
+          //return  false
+          console.log("canDrop")
+
           /**
            * general rules:
            * 1. can't drop on the same block or its children
@@ -1607,11 +1776,13 @@ export class DragEventWatcher {
           return false;
         },
         onDragEnter: () => {
+          console.log("drag enter")
           if (isNote && 'hideMask' in view) {
             view.hideMask = true;
           }
         },
         onDragLeave: () => {
+          console.log("onDragLeave")
           if (isNote && 'hideMask' in view) {
             view.hideMask = false;
           }
@@ -1636,12 +1807,12 @@ export class DragEventWatcher {
   }
 
   private _monitorBlockDrag() {
-    //console.log('_monitorBlockDrag');
+    console.log('_monitorBlockDrag');
     return this.std.dnd.monitor<DragBlockEntity>({
       canMonitor: ({ source }) => {
         //console.log('canMonitor');
         const entity = source.data?.bsEntity;
-
+        //console.log("aaaaa",entity?.type === 'blocks' && !!entity.snapshot)
         return entity?.type === 'blocks' && !!entity.snapshot;
       },
       onDropTargetChange: ({ location }) => {
@@ -1679,6 +1850,85 @@ export class DragEventWatcher {
         const dragPayload = source.data;
         const dropPayload = target.data;
 
+        if(this.isVerticalIndicator && this._dropResult){
+          const snapshot = dragPayload?.bsEntity?.snapshot;
+          //debugger
+          const draggingElements= dragPayload.bsEntity.modelIds.map(item=> this.std.view.getBlock(item)) //(item=> dragPayload.bsEntity.modelIds.includes(item.id))
+          console.log("7777777777777777777777777777777",dragPayload,dropPayload,this._dropResult,draggingElements,this.std.view)
+          //return
+
+            //const _dropResult = this._getDropResult(state,this.isVerticalIndicator);
+            //console.log("_dragMoveHandler dropResult",dropResult?.dropBlockId);
+            //const target= dropResult?.type=='after' ? dropResult?.modelState.model :   this._std.doc.getPrev(dropResult?.modelState.model)
+            //if(!target) return  null
+            //if(!this.widget.verticalIndicatorDropBlockId) return null
+            const target= this._dropResult.modelState.element //this.widget.doc.getBlock(this.widget.verticalIndicatorDropBlockId)
+            if(!target) return
+            const isContainMultiColumn=!!draggingElements.find(item=> item.model.flavour==MahdaadMultiColumnBlockSchema.model.flavour)
+            //console.log("start",dropResult,);
+            if(target.model.flavour!=MahdaadMultiColumnBlockSchema.model.flavour) {
+              if(isContainMultiColumn) {
+                if(draggingElements.length==1 && draggingElements[0].model.children.length+1<=4) {
+                  const multiColumnBlock= draggingElements[0]
+                  const res = insertMultiColumn(this.std,target.model,multiColumnBlock.model.children.length+1)
+                  //console.log("this is res",res,dropResult);
+                  if(res) {
+                    this.host.doc.moveBlocks([target.model],res.model.children[0])
+                    for (let i=0;i<multiColumnBlock.model.children.length;i++) {
+                      this.host.doc.moveBlocks([...multiColumnBlock.model.children[i].children],res.model.children[i+1])
+                    }
+                    this.host.doc.deleteBlock(multiColumnBlock.model)
+                  }
+                }
+                return null
+              }else{
+                const res = insertMultiColumn(this.std,target.model,2)
+                if(res) {
+                  this.host.doc.moveBlocks([target.model],res.model.children[0])
+                  const parent= res.model.children[1]//.id
+                  //index=0
+                  this._dropToModel(snapshot, parent.id, 0).catch(console.error);
+                }
+              }
+            }else{
+
+              //if()
+
+              if(isContainMultiColumn && target.model.children.length+draggingElements[0].model.children.length<=4) {
+                const multiColumnBlock= draggingElements[0]
+                for (let i = 0; i < multiColumnBlock.model.children.length; i++) {
+                  const res=addColumnToMultiColumn(this.std,target.model)
+                  if(res) {
+                    this.host.doc.moveBlocks([...multiColumnBlock.model.children[i].children],res.children[res.children.length-1])
+                  }
+                }
+                //const temp= this._std.doc.getBlock(multiColumnBlock.model.id)
+                /*console.log("tttt",temp);
+                if(temp) {
+                  this._std.doc.deleteBlock(temp.model)
+                }*/
+
+                this.host.doc.deleteBlock(multiColumnBlock.model)
+                return null
+              }else{
+                const res=addColumnToMultiColumn(this.std,target.model) //dropResult.modelState.model
+                if(res) {
+                  const parent= res.children[res.children.length-1]//.id
+                  //index=0
+                  this._dropToModel(snapshot, parent.id, 0).catch(console.error);
+                }else{
+                  return null
+                }
+              }
+              //return null
+
+            }
+
+
+          return
+        }
+
+
         this._onDrop(
           target.element as BlockComponent,
           dragPayload,
@@ -1688,10 +1938,9 @@ export class DragEventWatcher {
       },
       onDrag: ({ location, source }) => {
         //console.log('onDrag');
-        /*   setTimeout(() => {
+         /*  setTimeout(() => {
           debugger;
-        }, 5000);
-*/
+        }, 5000);*/
         if (
           !this._isDropOnCurrentEditor(
             (location.current.dropTargets[0]?.element as BlockComponent)?.std
@@ -1702,16 +1951,16 @@ export class DragEventWatcher {
         }
 
         const target = location.current.dropTargets[0];
-        console.log('target', target);
+        //console.log('target', target);
         const point = new Point(
           location.current.input.clientX,
           location.current.input.clientY
         );
-        console.log('point', point);
+        //console.log('point', point);
         const dragPayload = source.data;
         const dropPayload = target.data;
-        console.log('dragPayload', dragPayload);
-        console.log('dragPayload', dropPayload);
+        //console.log('dragPayload', dragPayload);
+        //console.log('dragPayload', dropPayload);
         //return;
 
         this._onDragMove(

@@ -1,6 +1,7 @@
 import { unsafeCSSVarV2 } from '@blocksuite/affine-shared/theme';
 import { property } from 'lit/decorators.js';
 import { css, html, LitElement, nothing } from 'lit';
+import {  ShadowlessElement } from '@blocksuite/affine/std'
 
 /*
 const BLOCK_PREVIEW_ICON_MAP: Record<
@@ -41,7 +42,7 @@ declare global {
 
 export const DOC_DND_PREVIEW_ELEMENT = 'doc-dnd-preview-element';
 
-export class DocDndPreviewElement extends LitElement {
+export class DocDndPreviewElement extends ShadowlessElement {
   static override styles = css`
     .edgeless-dnd-preview-container {
       position: relative;
@@ -114,10 +115,14 @@ export class DocDndPreviewElement extends LitElement {
   override render() {
     return html`<style>
         doc-dnd-preview-element {
+          //width: 300px;
+          display: block;
+          //height: 400px;
+            //position: absolute;
             //background-color: red;
             box-sizing: border-box;
             position: absolute;
-            display: block;
+            //display: block;
 
             top: 0;
             left: 0;
@@ -133,7 +138,7 @@ export class DocDndPreviewElement extends LitElement {
             cursor: grabbing !important;
           }
       </style>
-      <div>
+      <div style="display: block;">
         <span class="hint"> ${this.text ?? '-'} </span>
         ${this.tooltipMessage
           ? html`<div class="tooltip-message">${this.tooltipMessage}</div>`
