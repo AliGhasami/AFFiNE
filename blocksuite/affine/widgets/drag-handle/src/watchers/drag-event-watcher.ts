@@ -1685,7 +1685,6 @@ export class DragEventWatcher {
         }
       },
       setDragPreview: ({ source, container, setOffset }) => {
-
         if (
           !source.data?.bsEntity?.modelIds.length ||
           !source.data.bsEntity.snapshot
