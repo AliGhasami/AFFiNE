@@ -1,12 +1,13 @@
 import { CaptionedBlockComponent } from '@blocksuite/affine-components/caption';
 import type { MahdaadTableOfContentBlockModel } from '@blocksuite/affine-model';
 import { html, type TemplateResult } from 'lit';
-import {  state } from 'lit/decorators.js';
+import { state } from 'lit/decorators.js';
+import { getBlockName } from '../../../../../../src/claytapEditor/utils';
 
 export class MahdaadTableOfContentBlockComponent extends CaptionedBlockComponent<MahdaadTableOfContentBlockModel> {
   override connectedCallback() {
     super.connectedCallback();
-    this.list= this.doc?.meta?.headingList ?? []
+    this.list = this.doc?.meta?.headingList ?? [];
     //todo ali ghasami important
     /*this._disposables.add(
       this.doc.collection.slots.docUpdated.on(() => {
@@ -15,21 +16,25 @@ export class MahdaadTableOfContentBlockComponent extends CaptionedBlockComponent
     );*/
   }
 
-  changeOptions(event:CustomEvent) {
-    const key=event.detail[0]
+  changeOptions(event: CustomEvent) {
+    const key = event.detail[0];
     switch (key) {
       case 'delete':
-        this.doc.deleteBlock(this.model)
-        break
+        this.doc.deleteBlock(this.model);
+        break;
       case 'right_to_left':
-        this.doc.updateBlock(this.model, { dir: 'rtl'})
-        break
+        this.doc.updateBlock(this.model, { dir: 'rtl' });
+        break;
       case 'left_to_right':
-        this.doc.updateBlock(this.model, { dir: 'ltr'})
-        break
+        this.doc.updateBlock(this.model, { dir: 'ltr' });
+        break;
     }
   }
 
+  override previewName(): string {
+    return getBlockName(this);
+    //return 'Table of content'
+  }
 
   override renderBlock(): TemplateResult<1> {
     return html`<div contenteditable="false">
@@ -56,7 +61,6 @@ export class MahdaadTableOfContentBlockComponent extends CaptionedBlockComponent
     }
   }
 
-
   /*setDirection(event: CustomEvent) {
     this.doc.updateBlock(this.model, {dir:event.detail});
   }*/
@@ -64,11 +68,9 @@ export class MahdaadTableOfContentBlockComponent extends CaptionedBlockComponent
   @state()
   accessor list: any[] = [];
 
-
   //todo ali ghasami
   /*override previewName(): string {
     return  getBlockName(this)
     //return 'Table of content'
   }*/
-
 }

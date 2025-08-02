@@ -1,6 +1,9 @@
-import { MahdaadMultiColumnBlockSchema } from '@blocksuite/affine-model';
+import {
+  MahdaadCalloutBlockSchema,
+  MahdaadMultiColumnBlockSchema,
+} from '@blocksuite/affine-model';
 
-import type { DocMeta, TransformerMiddleware } from '@blocksuite/store';
+import { Store, type TransformerMiddleware } from '@blocksuite/store';
 import {
   checkParentIs,
   getParent,
@@ -53,3 +56,32 @@ export const mahdaadMultiColumnMiddleware =
       }
     });
   };
+
+export function multiColumnValidateChildren(
+  doc: Store,
+  payload: any,
+  parent: string
+) {
+  const block = doc.getBlock(parent);
+  if (
+    block &&
+    (block.flavour == MahdaadMultiColumnBlockSchema.model.flavour ||
+      checkParentIs(block.model, MahdaadMultiColumnBlockSchema.model.flavour))
+  ) {
+    const includeColumn = payload.content.find(item =>
+      [MahdaadMultiColumnBlockSchema.model.flavour].includes(item.flavour)
+    );
+    payload.content = payload.content.filter(
+      item =>
+        ![MahdaadMultiColumnBlockSchema.model.flavour].includes(item.flavour)
+    );
+    if (includeColumn) {
+      const selectedBlock =
+        block.flavour == MahdaadMultiColumnBlockSchema.model.flavour
+          ? block
+          : getParent(block.model, MahdaadMultiColumnBlockSchema.model.flavour);
+      const name = getBlockName(selectedBlock);
+      denyBlockWarningMessage(name, name);
+    }
+  }
+}

@@ -31,7 +31,10 @@ import { setDirectionOnBlock } from '../../../../../../src/claytapEditor/utils/b
 import quoteIcon from './assets/quote.svg?raw';
 import { ParagraphBlockConfigExtension } from './paragraph-block-config.js';
 import { paragraphBlockStyles } from './styles.js';
-import { getDirection } from '../../../../../../src/claytapEditor/utils';
+import {
+  getBlockName,
+  getDirection,
+} from '../../../../../../src/claytapEditor/utils';
 
 export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBlockModel> {
   static override styles = paragraphBlockStyles;
@@ -105,6 +108,33 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
       );
     }
     return this.rootComponent;
+  }
+
+  override previewName(): string {
+    return getBlockName(this);
+    //return  this.type ?? super.previewName()
+    /*switch (this.model.type) {
+      case 'text':
+        return 'Text'
+      case 'quote':
+        return 'Quote'
+      case 'h1':
+        return 'Heading 1'
+      case 'h2':
+        return 'Heading 2'
+      case 'h3':
+        return 'Heading 3'
+      case 'h4':
+        return 'Heading 4'
+      case 'h5':
+        return 'Heading 5'
+      case 'h6':
+        return 'Heading 6'
+    }*/
+    //  this.type ?? super.previewName()
+    //switch(this.type){}
+    //return super.previewName();
+    //return  super.previewName()
   }
 
   override connectedCallback() {

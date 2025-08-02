@@ -10,6 +10,7 @@ import type { BlockComponent } from '@blocksuite/std';
 import { type DeltaInsert, Text } from '@blocksuite/store';
 import { html, type TemplateResult } from 'lit';
 import { merge } from 'lodash-es';
+import { getBlockName } from '../../../../../../src/claytapEditor/utils';
 
 export class MahdaadObjectBlockComponent extends CaptionedBlockComponent<MahdaadObjectBlockModel> {
   override get topContenteditableElement() {
@@ -32,6 +33,24 @@ export class MahdaadObjectBlockComponent extends CaptionedBlockComponent<Mahdaad
   parentId() {
     //todo ali ghasami for meta object id in doc meta
     return (this.doc.meta && this.doc.meta?.id) ?? null;
+  }
+
+  override previewName(): string {
+    //return super.previewName();
+    return getBlockName(this);
+    /*switch (this.model.type) {
+      case 'document':
+        return 'Page'
+      case 'file':
+        return 'File'
+      case 'image':
+        return 'Image'
+      case 'weblink':
+        return 'Weblink'
+      default:
+        return 'Object'
+    }*/
+    //return super.previewName();
   }
 
   duplicate() {

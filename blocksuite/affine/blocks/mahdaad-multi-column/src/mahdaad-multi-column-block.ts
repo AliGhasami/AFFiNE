@@ -1,11 +1,11 @@
 import { CaptionedBlockComponent } from '@blocksuite/affine-components/caption';
 import type { MahdaadMultiColumnBlockModel } from '@blocksuite/affine-model';
 import { BlockModel } from '@blocksuite/store';
-import { html, nothing, type TemplateResult } from 'lit'
+import { html, nothing, type TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 import { pick } from 'lodash-es';
+import { getBlockName } from '../../../../../../src/claytapEditor/utils';
 export class MahdaadMultiColumnBlockComponent extends CaptionedBlockComponent<MahdaadMultiColumnBlockModel> {
-
   override connectedCallback() {
     super.connectedCallback();
   }
@@ -18,6 +18,11 @@ export class MahdaadMultiColumnBlockComponent extends CaptionedBlockComponent<Ma
       position == 'left' ? 'before' : 'after'
     );
     this.doc.addBlock('affine:paragraph', {}, ids[0]);
+  }
+
+  override previewName(): string {
+    return getBlockName(this);
+    //return  `${this.model.children.length} columns`
   }
 
   override renderBlock(): TemplateResult<1> {
@@ -33,49 +38,49 @@ export class MahdaadMultiColumnBlockComponent extends CaptionedBlockComponent<Ma
         column-count="${children.length}"
         sizes="${JSON.stringify(this.model.props.sizes)}"
         @add-column="${(event: CustomEvent) => {
-      const detail = event.detail;
-      this.addColumn(detail[0], detail[1]);
-    }}"
+          const detail = event.detail;
+          this.addColumn(detail[0], detail[1]);
+        }}"
         @update-props="${(event: CustomEvent) => {
-      this.updateProps(event);
-    }}"
+          this.updateProps(event);
+        }}"
         @move-column="${(event: CustomEvent) => {
-      const detail = event.detail;
-      this.moveColumn(detail[0], detail[1]);
-    }}"
+          const detail = event.detail;
+          this.moveColumn(detail[0], detail[1]);
+        }}"
         @delete-column="${(event: CustomEvent) => {
-      const detail = event.detail;
-      this.deleteColumn(detail[0]);
-    }}"
+          const detail = event.detail;
+          this.deleteColumn(detail[0]);
+        }}"
         @fullWidth="${(event: CustomEvent) => {
-      const detail = event.detail;
-      this.fullWidth(detail[0]);
-    }}"
+          const detail = event.detail;
+          this.fullWidth(detail[0]);
+        }}"
         @fullWidthAll="${this.fullWidthAll}"
         @deleteBlock="${this.deleteBlock}"
         @mount="${() => {
-      this._isLoad = true;
-    }}"
+          this._isLoad = true;
+        }}"
       >
         <div slot="slot_0">
-           ${this._isLoad && children[0]
-      ? this.renderChildren(children[0])
-      : nothing}
+          ${this._isLoad && children[0]
+            ? this.renderChildren(children[0])
+            : nothing}
         </div>
         <div slot="slot_1">
           ${this._isLoad && children[1]
-      ? this.renderChildren(children[1])
-      : nothing}
+            ? this.renderChildren(children[1])
+            : nothing}
         </div>
         <div slot="slot_2">
           ${this._isLoad && children[2]
-      ? this.renderChildren(children[2])
-      : nothing}
+            ? this.renderChildren(children[2])
+            : nothing}
         </div>
         <div slot="slot_3">
           ${this._isLoad && children[3]
-      ? this.renderChildren(children[3])
-      : nothing}
+            ? this.renderChildren(children[3])
+            : nothing}
         </div>
       </mahdaad-multi-column-component>
     </div>`;
@@ -90,12 +95,12 @@ export class MahdaadMultiColumnBlockComponent extends CaptionedBlockComponent<Ma
   }
 
   moveColumn(currentIndex: number, position: 'left' | 'right') {
-    const moveIndex= position == 'left' ? currentIndex - 1 : currentIndex + 1
-    const target = this.model.children[moveIndex]
-    const sizes= this.model.props.sizes.slice(0)
-    const temp= sizes[currentIndex]
-    sizes[currentIndex]=sizes[moveIndex]
-    sizes[moveIndex]= temp
+    const moveIndex = position == 'left' ? currentIndex - 1 : currentIndex + 1;
+    const target = this.model.children[moveIndex];
+    const sizes = this.model.props.sizes.slice(0);
+    const temp = sizes[currentIndex];
+    sizes[currentIndex] = sizes[moveIndex];
+    sizes[moveIndex] = temp;
     this.doc.moveBlocks(
       [this.model.children[currentIndex]],
       this.model,
@@ -103,10 +108,9 @@ export class MahdaadMultiColumnBlockComponent extends CaptionedBlockComponent<Ma
       position == 'left'
     );
     this.doc.updateBlock(this.model, {
-      sizes
+      sizes,
     });
   }
-
 
   @property({ attribute: false })
   accessor _isLoad: boolean = false;
@@ -116,7 +120,6 @@ export class MahdaadMultiColumnBlockComponent extends CaptionedBlockComponent<Ma
     return  getBlockName(this)
     //return  `${this.model.children.length} columns`
   }*/
-
 
   fullWidthAll() {
     this.model.children.slice(1).forEach(child => {
@@ -157,5 +160,4 @@ export class MahdaadMultiColumnBlockComponent extends CaptionedBlockComponent<Ma
   deleteBlock() {
     this.doc.deleteBlock(this.model);
   }
-
 }

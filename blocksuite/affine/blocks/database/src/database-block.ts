@@ -57,6 +57,7 @@ import { NoteRenderer } from './detail-panel/note-renderer.js';
 import { DatabaseSelection } from './selection.js';
 import { currentViewStorage } from './utils/current-view.js';
 import { getSingleDocIdFromText } from './utils/title-doc.js';
+import { getBlockName } from '../../../../../../src/claytapEditor/utils/index.js';
 
 export class DatabaseBlockComponent extends CaptionedBlockComponent<DatabaseBlockModel> {
   static override styles = css`
@@ -103,6 +104,11 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<DatabaseBloc
       }
     }
   `;
+
+  override previewName(): string {
+    return getBlockName(this);
+    //return 'Table'
+  }
 
   private readonly _clickDatabaseOps = (e: MouseEvent) => {
     const options = this.optionsConfig.configure(this.model, {

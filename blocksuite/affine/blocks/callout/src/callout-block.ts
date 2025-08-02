@@ -12,6 +12,7 @@ import type { BlockComponent } from '@blocksuite/std';
 import { flip, offset } from '@floating-ui/dom';
 import { css, html } from 'lit';
 import { query } from 'lit/decorators.js';
+import { getBlockName } from '../../../../../../src/claytapEditor/utils';
 export class CalloutBlockComponent extends CaptionedBlockComponent<CalloutBlockModel> {
   static override styles = css`
     :host {
@@ -79,6 +80,12 @@ export class CalloutBlockComponent extends CaptionedBlockComponent<CalloutBlockM
       closeOnClickAway: true,
     });
   };
+
+  override previewName(): string {
+    //this.model.
+    return getBlockName(this);
+    //return  'Callout'
+  }
 
   get attributeRenderer() {
     return this.inlineManager.getRenderer();

@@ -5,6 +5,7 @@ import { BlockSelection } from '@blocksuite/std';
 import { html } from 'lit';
 
 import { dividerBlockStyles } from './styles.js';
+import { getBlockName } from '../../../../../../src/claytapEditor/utils';
 
 export class DividerBlockComponent extends CaptionedBlockComponent<DividerBlockModel> {
   static override styles = dividerBlockStyles;
@@ -21,6 +22,11 @@ export class DividerBlockComponent extends CaptionedBlockComponent<DividerBlockM
         }),
       ]);
     });
+  }
+
+  override previewName(): string {
+    return getBlockName(this);
+    //return 'Divider'
   }
 
   override renderBlock() {

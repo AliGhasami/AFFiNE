@@ -67,6 +67,21 @@ export class ListBlockComponent extends CaptionedBlockComponent<ListBlockModel> 
     this._select();
   };
 
+  override previewName(): string {
+    return getBlockName(this);
+    /*switch (this.model.type) {
+      case 'numbered':
+        return  'Number List'
+      case 'todo':
+        return 'Check List'
+      case 'toggle':
+        return 'Toggle List'
+      case 'bulleted':
+        return 'Bullet List'
+    }*/
+    //return super.previewName();
+  }
+
   get attributeRenderer() {
     return this.inlineManager.getRenderer();
   }

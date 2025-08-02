@@ -8,7 +8,10 @@ import { property } from 'lit/decorators.js';
 // eslint-disable-next-line import-x/no-extraneous-dependencies
 import { pick } from 'lodash-es';
 
-import { checkNotEmptyNote } from '../../../../../../src/claytapEditor/utils/index.js';
+import {
+  checkNotEmptyNote,
+  getBlockName,
+} from '../../../../../../src/claytapEditor/utils/index.js';
 
 export class MahdaadCalloutBlockComponent extends CaptionedBlockComponent<MahdaadCalloutBlockModel> {
   @property({ attribute: false })
@@ -23,12 +26,9 @@ export class MahdaadCalloutBlockComponent extends CaptionedBlockComponent<Mahdaa
     );
   }
 
-  //todo ali ghasami
-  /*override previewName(): string {
-    //this.model.
-    return  getBlockName(this)
-    //return  'Callout'
-  }*/
+  override previewName(): string {
+    return getBlockName(this);
+  }
 
   //todo ali ghasami for check empty important
   /*override async getUpdateComplete() {
