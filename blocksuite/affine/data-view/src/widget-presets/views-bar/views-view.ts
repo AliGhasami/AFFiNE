@@ -14,6 +14,7 @@ import {
   MoveRightIcon,
   PlusIcon,
 } from '@blocksuite/icons/lit';
+import { repeat } from 'lit/directives/repeat.js';
 import { css, html } from 'lit';
 import { property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
@@ -208,13 +209,13 @@ export class DataViewHeaderViews extends WidgetBase {
           }),
           menu.group({
             items: [
-              menu.action({
+              /*menu.action({
                 name: 'Duplicate',
                 prefix: DuplicateIcon(),
                 select: () => {
                   this.viewManager.viewDuplicate(id);
                 },
-              }),
+              }),*/
               menu.action({
                 name: 'Delete',
                 prefix: DeleteIcon(),
@@ -294,12 +295,23 @@ export class DataViewHeaderViews extends WidgetBase {
   }
 
   override render() {
+    const temp = this.renderViews();
     return html`
+      ${repeat(temp.slice(0, 3), (render, index) => {
+        return html`<div class="">${render()}</div>`;
+      })}
+      ${this.renderMore(temp.length <= 3 ? temp.length : 3)}
+      <!-- <component-overflow
+        .renderItem="${this.renderViews()}"
+        .renderMore="${this.renderMore}"
+      ></component-overflow> -->
+    `;
+    /* return html`
       <component-overflow
         .renderItem="${this.renderViews()}"
         .renderMore="${this.renderMore}"
       ></component-overflow>
-    `;
+    `;*/
   }
 
   @property({ attribute: false })

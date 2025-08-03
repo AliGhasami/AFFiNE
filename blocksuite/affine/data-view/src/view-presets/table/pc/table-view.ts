@@ -35,6 +35,7 @@ const styles = css`
 
   .affine-database-table {
     overflow-y: auto;
+    margin-inline-start: 4px;
   }
 
   .affine-database-block-title-container {
@@ -48,9 +49,9 @@ const styles = css`
   .affine-database-block-table {
     position: relative;
     width: 100%;
-    padding-bottom: 4px;
+    //padding-bottom: 4px;
     z-index: 1;
-    overflow-x: scroll;
+    //overflow-x: scroll;
     overflow-y: hidden;
   }
 

@@ -262,9 +262,9 @@ export class TableRow extends SignalWatcher(WithDisposable(ShadowlessElement)) {
             ${!column.readonly$.value &&
             column.view.mainProperties$.value.titleColumn === column.id
               ? html`<div class="row-ops show-on-hover-row">
-                  <div class="row-op" @click="${clickDetail}">
+                  <!-- <div class="row-op" @click="${clickDetail}">
                     ${CenterPeekIcon()}
-                  </div>
+                  </div> -->
                   ${!view.readonly$.value
                     ? html`<div class="row-op" @click="${openMenu}">
                         ${MoreHorizontalIcon()}

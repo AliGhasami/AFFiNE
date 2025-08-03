@@ -67,7 +67,8 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<DatabaseBloc
       border-radius: 8px;
       background-color: var(--affine-background-primary-color);
       padding: 8px;
-      margin: 8px -8px -8px;
+      /* set for mahdaad */
+      //margin: 8px -8px -8px;
     }
 
     .database-block-selected {
@@ -167,7 +168,9 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<DatabaseBloc
   private readonly dataView = new DataView();
 
   private readonly renderTitle = (dataViewMethod: DataViewInstance) => {
-    const addRow = () => dataViewMethod.addRow?.('start');
+    const addRow = () => {
+      //dataViewMethod.addRow?.('start');
+    };
     return html` <affine-database-title
       style="overflow: hidden"
       .titleText="${this.model.props.title}"
@@ -404,10 +407,11 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<DatabaseBloc
   override renderBlock() {
     const peekViewService = this.std.getOptional(PeekViewProvider);
     const telemetryService = this.std.getOptional(TelemetryProvider);
+    //background-color: var(--affine-background-primary-color)
     return html`
       <div
         contenteditable="false"
-        style="position: relative;background-color: var(--affine-background-primary-color);border-radius: 4px"
+        style="position: relative;border-radius: 4px;min-width: 450px"
       >
         ${this.dataView.render({
           virtualPadding$: this.virtualPadding$,

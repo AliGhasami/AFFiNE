@@ -81,13 +81,13 @@ export const popRowMenu = (
   const row = selection.rows[0];
   if (!row) return;
   popFilterableSimpleMenu(ele, [
-    menu.action({
+    /* menu.action({
       name: 'Expand Row',
       prefix: ExpandFullIcon(),
       select: () => {
         openDetail(dataViewEle, row.id, selectionController);
       },
-    }),
+    }),*/
     menu.group({
       name: '',
       items: [
