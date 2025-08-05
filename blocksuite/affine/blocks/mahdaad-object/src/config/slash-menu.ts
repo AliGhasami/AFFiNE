@@ -10,7 +10,6 @@ import type { BlockModel } from '@blocksuite/store';
 import { html } from 'lit';
 import { objectTriggerKey } from '../../../../../../../src/claytapEditor/utils';
 import type { IObjectType } from '../../../../../../../src/types/object';
-import { getInlineEditorByModel } from '@blocksuite/affine-rich-text';
 export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
   disableWhen: ({ model }) => {
     return (
