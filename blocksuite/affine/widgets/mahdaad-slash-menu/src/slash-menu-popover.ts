@@ -445,6 +445,7 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
     image: '0_mahdaad@7',
     weblink: '0_mahdaad@4',
     tag: '0_mahdaad@5',
+    daily_note: '0_mahdaad@11',
   };
 
   @state()

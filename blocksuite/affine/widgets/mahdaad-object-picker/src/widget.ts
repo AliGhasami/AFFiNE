@@ -31,11 +31,6 @@ import { DisposableGroup } from '@blocksuite/global/disposable';
 import { getInlineEditorByModel } from '@blocksuite/affine-rich-text';
 import throttle from 'lodash-es/throttle';
 import { ObjectPickerPopover } from './object-picker-popover';
-//let globalAbortController = new AbortController();
-
-/*function closePopover() {
-  globalAbortController.abort();
-}*/
 
 const showMenu = debounce(
   ({
@@ -73,17 +68,7 @@ const showMenu = debounce(
       context.model
     );
 
-    //private obj_type: IObjectType,
-    //private model: BlockModel
-
-    //objectPicker.options = options;
     objectPicker.triggerKey = triggerKey;
-    //slashMenu.context = context;
-    /*slashMenu.items = buildSlashMenuItems(
-      typeof config.items === 'function' ? config.items(context) : config.items,
-      context,
-      configItemTransform
-    );*/
 
     container.append(objectPicker);
     disposables.add(() => {
@@ -151,10 +136,6 @@ const showMenu = debounce(
 );
 
 export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
-  //private _context: ObjectPickerContext | null = null;
-
-  //private readonly _inputRects$ = signal<SelectionRect[]>([]);
-
   private readonly _mode$ = signal<'desktop' | 'mobile' | 'none'>('none');
 
   static DEFAULT_OPTIONS: ObjectPickerWidgetConfig = {
@@ -174,6 +155,10 @@ export class MahdaadObjectPickerWidget extends WidgetComponent<RootBlockModel> {
       {
         words: objectTriggerWords.page,
         type: 'document',
+      },
+      {
+        words: objectTriggerWords.daily_note,
+        type: 'daily_note',
       },
       {
         words: objectTriggerWords.image,

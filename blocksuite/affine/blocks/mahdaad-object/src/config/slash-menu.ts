@@ -43,6 +43,29 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       },
     },
     {
+      name: 'daily_note',
+      description: '',
+      //icon: FontIcon(),
+      tooltip: {
+        figure: html``,
+        caption: '',
+      },
+      searchAlias: [''],
+      group: '0_mahdaad@11',
+      when: () => {
+        return true;
+        /*return (
+          std.get(FeatureFlagService).getFlag('enable_callout') &&
+          !isInsideBlockByFlavour(model.doc, model, 'affine:edgeless-text')
+        );*/
+      },
+      action: ({ model, std }) => {
+        const triggerKey = objectTriggerKey.value.daily_note;
+        insertContent(std, model, triggerKey);
+        openObjectPicker(std, model, 'daily_note', triggerKey);
+      },
+    },
+    {
       name: 'file',
       description: '',
       //icon: FontIcon(),
