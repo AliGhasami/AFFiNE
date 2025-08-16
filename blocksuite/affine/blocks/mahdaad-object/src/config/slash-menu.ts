@@ -38,8 +38,10 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       },
       action: ({ model, std }) => {
         const triggerKey = objectTriggerKey.value.page;
-        insertContent(std, model, triggerKey);
-        openObjectPicker(std, model, 'document', triggerKey);
+        setTimeout(() => {
+          insertContent(std, model, triggerKey);
+          openObjectPicker(std, model, 'document', triggerKey);
+        }, 50);
       },
     },
     {
@@ -61,8 +63,10 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       },
       action: ({ model, std }) => {
         const triggerKey = objectTriggerKey.value.daily_note;
-        insertContent(std, model, triggerKey);
-        openObjectPicker(std, model, 'daily_note', triggerKey);
+        setTimeout(() => {
+          insertContent(std, model, triggerKey);
+          openObjectPicker(std, model, 'daily_note', triggerKey);
+        }, 50);
       },
     },
     {
@@ -84,8 +88,10 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       },
       action: ({ model, std }) => {
         const triggerKey = objectTriggerKey.value.file;
-        insertContent(std, model, triggerKey);
-        openObjectPicker(std, model, 'file', triggerKey);
+        setTimeout(() => {
+          insertContent(std, model, triggerKey);
+          openObjectPicker(std, model, 'file', triggerKey);
+        }, 50);
       },
     },
     {
@@ -107,8 +113,10 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       },
       action: ({ model, std }) => {
         const triggerKey = objectTriggerKey.value.weblink;
-        insertContent(std, model, triggerKey);
-        openObjectPicker(std, model, 'weblink', triggerKey);
+        setTimeout(() => {
+          insertContent(std, model, triggerKey);
+          openObjectPicker(std, model, 'weblink', triggerKey);
+        }, 50);
       },
     },
     {
@@ -130,8 +138,10 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       },
       action: ({ model, std }) => {
         const triggerKey = objectTriggerKey.value.tag;
-        insertContent(std, model, triggerKey);
-        openObjectPicker(std, model, 'tag', triggerKey);
+        setTimeout(() => {
+          insertContent(std, model, triggerKey);
+          openObjectPicker(std, model, 'tag', triggerKey);
+        }, 50);
       },
     },
     {
@@ -153,8 +163,10 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       },
       action: ({ model, std }) => {
         const triggerKey = objectTriggerKey.value.template;
-        insertContent(std, model, triggerKey);
-        openObjectPicker(std, model, 'template', triggerKey);
+        setTimeout(() => {
+          insertContent(std, model, triggerKey);
+          openObjectPicker(std, model, 'template', triggerKey);
+        }, 50);
       },
     },
     {
@@ -176,8 +188,10 @@ export const mahdaadObjectSlashMenuConfig: SlashMenuConfig = {
       },
       action: ({ model, std }) => {
         const triggerKey = objectTriggerKey.value.image;
-        insertContent(std, model, triggerKey);
-        openObjectPicker(std, model, 'image', triggerKey);
+        setTimeout(() => {
+          insertContent(std, model, triggerKey);
+          openObjectPicker(std, model, 'image', triggerKey);
+        }, 50);
       },
     },
   ],
