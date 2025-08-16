@@ -8,9 +8,17 @@ export class MahdaadTableOfContentBlockComponent extends CaptionedBlockComponent
   override connectedCallback() {
     super.connectedCallback();
     this.list = this.doc?.meta?.headingList ?? [];
+
+    this._disposables.add(
+      this.std.workspace.slots.docListUpdated.subscribe(() => {
+        this.list = this.doc?.meta?.headingList ?? [];
+      })
+    );
+    /*
     //todo ali ghasami important
-    /*this._disposables.add(
-      this.doc.collection.slots.docUpdated.on(() => {
+    this._disposables.add(
+      this.doc.coll
+      this.doc.slots.docMetaUpdated.collection.slots.docUpdated.on(() => {
         this.list= this.doc?.meta?.headingList ?? []
       })
     );*/

@@ -9,6 +9,12 @@
 html {
   font-size: 100%;
 }
+body {
+  font-family: Arial;
+  color: var(--pta-fg);
+  margin-inline-end: 3px;
+  padding: var(--pta-space-2000, 40px);
+}
 /* Reset for all heading elements */
 h1,
 h2,
@@ -79,6 +85,7 @@ q::after {
   --pta-space-600: 12px;
   /*--pta-fg-subtle:#8194A7;*/
   --pta-fg-subtle: #90959D;
+  --pta-space-2000: 40px;
   --pta-space-100: 2px;
   --pta-space-200: 4px;
   --pta-space-300: 6px;
@@ -383,15 +390,13 @@ q::after {
   --affine-text-highlight-foreground-purple: #842ed3;
   --affine-text-highlight-foreground-grey: #7a7a7a;
 }
-body {
-  font-family: Arial;
-  color: var(--pta-fg);
-  margin-inline-end: 3px;
-}
 .page-title {
-  font-weight: bold;
   font-size: 32px;
-  line-height: 38px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 48px;
+  /* 150% */
+  margin-bottom: var(--pta-space-2000, 40px);
 }
 * path {
   stroke-width: 1 !important;
@@ -408,14 +413,6 @@ body {
 }
 /** text */
 .mahdaad-text {
-  /*color: --pta-fg;*/
-  /*font-family: Arial;*/
-  /*font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: var(----ptp-dimension-1600, 32px); !* 133.333% *!*/
-  /*color: --pta-fg;*/
-  /*font-family: Arial;*/
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -423,8 +420,6 @@ body {
   /* 171.429% */
 }
 h1 {
-  /*color: --pta-fg;*/
-  /*font-family: Arial;*/
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
@@ -432,8 +427,6 @@ h1 {
   /* 133.333% */
 }
 h2 {
-  /*color: --pta-fg;*/
-  /*font-family: Arial;*/
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
@@ -441,8 +434,6 @@ h2 {
   /* 160% */
 }
 h3 {
-  /*color: --pta-fg;*/
-  /*font-family: Arial;*/
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
@@ -451,20 +442,13 @@ h3 {
 }
 blockquote {
   color: var(--pta-fg);
-  /*color: var(--pta-fg-subtle);*/
-  /*font-family: Arial;*/
   font-size: var(--ptp-dimension-600, 12px);
   font-weight: 400;
-  /*font-size: 14px;
-  font-style: italic;
-  font-weight: 400;
-  line-height: var(--ptp-dimension-1200, 24px); !* 171.429% *!*/
 }
 .mahdaad-blockquote {
   display: flex;
   gap: var(--pta-space-200, 4px);
   padding: var(--pta-space-400, 8px);
-  /*justify-content: space-between;*/
   background: var(--pta-bg-secondary);
 }
 .mahdaad-blockquote .quote {
@@ -479,15 +463,11 @@ blockquote {
   min-height: var(--pta-size-sm, 24px);
   gap: 4px;
   padding-inline: 4px;
-  /*min-width: var(--pta-size-lg, 40px);*/
   justify-content: center;
   align-items: center;
-  /*flex-shrink: 0;*/
   border-radius: var(--pta-roundness-sm, 4px);
   border: 1px solid var(--pta-primary-br-subtle);
   background: var(--pta-primary-fill-subtle);
-  /*color: --pta-primary-fg;*/
-  /*font-family: Arial;*/
   font-size: var(--ptp-dimension-600, 12px);
   font-style: normal;
   font-weight: 400;
