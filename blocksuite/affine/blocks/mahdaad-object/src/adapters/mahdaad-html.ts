@@ -43,7 +43,7 @@ export const ObjectBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatche
     fromBlockSnapshot: {
       enter: async (o, context) => {
         const { walkerContext } = context;
-        console.log('o.node.props', o.node.props);
+        // console.log('o.node.props', o.node.props);
         const objectId = o.node.props.object_id;
         //@ts-ignore
         const objectList: any[] = context.configs.has('mahdaad_config')
