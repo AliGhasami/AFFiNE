@@ -206,7 +206,7 @@ export class ListBlockComponent extends CaptionedBlockComponent<ListBlockModel> 
     </div>`;
 
     return html`
-      <div class=${'affine-list-block-container'}>
+      <div dir=${this.model.props.dir} class=${'affine-list-block-container'}>
         <div
           class=${classMap({
             'affine-list-rich-text-wrapper': true,
