@@ -120,7 +120,7 @@ export class MahdaadObject extends SignalWatcher(
   }
 
   updateProps(event) {
-    const data = event?.detail;
+    const data = event?.detail[0];
     const format = this.inlineEditor.getFormat(this.selfInlineRange);
     if (format.mahdaadObjectLink) {
       merge(format.mahdaadObjectLink, { meta: data.meta });

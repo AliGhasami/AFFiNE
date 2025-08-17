@@ -5,6 +5,7 @@ import {
   HastUtils,
 } from '@blocksuite/affine-shared/adapters';
 import { getDirection } from '../../../../../../../src/claytapEditor/utils';
+import { convertVWToPXPDF } from '../../../../../../../src/utils';
 
 function convertToFullUrl(inputString: string) {
   // Check if the input string starts with 'http' or 'www' to avoid duplication
@@ -42,6 +43,7 @@ export const ObjectBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatche
     fromBlockSnapshot: {
       enter: async (o, context) => {
         const { walkerContext } = context;
+        console.log('o.node.props', o.node.props);
         const objectId = o.node.props.object_id;
         //@ts-ignore
         const objectList: any[] = context.configs.has('mahdaad_config')
@@ -141,6 +143,17 @@ export const ObjectBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatche
             o.node.props?.show_type &&
             o.node.props?.show_type == 'embed'
           ) {
+            const meta = o.node.props.meta;
+            const temp = meta.width
+              ? Math.min(convertVWToPXPDF(meta.width), 794 - 120)
+              : Math.min(meta.originalWidth, 794 - 120);
+            const width = temp.toString();
+            const height = (
+              meta.width
+                ? +width * meta.aspectRatio
+                : +width * meta.originalAspectRatio
+            ).toString();
+
             walkerContext
               .openNode(
                 {
@@ -152,7 +165,8 @@ export const ObjectBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatche
                       object.meta && object.meta.bucket_name
                         ? `${minioStorageImageUrl}/${object.meta.storage}`
                         : `${storageUrl}/${object.meta.storage}`,
-                    style: 'width:100%',
+                    //style: 'width:100%',
+                    style: `width:${width}px;height:${height}px;object-fit: cover;`,
                     //className: [`title line-clamp-1`],
                   },
                   children: [],

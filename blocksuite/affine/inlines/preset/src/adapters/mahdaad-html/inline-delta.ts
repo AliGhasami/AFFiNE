@@ -9,6 +9,7 @@ import type {
 } from '@blocksuite/affine-shared/adapters';
 import { MahdaadInlineDeltaToHtmlAdapterExtension } from '@blocksuite/affine-shared/adapters';
 import { ThemeProvider } from '@blocksuite/affine-shared/services';
+import { convertVWToPXPDF } from '../../../../../../../../src/utils';
 
 const EventIcon = `<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" viewBox="0 0 24 24" class="iconify iconify--tabler"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3H4a4 4 0 0 0 2-3v-3a7 7 0 0 1 4-6M9 17v1a3 3 0 0 0 6 0v-1m6-10.273A11.05 11.05 0 0 0 18.206 3M3 6.727A11.05 11.05 0 0 1 5.792 3"></path></svg>`;
 
@@ -346,12 +347,11 @@ export const objectDeltaToMahdaadHtmlAdapterMatcher =
         ).toString()*/
         const meta = delta.attributes?.mahdaadObjectLink?.meta ?? {};
 
-        const width = convertVWToPX(meta.width);
+        const width = convertVWToPXPDF(meta.width);
 
         const style = meta.width
           ? `width:${width}px;height:${width * meta.aspectRatio}px`
           : ``;
-        console.log('1111', meta, style);
 
         children.push(
           ...[
