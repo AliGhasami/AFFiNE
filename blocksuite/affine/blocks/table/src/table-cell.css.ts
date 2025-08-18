@@ -57,7 +57,8 @@ export const columnOptionsStyle = style({
 export const rowOptionsCellStyle = style({
   position: 'absolute',
   top: '0',
-  left: '0',
+  //left: '0',
+  insetInlineStart: '0',
   width: '0',
   height: '100%',
   display: 'flex',
@@ -127,7 +128,8 @@ export const columnRightIndicatorStyle = style([
   columnIndicatorStyle,
   {
     cursor: 'ew-resize',
-    right: '-3px',
+    //right: '-3px',
+    insetInlineEnd: '-3px',
     pointerEvents: 'auto',
   },
 ]);

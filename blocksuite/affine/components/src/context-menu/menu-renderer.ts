@@ -386,7 +386,8 @@ export const createModal = (container: HTMLElement = document.body) => {
   const div = document.createElement('div');
   div.setAttribute(RANGE_SYNC_EXCLUDE_ATTR, 'true');
   div.style.pointerEvents = 'auto';
-  div.style.position = 'absolute';
+  div.style.position = 'fixed';
+  //div.style.position = 'absolute';
   div.style.left = '0';
   div.style.top = '0';
   div.style.width = '100%';
@@ -448,6 +449,7 @@ export const createPopup = (
   const modal = createModal(target.root);
   autoUpdate(target.targetRect, content, () => {
     computePosition(target.targetRect, content, {
+      strategy: 'fixed',
       middleware: options?.middleware ?? [shift({ crossAxis: true })],
     })
       .then(({ x, y }) => {
