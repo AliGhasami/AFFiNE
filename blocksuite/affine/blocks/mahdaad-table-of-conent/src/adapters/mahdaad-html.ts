@@ -24,80 +24,99 @@ export const TableOfContentBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapt
         //@ts-ignore
         const lang = context.configs.get('mahdaad_config')?.lang ?? 'en';
         const headingList = context.configs.get('headingList') || [];
-        walkerContext.openNode(
-          {
+        walkerContext
+          .openNode({
             type: 'element',
             tagName: 'div',
             properties: {
-              className: [
-                `mahdaad-block-container mahdaad-table-of-content`,
-                lang == 'fa' ? 'rtl' : 'ltr',
-              ],
+              className: ['mahdaad-block-container content-divider'],
             },
-            children: [
-              {
-                type: 'element',
-                tagName: 'div',
-                properties: {
-                  className: ['title'],
-                  style:
-                    'display: flex; align-items: center; padding:8px; font-size: 14px; line-height:24px; font-weight: 400;  height:32px;',
-                },
-                children: [
-                  {
-                    type: 'element',
-                    tagName: 'iconify-icon',
-                    properties: {
-                      icon: 'tabler:align-justified',
-                      style: 'padding-inline-end:2px;',
-                    },
-                    children: [],
-                  },
-                  {
-                    type: 'text',
-                    value: lang == 'fa' ? 'فهرست مطالب' : 'Table of Content',
-                  },
+            children: [],
+          })
+          .openNode({
+            type: 'element',
+            tagName: 'div',
+            properties: {
+              className: ['divider'],
+            },
+            children: [],
+          })
+          .closeNode()
+          .closeNode()
+          .openNode(
+            {
+              type: 'element',
+              tagName: 'div',
+              properties: {
+                className: [
+                  `mahdaad-block-container mahdaad-table-of-content`,
+                  lang == 'fa' ? 'rtl' : 'ltr',
                 ],
               },
-              {
-                type: 'element',
-                tagName: 'div',
-                properties: {
-                  className: ['list'],
-                },
-                children: headingList.map((heading, index) => ({
+              children: [
+                {
                   type: 'element',
                   tagName: 'div',
                   properties: {
-                    className: [`item ${heading.type}`],
-                    style: `height:32px;`,
+                    className: ['title'],
+                    style:
+                      'display: flex; align-items: center; padding:8px; font-size: 14px; line-height:24px; font-weight: 400;  height:32px;',
                   },
                   children: [
                     {
                       type: 'element',
-                      tagName: 'a',
+                      tagName: 'iconify-icon',
                       properties: {
-                        href: `#${heading.id}`,
-                        className: ['link'],
-                        style: 'height:32px; color:inherit; font-size:14px;',
+                        icon: 'tabler:align-justified',
+                        style: 'padding-inline-end:2px;',
                       },
-                      children: [
-                        {
-                          type: 'text',
-                          value: heading.text,
-                          properties: {
-                            style: ``,
-                          },
-                        },
-                      ],
+                      children: [],
+                    },
+                    {
+                      type: 'text',
+                      value: lang == 'fa' ? 'فهرست مطالب' : 'Table of Content',
                     },
                   ],
-                })),
-              },
-            ],
-          },
-          'children'
-        );
+                },
+                {
+                  type: 'element',
+                  tagName: 'div',
+                  properties: {
+                    className: ['list'],
+                  },
+                  children: headingList.map((heading, index) => ({
+                    type: 'element',
+                    tagName: 'div',
+                    properties: {
+                      className: [`item ${heading.type}`],
+                      style: `height:32px;`,
+                    },
+                    children: [
+                      {
+                        type: 'element',
+                        tagName: 'a',
+                        properties: {
+                          href: `#${heading.id}`,
+                          className: ['link'],
+                          style: 'height:32px; color:inherit; font-size:14px;',
+                        },
+                        children: [
+                          {
+                            type: 'text',
+                            value: heading.text,
+                            properties: {
+                              style: ``,
+                            },
+                          },
+                        ],
+                      },
+                    ],
+                  })),
+                },
+              ],
+            },
+            'children'
+          );
       },
       leave: (_, context) => {
         const { walkerContext } = context;

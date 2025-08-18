@@ -13,7 +13,7 @@ body {
   font-family: Arial;
   color: var(--pta-fg);
   margin-inline-end: 3px;
-  padding: var(--pta-space-2000, 40px);
+  padding: 12px;
 }
 /* Reset for all heading elements */
 h1,
@@ -396,7 +396,20 @@ q::after {
   font-weight: 700;
   line-height: 48px;
   /* 150% */
-  margin-bottom: var(--pta-space-2000, 40px);
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pta-space-400, 8px);
+}
+.page-title .icon {
+  border-radius: var(--pta-roundness-sm, 4px);
+  display: flex;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  align-items: center;
+  color: var(--pta-sky-fg);
+  background: var(--pta-sky-fill-subtle);
 }
 * path {
   stroke-width: 1 !important;
@@ -409,7 +422,7 @@ q::after {
   overflow: hidden;
 }
 .mahdaad-block-container {
-  margin-block: 10px;
+  margin-block: 12px;
 }
 /** text */
 .mahdaad-text {
@@ -429,14 +442,14 @@ h1 {
 h2 {
   font-size: 20px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   line-height: var(--ptp-dimension-1600, 32px);
   /* 160% */
 }
 h3 {
   font-size: 18px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   line-height: var(--ptp-dimension-1600, 32px);
   /* 177.778% */
 }
@@ -738,5 +751,15 @@ blockquote {
 }
 .mahdaad-table-of-content .h3 {
   margin-inline-start: 53px;
+}
+.content-divider .divider {
+  display: flex;
+  height: var(--ptp-dimension-050, 1px);
+  min-height: var(--ptp-dimension-050, 1px);
+  max-height: var(--ptp-dimension-050, 1px);
+  justify-content: center;
+  align-items: flex-start;
+  align-self: stretch;
+  background: var(--pta-br);
 }
 /*# sourceMappingURL=mahdaad-style.css.map */

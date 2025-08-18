@@ -105,9 +105,45 @@ export const ObjectBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatche
         ) {
           walkerContext
             .openNode({
+              type: 'element',
+              tagName: 'div',
+              properties: {
+                className: ['mahdaad-block-container content-divider'],
+              },
+              children: [],
+            })
+            .openNode({
+              type: 'element',
+              tagName: 'div',
+              properties: {
+                className: ['divider'],
+              },
+              children: [],
+            })
+            .closeNode()
+            .closeNode()
+            .openNode({
               type: 'raw',
               value: embedItem.context,
             })
+            .closeNode()
+            .openNode({
+              type: 'element',
+              tagName: 'div',
+              properties: {
+                className: ['mahdaad-block-container content-divider'],
+              },
+              children: [],
+            })
+            .openNode({
+              type: 'element',
+              tagName: 'div',
+              properties: {
+                className: ['divider'],
+              },
+              children: [],
+            })
+            .closeNode()
             .closeNode();
         } else {
           if (

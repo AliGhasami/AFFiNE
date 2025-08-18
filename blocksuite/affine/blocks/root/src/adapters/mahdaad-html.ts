@@ -8,6 +8,7 @@ import fa from './fa.css?raw';
 import mahdaadStyle from './mahdaad-style.css?raw';
 import { getDirection } from '../../../../../../../src/claytapEditor/utils';
 import { generateCSSVars } from '@mahdaad/tokens';
+import { pageSvg } from '../../../../../../../src/hooks/types';
 
 export const rootBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatcher =
   {
@@ -41,6 +42,9 @@ export const rootBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatcher 
           context.configs.get('mahdaad_config')?.lang ?? null;
         const title: string | null =
           context.configs.get('mahdaad_config')?.title ?? null;
+
+        const include_page =
+          context.configs.get('mahdaad_config')?.include_page ?? null;
 
         walkerContext
           .openNode(
@@ -130,16 +134,52 @@ export const rootBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatcher 
                 //style: 'width: 70vw; margin: 60px auto;',
               },
               children: [
-                {
+                /*{
                   type: 'text',
                   value: title,
                   //value: '',
-                },
+                },*/
               ],
             },
             'children'
-          )
+          );
+
+        if (include_page) {
+          walkerContext
+            .openNode(
+              {
+                type: 'element',
+                tagName: 'span',
+                properties: {
+                  className: [`icon`],
+                },
+                children: [
+                  {
+                    type: 'raw',
+                    value: pageSvg,
+                  },
+                ],
+              },
+              'children'
+            )
+            .closeNode();
+        }
+
+        walkerContext
+          .openNode({
+            type: 'element',
+            tagName: 'span',
+            children: [
+              {
+                type: 'text',
+                children: [],
+                value: title as string,
+              },
+            ],
+          })
+          .closeNode()
           .closeNode();
+        //walkerContext.closeNode();
         /*.openNode(
           {
             type: 'element',
