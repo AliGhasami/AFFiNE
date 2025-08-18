@@ -58,7 +58,7 @@ export const databaseBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatc
           properties: Object.create(null),
           children: [
             createAstTableRow(
-              table.headers.map(v =>
+              table.headers?.map(v =>
                 createAstTableHeaderCell([
                   {
                     type: 'text',
@@ -74,9 +74,9 @@ export const databaseBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatc
           type: 'element',
           tagName: 'tbody',
           properties: Object.create(null),
-          children: table.rows.map(v => {
+          children: table.rows?.map(v => {
             return createAstTableRow(
-              v.cells.map(cell => {
+              v.cells?.map(cell => {
                 return createAstTableCell(
                   typeof cell.value === 'string'
                     ? [{ type: 'text', value: cell.value }]

@@ -377,6 +377,7 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
   }
 
   override render() {
+    console.log('this is items', this.items);
     const { denyKeys, allowKeys } = this.checkKeys();
     const slashMenuStyles = this._position
       ? {
@@ -438,7 +439,8 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
     template: '0_mahdaad@6',
     date: '0_mahdaad@9',
     time: '0_mahdaad@10',
-    table: '7_Database@0',
+    //table: '7_Database@0',
+    table: '4_Content & Media@0',
     divider: '0_Basic@7',
     page: '0_mahdaad@2',
     file: '0_mahdaad@3',

@@ -208,7 +208,7 @@ export const dateTimeDeltaToMahdaadHtmlAdapterMatcher =
     name: 'date',
     match: delta => !!delta.attributes?.date,
     toAST: (delta, context) => {
-      console.log('this is context ^^', context, delta);
+      //console.log('this is context ^^', context, delta);
       //@ts-ignore
       const convertDateTime =
         context.configs.get('mahdaad_config')?.convertDateTime;
