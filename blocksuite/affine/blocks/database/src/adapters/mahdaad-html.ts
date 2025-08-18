@@ -80,7 +80,7 @@ export const databaseBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatc
                 return createAstTableCell(
                   typeof cell.value === 'string'
                     ? [{ type: 'text', value: cell.value }]
-                    : deltaConverter.deltaToAST(cell.value.delta)
+                    : deltaConverter.deltaToAST(cell.value?.delta ?? [])
                 );
               })
             );

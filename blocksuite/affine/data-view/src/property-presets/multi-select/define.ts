@@ -25,7 +25,7 @@ export const multiSelectPropertyModelConfig =
       schema: zod.array(zod.string()),
       default: () => [],
       toString: ({ value, data }) =>
-        value.map(id => data.options.find(v => v.id === id)?.value).join(','),
+        value?.map(id => data.options.find(v => v.id === id)?.value).join(','),
       fromString: ({ value: oldValue, data }) => {
         const optionMap = Object.fromEntries(
           data.options.map(v => [v.value, v])
