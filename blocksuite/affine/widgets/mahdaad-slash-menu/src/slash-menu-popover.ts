@@ -377,7 +377,6 @@ export class SlashMenu extends WithDisposable(ShadowlessElement) {
   }
 
   override render() {
-    console.log('this is items', this.items);
     const { denyKeys, allowKeys } = this.checkKeys();
     const slashMenuStyles = this._position
       ? {

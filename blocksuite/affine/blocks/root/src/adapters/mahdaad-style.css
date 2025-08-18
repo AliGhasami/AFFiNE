@@ -421,7 +421,8 @@ q::after {
   display: -webkit-box;
   overflow: hidden;
 }
-.mahdaad-block-container {
+.mahdaad-block-container,
+li {
   margin-block: 12px;
 }
 /** text */
