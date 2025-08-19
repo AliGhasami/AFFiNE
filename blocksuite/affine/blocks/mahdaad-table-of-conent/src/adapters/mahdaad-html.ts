@@ -4,6 +4,7 @@ import {
   type BlockMahdaadHtmlAdapterMatcher,
   HastUtils,
 } from '@blocksuite/affine-shared/adapters';
+import { getDirection } from '../../../../../../../src/claytapEditor/utils';
 
 export const TableOfContentBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatcher =
   {
@@ -52,6 +53,9 @@ export const TableOfContentBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapt
                   `mahdaad-block-container mahdaad-table-of-content`,
                   lang == 'fa' ? 'rtl' : 'ltr',
                 ],
+                dir: o.node.props.dir
+                  ? (o.node.props.dir as string)
+                  : getDirection(),
               },
               children: [
                 {
