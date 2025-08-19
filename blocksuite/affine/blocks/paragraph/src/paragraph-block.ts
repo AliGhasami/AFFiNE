@@ -361,14 +361,14 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
             [TOGGLE_BUTTON_PARENT_CLASS]: true,
           })}
         >
-          ${this.model.props.type$.value.startsWith('h')
+          <!-- ${this.model.props.type$.value.startsWith('h')
             ? html`
                 <affine-paragraph-heading-icon
                   .model=${this.model}
                   .direction=${this._dir}
                 ></affine-paragraph-heading-icon>
               `
-            : nothing}
+            : nothing} -->
           ${this.model.props.type$.value.startsWith('h') &&
           collapsedSiblings.length > 0
             ? html`
