@@ -160,14 +160,16 @@ export class AffineDocRemoteSelectionWidget extends WidgetComponent {
       selection => selection instanceof BlockSelection
     );
     const container = this._container;
-    const containerRect = this._containerRect;
+    //  const containerRect = this._containerRect;
+    //console.log('containerRect', containerRect);
 
     if (textSelection) {
+      //console.log('textSelection');
       const range = this._getTextRange(textSelection);
       if (!range) return null;
 
       const container = this._container;
-      const containerRect = this._containerRect;
+      //const containerRect = this._containerRect;
       const rangeRects = Array.from(range.getClientRects());
       if (rangeRects.length > 0) {
         const rect =
@@ -177,15 +179,12 @@ export class AffineDocRemoteSelectionWidget extends WidgetComponent {
         return {
           width: 2,
           height: rect.height,
-          top:
-            rect.top - (containerRect?.top ?? 0) + (container?.scrollTop ?? 0),
-          left:
-            rect.left -
-            (containerRect?.left ?? 0) +
-            (container?.scrollLeft ?? 0),
+          top: rect.top + (container?.scrollTop ?? 0), //- (containerRect?.top ?? 0)
+          left: rect.left + (container?.scrollLeft ?? 0), // - (containerRect?.left ?? 0)
         };
       }
     } else if (blockSelections.length > 0) {
+      // console.log('blockSelections.length > 0');
       const lastBlockSelection = blockSelections[blockSelections.length - 1];
 
       const block = this.host.view.getBlock(lastBlockSelection.blockId);
@@ -195,13 +194,8 @@ export class AffineDocRemoteSelectionWidget extends WidgetComponent {
         return {
           width: 2,
           height: rect.height,
-          top:
-            rect.top - (containerRect?.top ?? 0) + (container?.scrollTop ?? 0),
-          left:
-            rect.left +
-            rect.width -
-            (containerRect?.left ?? 0) +
-            (container?.scrollLeft ?? 0),
+          top: rect.top + (container?.scrollTop ?? 0), //- (containerRect?.top ?? 0)
+          left: rect.left + rect.width - (container?.scrollLeft ?? 0), //(containerRect?.left ?? 0) +
         };
       }
     }
@@ -416,6 +410,7 @@ export class AffineDocRemoteSelectionWidget extends WidgetComponent {
         const color = remoteColorManager.get(selection.id);
         if (!color) return;
         const cursorRect = this._getCursorRect(selection.selections);
+        //console.log('cursorRect', cursorRect);
 
         return html`
           <div

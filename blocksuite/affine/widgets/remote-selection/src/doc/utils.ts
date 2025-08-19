@@ -14,6 +14,7 @@ export function selectionStyle(
     top: `${rect.top}px`,
     left: `${rect.left}px`,
     backgroundColor: rect.transparent ? 'transparent' : color,
+    //backgroundColor: 'green',
     pointerEvent: 'none',
     opacity: '20%',
     borderRadius: '3px',
@@ -25,7 +26,9 @@ export function cursorStyle(
   color: string
 ): DirectiveResult<typeof StyleMapDirective> {
   return styleMap({
-    position: 'absolute',
+    position: 'fixed',
+    //position: 'absolute',
+    //backgroundColor: 'green',
     width: `${rect.width}px`,
     height: `${rect.height}px`,
     top: `${rect.top}px`,
