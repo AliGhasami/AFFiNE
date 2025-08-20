@@ -119,7 +119,7 @@ export function autoUpdatePosition(
             limiter: limitShift(),
           })),
           flip({ padding: 10 }),
-          hide(),
+          //hide(),
         ],
       };
   const update = async () => {
