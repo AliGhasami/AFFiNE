@@ -22,6 +22,7 @@ import {
   TableCellComponentName,
 } from './table-cell';
 import { cleanSelection } from './utils';
+import { isRTL } from '../../../../../../src/claytapEditor/utils';
 type Cells = string[][];
 const TEXT = 'text/plain';
 export class SelectionController implements ReactiveController {
@@ -43,6 +44,15 @@ export class SelectionController implements ReactiveController {
   private get scale() {
     return this.host.getScale();
   }
+  /*private get isRtl() {
+    try {
+      const dir = getComputedStyle(this.host).direction;
+      if (dir) return dir === 'rtl';
+    } catch {
+      /!* noop *!/
+    }
+    return (typeof document !== 'undefined' && document.dir === 'rtl') || false;
+  }*/
 
   widthAdjust(dragHandle: HTMLElement, event: MouseEvent) {
     event.preventDefault();
@@ -58,15 +68,15 @@ export class SelectionController implements ReactiveController {
     }
     const onMove = (event: MouseEvent) => {
       this.dataManager.widthAdjustColumnId$.value = columnId;
+      const delta = (event.clientX - initialX) / this.scale;
+      const appliedDelta = isRTL() ? -delta : delta;
       this.dataManager.virtualWidth$.value = {
         columnId,
-        width: Math.max(
-          ColumnMinWidth,
-          (event.clientX - initialX) / this.scale + adjustedWidth
-        ),
+        width: Math.max(ColumnMinWidth, appliedDelta + adjustedWidth),
       };
     };
     const onUp = () => {
+      console.log('onUp');
       const width = this.dataManager.virtualWidth$.value?.width;
       this.dataManager.widthAdjustColumnId$.value = undefined;
       this.dataManager.virtualWidth$.value = undefined;
@@ -81,6 +91,7 @@ export class SelectionController implements ReactiveController {
     window.addEventListener('mouseup', onUp);
   }
   dragListener() {
+    //console.log('dragListener');
     if (IS_MOBILE || this.dataManager.readonly$.value) {
       return;
     }
@@ -108,6 +119,7 @@ export class SelectionController implements ReactiveController {
     });
   }
   startColumnDrag(x: number, columnDragHandle: HTMLElement) {
+    console.log('startColumnDrag');
     const columnId = columnDragHandle.dataset['dragColumnId'];
     if (!columnId) {
       return;
@@ -171,6 +183,7 @@ export class SelectionController implements ReactiveController {
     };
   }
   columnDrag(columnDragHandle: HTMLElement, event: MouseEvent) {
+    //console.log('columnDrag');
     let drag: { onMove: (x: number) => void; onEnd: () => void } | undefined =
       undefined;
     const initialX = event.clientX;

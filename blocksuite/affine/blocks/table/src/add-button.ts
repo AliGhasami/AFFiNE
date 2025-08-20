@@ -23,6 +23,7 @@ import {
 } from './add-button.css';
 import { DefaultColumnWidth, DefaultRowHeight } from './consts';
 import type { TableDataManager } from './table-data-manager';
+import { isRTL } from '../../../../../../src/claytapEditor/utils';
 
 export const AddButtonComponentName = 'affine-table-add-button';
 export class AddButton extends SignalWatcher(
@@ -167,7 +168,8 @@ export class AddButton extends SignalWatcher(
       emptyColumns = this.getEmptyColumns();
     }
     const onMouseMove = (e: MouseEvent) => {
-      const deltaX = e.clientX - initialX;
+      const rawDeltaX = e.clientX - initialX;
+      const deltaX = isRTL() ? -rawDeltaX : rawDeltaX;
       const deltaY = e.clientY - initialY;
       const addColumn = isColumn || isRowColumn;
       const addRow = isRow || isRowColumn;

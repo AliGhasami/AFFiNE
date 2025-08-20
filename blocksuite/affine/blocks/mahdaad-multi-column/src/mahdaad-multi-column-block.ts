@@ -31,7 +31,7 @@ export class MahdaadMultiColumnBlockComponent extends CaptionedBlockComponent<Ma
       temp.children.push(item);
       return temp;
     });
-    //console.log("this is children in block suite",children.length);
+    //console.log('this is children in block suite', children.length, this.model);
     return html` <div>
       <mahdaad-multi-column-component
         read-only="${this.doc.readonly}"

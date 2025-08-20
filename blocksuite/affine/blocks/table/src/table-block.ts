@@ -129,21 +129,23 @@ export class TableBlockComponent extends CaptionedBlockComponent<TableBlockModel
   override renderBlock() {
     const rows = this.dataManager.uiRows$.value;
     const columns = this.dataManager.uiColumns$.value;
-    const virtualPadding = this.virtualPaddingController.virtualPadding$.value;
+    //const virtualPadding = this.virtualPaddingController.virtualPadding$.value;
     return html`
       <div
         contenteditable="false"
         class=${tableContainer}
         style=${styleMap({
-          marginLeft: `-${virtualPadding + 10}px`,
-          marginRight: `-${virtualPadding}px`,
+          // marginLeft: `-${virtualPadding + 10}px`,
+          // marginRight: `-${virtualPadding}px`,
           position: 'relative',
         })}
       >
         <div
           style=${styleMap({
-            paddingLeft: `${virtualPadding}px`,
-            paddingRight: `${virtualPadding}px`,
+            //paddingLeft: `${virtualPadding}px`,
+            //paddingRight: `${virtualPadding}px`,
+            paddingLeft: `8px`,
+            paddingRight: `8px`,
             width: 'max-content',
           })}
         >

@@ -6,35 +6,41 @@ type Color = {
 export const colorList: Color[] = [
   {
     name: 'Blue',
-    color: cssVarV2.table.headerBackground.blue,
+    //color: cssVarV2.table.headerBackground.blue,
+    color: 'rgb(var(--pt-blue-0))',
   },
   {
     name: 'Green',
-    color: cssVarV2.table.headerBackground.green,
+    //color: cssVarV2.table.headerBackground.green,
+    color: 'rgb(var(--pt-green-0))',
   },
   {
     name: 'Grey',
-    color: cssVarV2.table.headerBackground.grey,
+    //color: cssVarV2.table.headerBackground.grey,
+    color: 'rgb(var(--pt-gray-1))',
   },
   {
     name: 'Orange',
-    color: cssVarV2.table.headerBackground.orange,
+    //color: cssVarV2.table.headerBackground.orange,
+    color: 'rgb(var(--pt-orange-0))',
   },
-  {
+  /*{
     name: 'Purple',
     color: cssVarV2.table.headerBackground.purple,
-  },
+  },*/
   {
     name: 'Red',
-    color: cssVarV2.table.headerBackground.red,
+    //color: cssVarV2.table.headerBackground.red,
+    color: 'rgb(var(--pt-red-0))',
   },
-  {
+  /*{
     name: 'Teal',
     color: cssVarV2.table.headerBackground.teal,
-  },
+  },*/
   {
     name: 'Yellow',
-    color: cssVarV2.table.headerBackground.yellow,
+    //color: cssVarV2.table.headerBackground.yellow,
+    color: 'rgb(var(--pt-yellow-0))',
   },
 ];
 
