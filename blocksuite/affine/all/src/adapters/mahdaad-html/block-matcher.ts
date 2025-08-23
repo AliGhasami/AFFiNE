@@ -9,6 +9,7 @@ import { MahdaadCalloutBlockMahdaadHtmlAdapterExtension } from '@blocksuite/mahd
 import { TableOfContentBlockMahdaadHtmlAdapterExtension } from '@blocksuite/mahdaad-table-of-content-block';
 import { MahdaadMultiColumnBlockHtmlAdapterExtension } from '@blocksuite/mahdaad-multi-column-block';
 import { DatabaseBlockMahdaadHtmlAdapterExtension } from '@blocksuite/affine-block-database';
+import { TableBlockMahdaadHtmlAdapterExtension } from '@blocksuite/affine-block-table';
 
 export const defaultBlockMahdaadHtmlAdapterMatchers = [
   RootBlockMahdaadHtmlAdapterExtension,
@@ -22,6 +23,7 @@ export const defaultBlockMahdaadHtmlAdapterMatchers = [
   TableOfContentBlockMahdaadHtmlAdapterExtension,
   MahdaadMultiColumnBlockHtmlAdapterExtension,
   DatabaseBlockMahdaadHtmlAdapterExtension,
+  TableBlockMahdaadHtmlAdapterExtension,
   /*
   MahdaadAttachmentBlockHtmlAdapterExtension,
   */

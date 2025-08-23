@@ -14,6 +14,7 @@ import { MenuFocusable } from './focusable.js';
 import { Menu, type MenuOptions } from './menu.js';
 import { popMenu, popupTargetFromElement } from './menu-renderer.js';
 import type { MenuItemRender } from './types.js';
+import { isRTL } from '../../../../../../src/claytapEditor/utils';
 
 export type MenuSubMenuData = {
   content: () => TemplateResult;
@@ -185,7 +186,11 @@ export const subMenuItems = {
               ${config.label?.() ?? config.name}
             </div>
             ${config.postfix}
-            ${config.disableArrow ? nothing : ArrowRightSmallIcon()} `,
+            ${config.disableArrow
+              ? nothing
+              : ArrowRightSmallIcon({
+                  style: isRTL() ? 'transform: rotate(180deg);' : '',
+                })} `,
         class: config.class,
         options: config.options,
       };

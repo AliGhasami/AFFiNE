@@ -61,9 +61,11 @@ type Table = {
 };
 type Row = {
   cells: Cell[];
+  style: string;
 };
 type Cell = {
   value: { delta: DeltaInsert[] };
+  style: string;
 };
 export const processTable = (
   columns: Record<string, TableColumn>,
@@ -82,6 +84,7 @@ export const processTable = (
   sortedRows.forEach(r => {
     const row: Row = {
       cells: [],
+      style: r.backgroundColor ? `background-color:${r.backgroundColor}` : '',
     };
     sortedColumns.forEach(col => {
       const cell = cells[`${r.rowId}:${col.columnId}`];
@@ -90,13 +93,23 @@ export const processTable = (
           value: {
             delta: [],
           },
+          style: '',
         });
         return;
       }
+      let temp = '';
+      if (col.backgroundColor) {
+        temp += `background-color:${col.backgroundColor};`;
+      }
+      if (col.width) {
+        temp += `width:${col.width}px;`;
+      }
       row.cells.push({
         value: cell.text,
+        style: temp,
       });
     });
+    //console.log('101111', row);
     table.rows.push(row);
   });
   return table;

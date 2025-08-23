@@ -419,6 +419,7 @@ export function renderToolbar(
     }}"
     active-paragraph-tool="text"
     active-inline-tools="[]"
+    is-inner=${selectedModels.length == 0}
   ></mahdaad-format-bar>`;
   const edgelessToolbar = join(
     renderActions(primaryActionGroup, context),

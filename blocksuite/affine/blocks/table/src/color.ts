@@ -17,12 +17,12 @@ export const colorList: Color[] = [
   {
     name: 'Grey',
     //color: cssVarV2.table.headerBackground.grey,
-    color: 'rgb(var(--pt-gray-1))',
+    color: 'rgb(var(--mt-gray-1))',
   },
   {
     name: 'Orange',
     //color: cssVarV2.table.headerBackground.orange,
-    color: 'rgb(var(--pt-orange-0))',
+    color: 'rgb(var(--mt-orange-0))',
   },
   /*{
     name: 'Purple',
@@ -31,7 +31,7 @@ export const colorList: Color[] = [
   {
     name: 'Red',
     //color: cssVarV2.table.headerBackground.red,
-    color: 'rgb(var(--pt-red-0))',
+    color: 'rgb(var(--mt-red-0))',
   },
   /*{
     name: 'Teal',
@@ -40,7 +40,7 @@ export const colorList: Color[] = [
   {
     name: 'Yellow',
     //color: cssVarV2.table.headerBackground.yellow,
-    color: 'rgb(var(--pt-yellow-0))',
+    color: 'rgb(var(--mt-yellow-0))',
   },
 ];
 

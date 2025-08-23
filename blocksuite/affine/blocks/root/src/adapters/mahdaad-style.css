@@ -720,6 +720,34 @@ blockquote {
 .mahdaad-table tbody tr:last-child td {
   border-bottom: unset;
 }
+.mahdaad-table-v2 table {
+  border-radius: var(--pta-roundness-md, 6px);
+  border: 1px solid var(--pta-br);
+  border-spacing: 0;
+  text-align: center;
+}
+.mahdaad-table-v2 th,
+.mahdaad-table-v2 td {
+  border-bottom: 1px solid var(--pta-br);
+  border-inline-start: 1px solid var(--pta-br);
+  height: var(--pta-size-xlg, 48px);
+  padding: 8px;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  /* 200% */
+}
+.mahdaad-table-v2 th:first-child,
+.mahdaad-table-v2 td:first-child {
+  border-inline-start: unset;
+}
+.mahdaad-table-v2 th {
+  color: var(--pta-fg-subtle);
+}
+.mahdaad-table-v2 tbody tr:last-child td {
+  border-bottom: unset;
+}
 .mahdaad-callout {
   display: flex;
   padding: var(--pta-space-600, 12px);

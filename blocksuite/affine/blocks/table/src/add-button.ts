@@ -306,6 +306,7 @@ export class AddButton extends SignalWatcher(
       ${ref(this.addRowColumnButtonRef$)}
       style=${styleMap({
         opacity: hovered || dragging ? 1 : undefined,
+        cursor: isRTL() ? 'ne-resize' : 'nwse-resize',
       })}
       @click="${(e: MouseEvent) => {
         e.preventDefault();

@@ -66,7 +66,8 @@ export const addRowColumnButtonStyle = style({
   alignItems: 'center',
   position: 'absolute',
   top: 'calc(100% + 2px)',
-  left: 'calc(100% + 2px)',
+  //left: 'calc(100% + 2px)',
+  insetInlineStart: 'calc(100% + 2px)',
   borderRadius: '2px',
   opacity: 0,
   transition:
@@ -83,9 +84,11 @@ export const addRowColumnButtonStyle = style({
 export const cellCountTipsStyle = style({
   position: 'absolute',
   backgroundColor: cssVarV2.tooltips.background,
+  //backgroundColor: 'red',
   borderRadius: '4px',
   padding: '4px',
   boxShadow: cssVar('buttonShadow'),
   color: cssVarV2.tooltips.foreground,
   whiteSpace: 'nowrap',
+  direction: 'ltr',
 });

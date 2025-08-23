@@ -59,6 +59,8 @@ import {
   threePointerIconStyle,
 } from './table-cell.css';
 import type { TableDataManager } from './table-data-manager';
+import { t } from 'i18next';
+import { isRTL } from '../../../../../../src/claytapEditor/utils';
 export const TableCellComponentName = 'affine-table-cell';
 export class TableCell extends SignalWatcher(
   WithDisposable(ShadowlessElement)
@@ -129,7 +131,7 @@ export class TableCell extends SignalWatcher(
           menu.group({
             items: [
               menu.subMenu({
-                name: 'Background color',
+                name: t('table_background_color'), // 'Background color'
                 prefix: ColorPickerIcon(),
                 options: {
                   items: [
@@ -156,7 +158,7 @@ export class TableCell extends SignalWatcher(
                   ),
                 },
               }),
-              ...(column.backgroundColor
+              /*...(column.backgroundColor
                 ? [
                     menu.action({
                       name: 'Clear column style',
@@ -169,14 +171,16 @@ export class TableCell extends SignalWatcher(
                       },
                     }),
                   ]
-                : []),
+                : []),*/
             ],
           }),
           menu.group({
             items: [
               menu.action({
-                name: 'Insert Left',
-                prefix: InsertLeftIcon(),
+                name: isRTL()
+                  ? t('table_insert_right')
+                  : t('table_insert_left'), // 'Insert Left'
+                prefix: isRTL() ? InsertRightIcon() : InsertLeftIcon(),
                 select: () => {
                   this.dataManager.insertColumn(
                     columnIndex > 0 ? columnIndex - 1 : undefined
@@ -184,22 +188,24 @@ export class TableCell extends SignalWatcher(
                 },
               }),
               menu.action({
-                name: 'Insert Right',
-                prefix: InsertRightIcon(),
+                name: isRTL()
+                  ? t('table_insert_left')
+                  : t('table_insert_right'), //'Insert Right'
+                prefix: isRTL() ? InsertLeftIcon() : InsertRightIcon(),
                 select: () => {
                   this.dataManager.insertColumn(columnIndex);
                 },
               }),
               menu.action({
-                name: 'Move Left',
-                prefix: ArrowLeftBigIcon(),
+                name: isRTL() ? t('table_move_right') : t('table_move_left'), //'Move Left'
+                prefix: isRTL() ? ArrowRightBigIcon() : ArrowLeftBigIcon(),
                 select: () => {
                   this.dataManager.moveColumn(columnIndex, columnIndex - 2);
                 },
               }),
               menu.action({
-                name: 'Move Right',
-                prefix: ArrowRightBigIcon(),
+                name: isRTL() ? t('table_move_left') : t('table_move_right'), // 'Move Right'
+                prefix: isRTL() ? ArrowLeftBigIcon() : ArrowRightBigIcon(),
                 select: () => {
                   this.dataManager.moveColumn(columnIndex, columnIndex + 1);
                 },
@@ -209,7 +215,7 @@ export class TableCell extends SignalWatcher(
           menu.group({
             items: [
               menu.action({
-                name: 'Duplicate',
+                name: t('table_duplicate_column'), //'Duplicate'
                 prefix: DuplicateIcon(),
                 select: () => {
                   this.dataManager.duplicateColumn(columnIndex);
@@ -217,7 +223,7 @@ export class TableCell extends SignalWatcher(
               }),
 
               menu.action({
-                name: 'Clear column contents',
+                name: t('table_clear_column_contents'), //'Clear column contents'
                 prefix: CloseIcon(),
                 select: () => {
                   this.dataManager.clearColumn(column.columnId);
@@ -225,7 +231,7 @@ export class TableCell extends SignalWatcher(
               }),
 
               menu.action({
-                name: 'Delete',
+                name: t('table_delete_column'), //'Delete'
                 class: {
                   'delete-item': true,
                 },
@@ -255,7 +261,7 @@ export class TableCell extends SignalWatcher(
           menu.group({
             items: [
               menu.subMenu({
-                name: 'Background color',
+                name: t('table_background_color'), //'Background color'
                 prefix: ColorPickerIcon(),
                 options: {
                   items: [
@@ -282,7 +288,7 @@ export class TableCell extends SignalWatcher(
                   ),
                 },
               }),
-              ...(row.backgroundColor
+              /*...(row.backgroundColor
                 ? [
                     menu.action({
                       name: 'Clear row style',
@@ -295,13 +301,13 @@ export class TableCell extends SignalWatcher(
                       },
                     }),
                   ]
-                : []),
+                : []),*/
             ],
           }),
           menu.group({
             items: [
               menu.action({
-                name: 'Insert Above',
+                name: t('table_insert_above'), // 'Insert Above'
                 prefix: InsertAboveIcon(),
                 select: () => {
                   this.dataManager.insertRow(
@@ -310,21 +316,21 @@ export class TableCell extends SignalWatcher(
                 },
               }),
               menu.action({
-                name: 'Insert Below',
+                name: t('table_insert_below'), // 'Insert Below'
                 prefix: InsertBelowIcon(),
                 select: () => {
                   this.dataManager.insertRow(rowIndex);
                 },
               }),
               menu.action({
-                name: 'Move Up',
+                name: t('table_move_up'), // 'Move Up'
                 prefix: ArrowUpBigIcon(),
                 select: () => {
                   this.dataManager.moveRow(rowIndex, rowIndex - 1);
                 },
               }),
               menu.action({
-                name: 'Move Down',
+                name: t('table_move_down'), //'Move Down'
                 prefix: ArrowDownBigIcon(),
                 select: () => {
                   this.dataManager.moveRow(rowIndex, rowIndex + 1);
@@ -335,21 +341,21 @@ export class TableCell extends SignalWatcher(
           menu.group({
             items: [
               menu.action({
-                name: 'Duplicate',
+                name: t('table_duplicate_row'), // 'Duplicate'
                 prefix: DuplicateIcon(),
                 select: () => {
                   this.dataManager.duplicateRow(rowIndex);
                 },
               }),
               menu.action({
-                name: 'Clear row contents',
+                name: t('table_clear_row_contents'), //'Clear row contents'
                 prefix: CloseIcon(),
                 select: () => {
                   this.dataManager.clearRow(row.rowId);
                 },
               }),
               menu.action({
-                name: 'Delete',
+                name: t('table_delete_row'), //'Delete'
                 class: {
                   'delete-item': true,
                 },
