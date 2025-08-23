@@ -42,6 +42,10 @@ export const rootBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatcher 
           context.configs.get('mahdaad_config')?.lang ?? null;
         const title: string | null =
           context.configs.get('mahdaad_config')?.title ?? null;
+        const title_direction: string | null =
+          context.configs.get('mahdaad_config')?.title_direction ?? null;
+
+        console.log('111111', title_direction);
 
         const include_page =
           context.configs.get('mahdaad_config')?.include_page ?? null;
@@ -130,7 +134,7 @@ export const rootBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatcher 
               tagName: 'div',
               properties: {
                 class: 'page-title',
-                dir: getDirection(),
+                dir: title_direction, // getDirection()
                 //style: 'width: 70vw; margin: 60px auto;',
               },
               children: [

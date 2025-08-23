@@ -400,6 +400,7 @@ q::after {
   display: inline-flex;
   align-items: center;
   gap: var(--pta-space-400, 8px);
+  width: 100%;
 }
 .page-title .icon {
   border-radius: var(--pta-roundness-sm, 4px);
