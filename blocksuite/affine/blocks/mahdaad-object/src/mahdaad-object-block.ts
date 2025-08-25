@@ -98,6 +98,10 @@ export class MahdaadObjectBlockComponent extends CaptionedBlockComponent<Mahdaad
     doc.deleteBlock(this.model);*/
   }
 
+  clearSelection() {
+    this.std.selection.clear();
+  }
+
   override renderBlock(): TemplateResult<1> {
     return html`<div contenteditable="false">
       <mahdaad-object-link-component
@@ -121,6 +125,7 @@ export class MahdaadObjectBlockComponent extends CaptionedBlockComponent<Mahdaad
         @changeViewMode="${this.changeViewMode}"
         @convertToLink="${this._convertLink}"
         @updateProps="${this.updateProps}"
+        @clearSelection="${this.clearSelection}"
       ></mahdaad-object-link-component>
     </div>`;
   }
