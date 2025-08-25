@@ -7,18 +7,18 @@ import {
 import type { BlockMeta } from '../../utils/types';
 
 export type MahdaadCalloutProps = {
-  type?:string | null,
-  background?:string | null,
-  icon?:string | null,
-  dir?: null | 'ltr' |  'rtl';
+  type?: string | null;
+  background?: string | null;
+  icon?: string | null;
+  dir?: null | 'ltr' | 'rtl';
 } & BlockMeta;
 
 export const MahdaadCalloutBlockSchema = defineBlockSchema({
   flavour: 'affine:mahdaad-callout',
   props: (): MahdaadCalloutProps => ({
-    type:'info',
-    icon:null,
-    background:null,
+    type: 'info',
+    icon: null,
+    background: null,
     dir: null,
     'meta:createdAt': undefined,
     'meta:createdBy': undefined,
@@ -44,8 +44,9 @@ export const MahdaadCalloutBlockSchema = defineBlockSchema({
   toModel: () => new MahdaadCalloutBlockModel(),
 });
 
-export const MahdaadCalloutBlockSchemaExtension =
-  BlockSchemaExtension(MahdaadCalloutBlockSchema);
+export const MahdaadCalloutBlockSchemaExtension = BlockSchemaExtension(
+  MahdaadCalloutBlockSchema
+);
 
 export class MahdaadCalloutBlockModel extends BlockModel<MahdaadCalloutProps> {
   /*override isEmpty(): boolean {
