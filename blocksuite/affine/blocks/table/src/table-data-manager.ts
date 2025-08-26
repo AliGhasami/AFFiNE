@@ -243,7 +243,7 @@ export class TableDataManager {
         if (id.startsWith(rowId)) {
           this.model.props.cells[id]?.text.replace(
             0,
-            this.model.props.cells[id]?.text.length,
+            this.model.props.cells[id]?.text.yText.length,
             ''
           );
         }
@@ -257,7 +257,7 @@ export class TableDataManager {
         if (id.endsWith(`:${columnId}`)) {
           this.model.props.cells[id]?.text.replace(
             0,
-            this.model.props.cells[id]?.text.length,
+            this.model.props.cells[id]?.text.yText.length,
             ''
           );
         }
