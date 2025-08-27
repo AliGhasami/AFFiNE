@@ -29,6 +29,7 @@ import { setDirectionOnBlock } from '../../../../../../src/claytapEditor/utils/b
 import { correctNumberedListsOrderToPrev } from './commands/utils.js';
 import { listBlockStyles } from './styles.js';
 import { getListIcon } from './utils/get-list-icon.js';
+import { getBlockName } from '../../../../../../src/claytapEditor/utils/index.js';
 
 export class ListBlockComponent extends CaptionedBlockComponent<ListBlockModel> {
   static override styles = listBlockStyles;

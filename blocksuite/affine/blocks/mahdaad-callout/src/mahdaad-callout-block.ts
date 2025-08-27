@@ -19,11 +19,12 @@ export class MahdaadCalloutBlockComponent extends CaptionedBlockComponent<Mahdaa
 
   override connectedCallback() {
     super.connectedCallback();
-    this.disposables.add(
+    /* this.disposables.add(
       effect(() => {
+        console.log('checkNotEmptyNote effect callout');
         checkNotEmptyNote(this.model, this.doc);
       })
-    );
+    );*/
   }
 
   override previewName(): string {

@@ -1,8 +1,6 @@
 import type { NoteBlockModel } from '@blocksuite/affine-model';
 import { BlockComponent } from '@blocksuite/std';
-import { effect } from '@preact/signals-core';
 import { css, html } from 'lit';
-
 //todo ali ghasami for fix import
 import { checkNotEmptyNote } from '../../../../../../src/claytapEditor/utils/index.ts';
 
@@ -18,6 +16,7 @@ export class NoteBlockComponent extends BlockComponent<NoteBlockModel> {
 
   override async getUpdateComplete() {
     const result = await super.getUpdateComplete();
+    console.log('checkNotEmptyNote effect note');
     checkNotEmptyNote(this.model, this.doc);
     /*try{
       let  lastChild :  null | BlockModel = null
@@ -41,12 +40,12 @@ export class NoteBlockComponent extends BlockComponent<NoteBlockModel> {
 
   override connectedCallback() {
     super.connectedCallback();
-
-    this.disposables.add(
+    /*this.disposables.add(
       effect(() => {
+        console.log('checkNotEmptyNote effect note');
         checkNotEmptyNote(this.model, this.doc);
       })
-    );
+    );*/
   }
 
   override renderBlock() {
