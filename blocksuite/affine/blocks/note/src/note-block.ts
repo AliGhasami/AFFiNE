@@ -16,7 +16,7 @@ export class NoteBlockComponent extends BlockComponent<NoteBlockModel> {
 
   override async getUpdateComplete() {
     const result = await super.getUpdateComplete();
-    console.log('checkNotEmptyNote effect note');
+    //console.log('checkNotEmptyNote effect note');
     checkNotEmptyNote(this.model, this.doc);
     /*try{
       let  lastChild :  null | BlockModel = null

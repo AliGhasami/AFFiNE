@@ -73,20 +73,34 @@ export class MahdaadObjectBlockComponent extends CaptionedBlockComponent<Mahdaad
     this.doc.updateBlock(this.model, { dir: event.detail[0] });
   }
 
-  //todo ali ghasami
   _convertLink(event: CustomEvent) {
-    /*const data = event.detail[0];
+    const data = event.detail[0];
     const { doc } = this.model;
     const parent = doc.getParent(this.model);
     //assertExists(parent);
     const index = parent.children.indexOf(this.model);
-    const yText = new DocCollection.Y.Text();
-    yText.insert(0, data.title);
-    yText.format(0, data.title.length, {
+    //const yText = new Text().yText; //DocCollection.Y.Text();
+    //yText.insert(0, data.title);
+    /*yText.format(0, data.title.length, {
       link: data.url,
       reference: null,
-    });
-    const text = new doc.Text(yText);
+    });*/
+
+    const text = new Text([
+      {
+        insert: data.title,
+        attributes: {
+          link: data.url,
+          reference: null,
+          /*reference: {
+            type: 'LinkedPage',
+            pageId: linkedDocId,
+          },*/
+        },
+      },
+    ] as DeltaInsert<AffineTextAttributes>[]);
+
+    //const text = new doc.Text(yText);
     doc.addBlock(
       'affine:paragraph',
       {
@@ -95,7 +109,7 @@ export class MahdaadObjectBlockComponent extends CaptionedBlockComponent<Mahdaad
       parent,
       index
     );
-    doc.deleteBlock(this.model);*/
+    doc.deleteBlock(this.model);
   }
 
   clearSelection() {
