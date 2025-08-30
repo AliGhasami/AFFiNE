@@ -69,7 +69,6 @@ export class MahdaadObject extends SignalWatcher(
     doc.deleteBlock(this.model);*/
   }
 
-  //todo ali ghasami
   changeViewMode(event: CustomEvent) {
     const mode = event.detail[0];
 

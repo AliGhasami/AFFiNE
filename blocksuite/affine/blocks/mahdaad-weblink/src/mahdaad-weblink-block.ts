@@ -1,28 +1,34 @@
 import { CaptionedBlockComponent } from '@blocksuite/affine-components/caption';
 import type { MahdaadWeblinkBlockModel } from '@blocksuite/affine-model';
 import { html, type TemplateResult } from 'lit';
+import type { DeltaInsert } from '@blocksuite/store';
+import type { AffineTextAttributes } from '@blocksuite/affine-shared/types';
+import type { ObjectLink } from '../../../../../../src/claytapEditor/types';
+import { Text } from '@blocksuite/store';
+import { getBlockName } from '../../../../../../src/claytapEditor/utils';
 
 export class MahdaadWeblinkBlockComponent extends CaptionedBlockComponent<MahdaadWeblinkBlockModel> {
   override connectedCallback() {
     super.connectedCallback();
   }
 
-  //todo ali ghasami
   changeViewMode(event: CustomEvent) {
     const mode = event.detail[0];
     if (mode == 'inline') {
       const { doc } = this.model;
       const parent = doc.getParent(this.model);
-      //assertExists(parent);
       const index = parent.children.indexOf(this.model);
-      const yText = new DocCollection.Y.Text();
-      const title = this.model.title ?? '';
-      yText.insert(0, title);
-      yText.format(0, title.length, {
-        link: this.model.url,
-        reference: null,
-      });
-      const text = new doc.Text(yText);
+
+      const text = new Text([
+        {
+          insert: this.model.props.title ?? this.model.props.url ?? '',
+          attributes: {
+            link: this.model.props.url,
+            reference: null,
+          },
+        },
+      ] as DeltaInsert<AffineTextAttributes>[]);
+
       doc.addBlock(
         'affine:paragraph',
         {
@@ -86,10 +92,9 @@ export class MahdaadWeblinkBlockComponent extends CaptionedBlockComponent<Mahdaa
     </div>`;
   }
 
-  /* override previewName(): string {
-    return  getBlockName(this)
-    //return  'Weblink'
-  }*/
+  override previewName(): string {
+    return getBlockName(this);
+  }
 
   save(event: CustomEvent) {
     const data = event.detail[0];
