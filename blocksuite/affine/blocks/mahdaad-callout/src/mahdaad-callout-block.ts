@@ -31,12 +31,11 @@ export class MahdaadCalloutBlockComponent extends CaptionedBlockComponent<Mahdaa
     return getBlockName(this);
   }
 
-  //todo ali ghasami for check empty important
-  /*override async getUpdateComplete() {
+  override async getUpdateComplete() {
     const result = await super.getUpdateComplete();
-    checkNotEmptyNote(this.model,this.doc)
+    checkNotEmptyNote(this.model, this.doc);
     return result;
-  }*/
+  }
 
   changeProps(event: CustomEvent) {
     const data = event.detail[0];
