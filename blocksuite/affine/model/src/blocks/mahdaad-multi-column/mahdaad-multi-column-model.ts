@@ -7,13 +7,13 @@ import {
 import type { BlockMeta } from '../../utils/types';
 
 export type MahdaadMultiColumnProps = {
-  sizes:string | number[]
+  sizes: string | number[];
 } & BlockMeta;
 
 export const MahdaadMultiColumnBlockSchema = defineBlockSchema({
   flavour: 'affine:mahdaad-multi-column',
   props: (): MahdaadMultiColumnProps => ({
-    sizes:[],
+    sizes: [],
     'meta:createdAt': undefined,
     'meta:createdBy': undefined,
     'meta:updatedAt': undefined,
@@ -24,15 +24,16 @@ export const MahdaadMultiColumnBlockSchema = defineBlockSchema({
     role: 'hub',
     parent: ['affine:note'],
     children: [
-      'affine:note'
+      //'affine:note'
+      'affine:paragraph',
+      'affine:list',
     ],
   },
   toModel: () => new MahdaadMultiColumnBlockModel(),
 });
 
-export const MahdaadMultiColumnBlockSchemaExtension =
-  BlockSchemaExtension(MahdaadMultiColumnBlockSchema);
+export const MahdaadMultiColumnBlockSchemaExtension = BlockSchemaExtension(
+  MahdaadMultiColumnBlockSchema
+);
 
-export class MahdaadMultiColumnBlockModel extends BlockModel<MahdaadMultiColumnProps> {
-
-}
+export class MahdaadMultiColumnBlockModel extends BlockModel<MahdaadMultiColumnProps> {}

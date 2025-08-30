@@ -1,15 +1,17 @@
 import { MahdaadMultiColumnBlockModel } from '@blocksuite/affine-model';
-import { focusTextModel } from '@blocksuite/affine-rich-text'
+import { focusTextModel } from '@blocksuite/affine-rich-text';
 //import { focusBlockEnd } from '@blocksuite/affine-shared/commands';
 import {
   findAncestorModel,
   matchModels,
 } from '@blocksuite/affine-shared/utils';
-import { type SlashMenuConfig, type SlashMenuItem } from '@blocksuite/affine-widget-slash-menu'
-import { html } from 'lit'
+import {
+  type SlashMenuConfig,
+  type SlashMenuItem,
+} from '@blocksuite/affine-widget-slash-menu';
+import { html } from 'lit';
 
-
-const items : SlashMenuItem[] =[2,3,4].map(item=> {
+const items: SlashMenuItem[] = [2, 3, 4].map(item => {
   return {
     name: 'Mahdaad Multi column',
     description: 'Mahdaad Multi column description.',
@@ -21,7 +23,7 @@ const items : SlashMenuItem[] =[2,3,4].map(item=> {
     searchAlias: [''],
     group: `0_mahdaad_multi_column@${item}`,
     when: () => {
-      return true
+      return true;
       /*return (
         std.get(FeatureFlagService).getFlag('enable_callout') &&
         !isInsideBlockByFlavour(model.doc, model, 'affine:edgeless-text')
@@ -34,24 +36,29 @@ const items : SlashMenuItem[] =[2,3,4].map(item=> {
 
       const index = parent.children.indexOf(model);
       if (index === -1) return;
-      const multiColumnId = doc.addBlock('affine:mahdaad-multi-column', { count: 2 }, parent, index + 1);
+      const multiColumnId = doc.addBlock(
+        'affine:mahdaad-multi-column',
+        { count: 2 },
+        parent,
+        index + 1
+      );
       if (!multiColumnId) return;
-      let firstParagraphId=null
-      for (let i = 0 ;i<item;i++) {
-        const noteId= doc.addBlock('affine:note', {}, multiColumnId)
-        const paragraphId= doc.addBlock('affine:paragraph', {},noteId)
-        if(i==0) {
-          firstParagraphId= paragraphId
+      let firstParagraphId = null;
+      for (let i = 0; i < item; i++) {
+        //const noteId= doc.addBlock('affine:note', {}, multiColumnId)
+        const paragraphId = doc.addBlock('affine:paragraph', {}, multiColumnId);
+        if (i == 0) {
+          firstParagraphId = paragraphId;
         }
       }
-      if(firstParagraphId) {
+      if (firstParagraphId) {
         focusTextModel(std, firstParagraphId);
       }
 
       //const paragraphId = doc.addBlock('affine:paragraph', {}, multiColumnId);
       //if (!paragraphId) return;
       if (model.text?.length === 0) {
-        doc.deleteBlock(model)
+        doc.deleteBlock(model);
       }
       /*std.host.updateComplete
         .then(() => {
@@ -63,9 +70,8 @@ const items : SlashMenuItem[] =[2,3,4].map(item=> {
         })
         .catch(console.error);*/
     },
-  }
-})
-
+  };
+});
 
 export const mahdaadMultiColumnSlashMenuConfig: SlashMenuConfig = {
   disableWhen: ({ model }) => {
@@ -75,5 +81,5 @@ export const mahdaadMultiColumnSlashMenuConfig: SlashMenuConfig = {
       ) !== null
     );
   },
-  items
+  items,
 };
