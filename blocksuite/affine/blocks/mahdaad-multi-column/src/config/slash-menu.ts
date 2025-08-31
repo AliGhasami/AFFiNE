@@ -45,8 +45,9 @@ const items: SlashMenuItem[] = [2, 3, 4].map(item => {
       if (!multiColumnId) return;
       let firstParagraphId = null;
       for (let i = 0; i < item; i++) {
-        //const noteId= doc.addBlock('affine:note', {}, multiColumnId)
-        const paragraphId = doc.addBlock('affine:paragraph', {}, multiColumnId);
+        const noteId = doc.addBlock('affine:note', {}, multiColumnId);
+        const paragraphId = doc.addBlock('affine:paragraph', {}, noteId);
+        //const paragraphId = doc.addBlock('affine:paragraph', {}, multiColumnId);
         if (i == 0) {
           firstParagraphId = paragraphId;
         }

@@ -129,7 +129,6 @@ export class MahdaadLink extends SignalWatcher(
   }
 
   private handleSave(event: CustomEvent) {
-    debugger;
     const data = event.detail[0];
     const link = normalizeUrl(data.url);
     this.inlineEditor.insertText(this.selfInlineRange, data.title, {

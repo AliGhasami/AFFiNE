@@ -23,11 +23,7 @@ export const MahdaadMultiColumnBlockSchema = defineBlockSchema({
     version: 1,
     role: 'hub',
     parent: ['affine:note'],
-    children: [
-      //'affine:note'
-      'affine:paragraph',
-      'affine:list',
-    ],
+    children: ['affine:note'],
   },
   toModel: () => new MahdaadMultiColumnBlockModel(),
 });
