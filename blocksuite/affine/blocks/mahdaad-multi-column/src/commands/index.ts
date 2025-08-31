@@ -10,8 +10,8 @@ export function addColumnToMultiColumn(
     multiColumn.flavour == MahdaadMultiColumnBlockSchema.model.flavour &&
     multiColumn.children.length < 4
   ) {
-    //std.host.doc.addBlock('affine:note', {}, multiColumn)
-    std.host.doc.addBlock('affine:paragraph', {}, multiColumn);
+    std.host.doc.addBlock('affine:note', {}, multiColumn);
+    //std.host.doc.addBlock('affine:paragraph', {}, multiColumn);
     return multiColumn;
   }
   return null;
