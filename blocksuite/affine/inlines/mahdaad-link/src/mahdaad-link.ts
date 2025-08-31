@@ -141,30 +141,28 @@ export class MahdaadLink extends SignalWatcher(
   }
 
   override render() {
-    return html`
-      <mahdaad-link-inline
-        url="${this.url}"
+    // prettier-ignore
+    return html`<mahdaad-link-inline
+      url="${this.url}"
         title="${this.title}"
         object-id="${this.block.doc.meta.id}"
         @save="${this.handleSave}"
         @removeLink="${this._removeLink}"
         @generateWeblink="${this.generateWeblink}"
         @changeViewMode="${(event: CustomEvent) => {
-          //debugger;
-          const mode = event.detail[0];
-          switch (mode) {
-            case 'card':
-              this._convertToCardView('card');
-              break;
-            case 'embed':
-              this._convertToCardView('embed');
-              break;
-          }
-        }}"
-      >
-        <v-text .str=${this.title}></v-text>
-      </mahdaad-link-inline>
-    `;
+      //debugger;
+      const mode = event.detail[0];
+      switch (mode) {
+        case 'card':
+          this._convertToCardView('card');
+          break;
+        case 'embed':
+          this._convertToCardView('embed');
+          break;
+      }
+    }}"
+      ><v-text .str=${this.delta.insert}></v-text
+    ></mahdaad-link-inline>`;
   }
 
   @property({ type: Object })

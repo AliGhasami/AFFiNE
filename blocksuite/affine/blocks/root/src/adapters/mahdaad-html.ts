@@ -45,8 +45,6 @@ export const rootBlockMahdaadHtmlAdapterMatcher: BlockMahdaadHtmlAdapterMatcher 
         const title_direction: string | null =
           context.configs.get('mahdaad_config')?.title_direction ?? null;
 
-        console.log('111111', title_direction);
-
         const include_page =
           context.configs.get('mahdaad_config')?.include_page ?? null;
 
