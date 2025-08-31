@@ -204,7 +204,8 @@ export function getClosestBlockComponentByPoint(
  * @param point position
  * @param selector selector to find the block
  */
-export function findClosestBlockComponent(
+/** old method affine */
+/*export function findClosestBlockComponent(
   container: BlockComponent,
   point: Point,
   selector: string
@@ -237,6 +238,43 @@ export function findClosestBlockComponent(
   }
 
   return lastChild;
+}*/
+
+export function findClosestBlockComponent(
+  container: BlockComponent,
+  point: Point,
+  selector: string
+): BlockComponent | null {
+  const children = (
+    Array.from(container.querySelectorAll(selector)) as BlockComponent[]
+  )
+    .filter(child => child.host === container.host)
+    .filter(child => child !== container);
+
+  if (!children.length) return null;
+
+  // اول فیلتر کردن بر اساس محدوده Y
+  const validChildren = children.filter(child => {
+    const rect = child.getBoundingClientRect();
+    return rect.height !== 0 && point.y <= rect.bottom && point.y >= rect.top;
+  });
+
+  if (!validChildren.length) return null;
+
+  // پیدا کردن نزدیک‌ترین المان در محور X
+  return validChildren.reduce((closest, current) => {
+    const currentRect = current.getBoundingClientRect();
+    const closestRect = closest.getBoundingClientRect();
+
+    const currentXDistance = Math.abs(
+      point.x - (currentRect.x + currentRect.width / 2)
+    );
+    const closestXDistance = Math.abs(
+      point.x - (closestRect.x + closestRect.width / 2)
+    );
+
+    return currentXDistance < closestXDistance ? current : closest;
+  }, validChildren[0]);
 }
 
 /**

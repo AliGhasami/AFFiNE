@@ -239,6 +239,19 @@ export class PointerEventWatcher {
       }
       if (this.widget.isGfxDragHandleVisible) return;
 
+      const { event } = ctx.get('defaultState');
+      if (event.target) {
+        const _target = event.target as HTMLElement;
+        //@ts-ignore
+        if (
+          Object.hasOwn(_target.dataset, 'disableDragHandle') &&
+          _target.dataset.disableDragHandle == 'true'
+        ) {
+          this.widget.hide();
+          return;
+        }
+      }
+
       const state = ctx.get('pointerState');
 
       // When pointer is moving, should do nothing
@@ -262,6 +275,8 @@ export class PointerEventWatcher {
         this.widget.rootComponent,
         point
       ) as NoteBlockComponent | null;
+
+      console.log('closestNoteBlock', closestNoteBlock);
 
       this.widget.noteScale.value =
         this.widget.mode === 'page'
@@ -293,6 +308,9 @@ export class PointerEventWatcher {
   // Multiple blocks: drag handle should show on the vertical middle of all blocks
   showDragHandleOnHoverBlock = () => {
     const block = this.widget.anchorBlockComponent.peek();
+    //todo ali ghasami for check old block editor code if has bug
+    const percentLeftSide = this.getLeftSideVisibilityPercentage(block);
+    if (percentLeftSide == 0) return;
     if (!block) return;
 
     const container = this.widget.dragHandleContainer;
@@ -344,6 +362,26 @@ export class PointerEventWatcher {
       };
     }
   };
+
+  getLeftSideVisibilityPercentage(element: HTMLElement): number {
+    const rect = element.getBoundingClientRect();
+    const steps = 10; // تعداد نقاط بیشتر برای دقت بالاتر
+
+    const points = Array.from({ length: steps }, (_, index) => ({
+      x: rect.left,
+      y: rect.top + (rect.height * index) / (steps - 1),
+    }));
+
+    const visiblePoints = points.filter(point => {
+      const elementAtPoint = document.elementFromPoint(point.x, point.y);
+      return (
+        elementAtPoint &&
+        (element === elementAtPoint || element.contains(elementAtPoint))
+      );
+    });
+
+    return (visiblePoints.length / points.length) * 100;
+  }
 
   private readonly _pointerDownHandler: UIEventHandler = () => {
     this._isPointerDown = true;

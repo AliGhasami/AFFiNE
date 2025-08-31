@@ -134,7 +134,8 @@ export const isOutOfNoteBlock = (
   editorHost: EditorHost,
   noteBlock: Element,
   point: Point,
-  scale: number
+  scale: number,
+  isRTL: boolean = false
 ) => {
   // TODO: need to find a better way to check if the point is out of note block
   const rect = noteBlock.getBoundingClientRect();
@@ -144,7 +145,34 @@ export const isOutOfNoteBlock = (
     (NOTE_CONTAINER_PADDING +
       (insidePageEditor ? 0 : EDGELESS_NOTE_EXTRA_PADDING)) *
     scale;
-  return rect
+
+  if (!rect) return true;
+
+  if (insidePageEditor) {
+    if (isRTL) {
+      return (
+        point.y < rect.top ||
+        point.y > rect.bottom ||
+        point.x < rect.left - padding
+      );
+    }
+    return (
+      point.y < rect.top ||
+      point.y > rect.bottom ||
+      point.x > rect.right + padding
+    );
+  }
+
+  // برای حالت غیر page editor
+  return (
+    point.y < rect.top ||
+    point.y > rect.bottom ||
+    point.x < rect.left - padding ||
+    point.x > rect.right + padding
+  );
+
+  //old method
+  /*return rect
     ? insidePageEditor
       ? point.y < rect.top ||
         point.y > rect.bottom ||
@@ -153,7 +181,7 @@ export const isOutOfNoteBlock = (
         point.y > rect.bottom ||
         point.x < rect.left - padding ||
         point.x > rect.right + padding
-    : true;
+    : true;*/
 };
 
 export const getParentNoteBlock = (blockComponent: BlockComponent) => {
@@ -335,4 +363,36 @@ export function getSnapshotRect(snapshot: SliceSnapshot): Bound | null {
   snapshot.content.forEach(getBound);
 
   return bound;
+}
+
+/**
+ * Checks if a point is inside an element's bounds
+ * @param point The point to check {x: number, y: number}
+ * @param element The HTML element to check against
+ * @param scale Optional scale factor (default is 1)
+ * @returns boolean - true if point is inside element, false if outside
+ */
+export function isPointInElement(
+  point: { x: number; y: number },
+  element: HTMLElement,
+  scale: number = 1
+): boolean {
+  // Get the element's bounding rectangle
+  const rect = element.getBoundingClientRect();
+
+  // Account for scaling if needed
+  const scaledRect = {
+    left: rect.left * scale,
+    right: rect.right * scale,
+    top: rect.top * scale,
+    bottom: rect.bottom * scale,
+  };
+
+  // Check if point is within the rectangle bounds
+  return (
+    point.x >= scaledRect.left &&
+    point.x <= scaledRect.right &&
+    point.y >= scaledRect.top &&
+    point.y <= scaledRect.bottom
+  );
 }

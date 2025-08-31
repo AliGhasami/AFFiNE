@@ -10,7 +10,7 @@ import type { IVec, Point, Rect } from '@blocksuite/global/gfx';
 import {
   type BlockComponent,
   WidgetComponent,
-  DndEventState,
+  //DndEventState,
 } from '@blocksuite/std';
 import type { GfxModel } from '@blocksuite/std/gfx';
 import { computed, type ReadonlySignal, signal } from '@preact/signals-core';
