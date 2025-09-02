@@ -312,9 +312,8 @@ export class PointerEventWatcher {
   showDragHandleOnHoverBlock = () => {
     const block = this.widget.anchorBlockComponent.peek();
     //todo ali ghasami for check old block editor code if has bug
-    const percentLeftSide = this.getLeftSideVisibilityPercentage(block);
+    const percentLeftSide = this.getSideVisibilityPercentage(block);
     if (percentLeftSide == 0) return;
-    if (!block) return;
 
     const container = this.widget.dragHandleContainer;
     const grabber = this.widget.dragHandleGrabber;
@@ -366,12 +365,16 @@ export class PointerEventWatcher {
     }
   };
 
-  getLeftSideVisibilityPercentage(element: HTMLElement): number {
+  getSideVisibilityPercentage(element: HTMLElement): number {
     const rect = element.getBoundingClientRect();
     const steps = 10; // تعداد نقاط بیشتر برای دقت بالاتر
 
+    // In RTL, measure from the right edge; otherwise from the left edge
+    // Use +/- 1px to avoid being exactly on the border
+    const sampleX = isRTL() ? rect.right - 1 : rect.left + 1;
+
     const points = Array.from({ length: steps }, (_, index) => ({
-      x: rect.left,
+      x: sampleX,
       y: rect.top + (rect.height * index) / (steps - 1),
     }));
 
