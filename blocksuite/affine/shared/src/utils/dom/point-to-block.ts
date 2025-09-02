@@ -243,7 +243,8 @@ export function getClosestBlockComponentByPoint(
 export function findClosestBlockComponent(
   container: BlockComponent,
   point: Point,
-  selector: string
+  selector: string,
+  isRTL: boolean = false
 ): BlockComponent | null {
   const children = (
     Array.from(container.querySelectorAll(selector)) as BlockComponent[]
@@ -253,6 +254,8 @@ export function findClosestBlockComponent(
 
   if (!children.length) return null;
 
+  //console.log(children);
+
   // اول فیلتر کردن بر اساس محدوده Y
   const validChildren = children.filter(child => {
     const rect = child.getBoundingClientRect();
@@ -261,19 +264,84 @@ export function findClosestBlockComponent(
 
   if (!validChildren.length) return null;
 
-  // پیدا کردن نزدیک‌ترین المان در محور X
+  // جهت نوشتار برای تعیین لبه شروع (start edge)
+  //const isRTL = true; //getComputedStyle(container).direction === 'rtl';
+  const distToStart = (rect: DOMRect) =>
+    Math.abs(point.x - (isRTL ? rect.right : rect.left));
+
+  // 1) اگر نقطه به صورت افقی داخل رکت هر کدام باشد، همان‌ها را اولویت بده
+  const horizontallyContaining = validChildren.filter(child => {
+    const rect = child.getBoundingClientRect();
+    return point.x >= rect.left && point.x <= rect.right;
+  });
+
+  if (horizontallyContaining.length) {
+    // اگر چند مورد بود، نزدیک‌ترین به مرکز افقی انتخاب می‌شود
+    return horizontallyContaining.reduce((closest, current) => {
+      const currentRect = current.getBoundingClientRect();
+      const closestRect = closest.getBoundingClientRect();
+
+      // ابتدا نزدیک‌ترین به لبه شروع را ترجیح بده (برای رفع مشکل نزدیک شروع بلاک در RTL)
+      const currentStartDx = distToStart(currentRect);
+      const closestStartDx = distToStart(closestRect);
+      if (currentStartDx !== closestStartDx) {
+        return currentStartDx < closestStartDx ? current : closest;
+      }
+
+      // سپس نزدیکی به مرکز افقی را در نظر بگیر
+      const currentCenterX = currentRect.left + currentRect.width / 2;
+      const closestCenterX = closestRect.left + closestRect.width / 2;
+      const currentCenterDx = Math.abs(point.x - currentCenterX);
+      const closestCenterDx = Math.abs(point.x - closestCenterX);
+      if (currentCenterDx !== closestCenterDx) {
+        return currentCenterDx < closestCenterDx ? current : closest;
+      }
+
+      // تساوی: المانی که مساحت کوچکتری دارد (اغلب داخلی‌تر است) را ترجیح بده
+      const currentArea = currentRect.width * currentRect.height;
+      const closestArea = closestRect.width * closestRect.height;
+      return currentArea < closestArea ? current : closest;
+    }, horizontallyContaining[0]);
+  }
+
+  // 2) در غیر این صورت، کمینه فاصله افقی تا لبه‌های رکت را معیار قرار بده
   return validChildren.reduce((closest, current) => {
     const currentRect = current.getBoundingClientRect();
     const closestRect = closest.getBoundingClientRect();
 
-    const currentXDistance = Math.abs(
-      point.x - (currentRect.x + currentRect.width / 2)
+    const currentDx = Math.min(
+      Math.abs(point.x - currentRect.left),
+      Math.abs(point.x - currentRect.right)
     );
-    const closestXDistance = Math.abs(
-      point.x - (closestRect.x + closestRect.width / 2)
+    const closestDx = Math.min(
+      Math.abs(point.x - closestRect.left),
+      Math.abs(point.x - closestRect.right)
     );
 
-    return currentXDistance < closestXDistance ? current : closest;
+    // ابتدا فاصله تا لبه شروع را ترجیح بده
+    const currentStartDx = distToStart(currentRect);
+    const closestStartDx = distToStart(closestRect);
+    if (currentStartDx !== closestStartDx) {
+      return currentStartDx < closestStartDx ? current : closest;
+    }
+
+    if (currentDx !== closestDx) {
+      return currentDx < closestDx ? current : closest;
+    }
+
+    // تساوی: کمینه فاصله عمودی به مرکز را هم در نظر بگیر
+    const currentCenterY = currentRect.top + currentRect.height / 2;
+    const closestCenterY = closestRect.top + closestRect.height / 2;
+    const currentDy = Math.abs(point.y - currentCenterY);
+    const closestDy = Math.abs(point.y - closestCenterY);
+    if (currentDy !== closestDy) {
+      return currentDy < closestDy ? current : closest;
+    }
+
+    // تساوی نهایی: کوچک‌تر بودن مساحت را ترجیح بده (اغلب داخلی‌تر)
+    const currentArea = currentRect.width * currentRect.height;
+    const closestArea = closestRect.width * closestRect.height;
+    return currentArea < closestArea ? current : closest;
   }, validChildren[0]);
 }
 

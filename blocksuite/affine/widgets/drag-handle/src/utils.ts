@@ -39,6 +39,7 @@ import {
   EDGELESS_NOTE_EXTRA_PADDING,
   NOTE_CONTAINER_PADDING,
 } from './config.js';
+import { isRTL } from '../../../../../../src/claytapEditor/utils';
 
 const heightMap: Record<string, number> = {
   text: 23,
@@ -196,7 +197,7 @@ export const getClosestNoteBlock = (
   const isInsidePageEditor =
     editorHost.std.get(DocModeProvider).getEditorMode() === 'page';
   return isInsidePageEditor
-    ? findClosestBlockComponent(rootComponent, point, 'affine-note')
+    ? findClosestBlockComponent(rootComponent, point, 'affine-note', isRTL())
     : getHoveringNote(point);
 };
 

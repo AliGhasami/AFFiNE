@@ -36,6 +36,7 @@ import { isRTL } from '../../../../../../../src/claytapEditor/utils';
  */
 export class PointerEventWatcher {
   private _isPointerDown = false;
+  private _paddingInRTL = 22;
 
   private get _gfx() {
     return this.widget.std.get(GfxControllerIdentifier);
@@ -163,8 +164,8 @@ export class PointerEventWatcher {
    */
   private readonly _pointerMoveOnBlock = (state: PointerEventState) => {
     if (this.widget.isGfxDragHandleVisible) return;
-
-    const point = new Point(state.raw.x, state.raw.y);
+    const x = isRTL() ? state.raw.x - this._paddingInRTL : state.raw.x;
+    const point = new Point(x, state.raw.y);
     if (!this.widget.rootComponent) return;
 
     const closestBlock = getClosestBlockByPoint(
@@ -228,6 +229,18 @@ export class PointerEventWatcher {
 
   private readonly _throttledPointerMoveHandler = throttle<UIEventHandler>(
     ctx => {
+      const { event } = ctx.get('defaultState');
+      if (event.target) {
+        const _target = event.target as HTMLElement;
+        //@ts-ignore
+        if (
+          Object.hasOwn(_target.dataset, 'disableDragHandle') &&
+          _target.dataset.disableDragHandle == 'true'
+        ) {
+          this.widget.hide();
+        }
+      }
+
       if (this._isPointerDown) return;
       if (
         this.widget.doc.readonly ||
@@ -238,19 +251,6 @@ export class PointerEventWatcher {
         return;
       }
       if (this.widget.isGfxDragHandleVisible) return;
-
-      const { event } = ctx.get('defaultState');
-      if (event.target) {
-        const _target = event.target as HTMLElement;
-        //@ts-ignore
-        if (
-          Object.hasOwn(_target.dataset, 'disableDragHandle') &&
-          _target.dataset.disableDragHandle == 'true'
-        ) {
-          this.widget.hide();
-          return;
-        }
-      }
 
       const state = ctx.get('pointerState');
 
@@ -268,7 +268,10 @@ export class PointerEventWatcher {
       if (!this.widget.rootComponent) return;
 
       // When pointer out of note block hover area or inside database, should hide drag handle
-      const point = new Point(state.raw.x, state.raw.y);
+      const x = isRTL() ? state.raw.x - this._paddingInRTL : state.raw.x;
+      const point = new Point(x, state.raw.y);
+
+      //debugPoint(point);
 
       const closestNoteBlock = getClosestNoteBlock(
         this.widget.host,
@@ -276,7 +279,7 @@ export class PointerEventWatcher {
         point
       ) as NoteBlockComponent | null;
 
-      console.log('closestNoteBlock', closestNoteBlock);
+      // console.log('closestNoteBlock', closestNoteBlock);
 
       this.widget.noteScale.value =
         this.widget.mode === 'page'
