@@ -335,7 +335,9 @@ export class LinkPopup extends WithDisposable(ShadowlessElement) {
           .then(({ x, y, strategy }) => {
             Object.assign(popover.style, {
               position: strategy, // با استراتژی هماهنگ شود
-              left: `${x}px`,
+              left: isRTL()
+                ? `${x - popover.offsetWidth + range.getBoundingClientRect().width}px`
+                : `${x}px`,
               top: `${y}px`,
               zIndex: '99999',
             });
