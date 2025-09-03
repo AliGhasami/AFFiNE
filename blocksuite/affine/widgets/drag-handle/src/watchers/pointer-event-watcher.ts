@@ -36,7 +36,7 @@ import { isRTL } from '../../../../../../../src/claytapEditor/utils';
  */
 export class PointerEventWatcher {
   private _isPointerDown = false;
-  private _paddingInRTL = 22;
+  private _paddingInRTL = 45;
 
   private get _gfx() {
     return this.widget.std.get(GfxControllerIdentifier);
