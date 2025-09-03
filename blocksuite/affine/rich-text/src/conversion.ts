@@ -50,7 +50,7 @@ export const textConversionConfigs: TextConversionConfig[] = [
     type: 'h2',
     name: 'Heading 2',
     description: 'Headings in the 2nd font size.',
-    hotkey: [`Mod-Alt-2`, `Mod-Shift-2`],
+    hotkey: [`Mod-Alt-2`], //, `Mod-Shift-2`
     icon: Heading2Icon,
   },
   {
