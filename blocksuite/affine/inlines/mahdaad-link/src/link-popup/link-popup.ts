@@ -27,6 +27,7 @@ import { html } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { choose } from 'lit/directives/choose.js';
 import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts';
+import { isRTL } from '../../../../../../../src/claytapEditor/utils/is';
 
 //import { linkPopupStyle } from './styles';
 
@@ -321,6 +322,7 @@ export class LinkPopup extends WithDisposable(ShadowlessElement) {
       autoUpdate(visualElement, popover, () => {
         computePosition(visualElement, popover, {
           strategy: 'fixed',
+          placement: isRTL() ? 'bottom-end' : 'bottom-start',
           middleware: [
             flip(),
             offset(10),
@@ -330,14 +332,20 @@ export class LinkPopup extends WithDisposable(ShadowlessElement) {
             }),
           ],
         })
-          .then(({ x, y }) => {
-            const domRects = range.getBoundingClientRect();
-            popover.style.left = `${domRects.x}px`;
-            popover.style.top = `${domRects.y + domRects.height + 10}px`;
+          .then(({ x, y, strategy }) => {
+            Object.assign(popover.style, {
+              position: strategy, // با استراتژی هماهنگ شود
+              left: `${x}px`,
+              top: `${y}px`,
+              zIndex: '99999',
+            });
+            /*const domRects = range.getBoundingClientRect();
+            //popover.style.left = `${domRects.x}px`;
+            //popover.style.top = `${domRects.y + domRects.height + 10}px`;
             popover.style.zIndex = `99999`;
             popover.style.position = 'fixed';
-            //popover.style.left = `${x}px`;
-            //popover.style.top = `${y}px`;
+            popover.style.left = `${x}px`;
+            popover.style.top = `${y + domRects.height}px`;*/
 
             this.updateMockSelection(
               Array.from(visualElement.getClientRects())

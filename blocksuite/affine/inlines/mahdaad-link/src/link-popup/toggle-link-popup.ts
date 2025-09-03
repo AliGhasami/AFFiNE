@@ -18,9 +18,13 @@ export function toggleLinkPopup(
   popup.targetInlineRange = targetInlineRange;
   popup.abortController = abortController;
 
-  const root =
+  /*const root =
     inlineEditor.rootElement?.closest('editor-host')?.parentElement ??
-    document.body;
+    document.body;*/
+
+  //inlineEditor.rootElement?.closest('editor-host')?.parentElement ??
+  const root = document.body;
+
   root.append(popup);
 
   return popup;
