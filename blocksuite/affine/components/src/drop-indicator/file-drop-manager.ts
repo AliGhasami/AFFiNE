@@ -197,7 +197,7 @@ export class FileDropExtension extends LifeCycleWatcher {
       this.dropTarget$.subscribe(target => {
         this.indicator.rect = this._disableIndicator
           ? null
-          : (target?.rect ?? null);
+          : target?.rect ?? null;
       })
     );
 
@@ -226,7 +226,7 @@ export class FileDropExtension extends LifeCycleWatcher {
       std.event.add('nativeDragOver', context => {
         const event = context.get('dndState').raw;
 
-        if (this.dragging$.peek()) {
+        if (this.dragging$.peek() || this.doc.readonly) {
           event.preventDefault();
           event.stopPropagation();
           return;
@@ -246,7 +246,7 @@ export class FileDropExtension extends LifeCycleWatcher {
         const { x, y, dataTransfer } = event;
         const droppedFiles = dataTransfer?.files;
 
-        if (!droppedFiles || !droppedFiles.length) {
+        if (this.doc.readonly || !droppedFiles || !droppedFiles.length) {
           this.onDragLeave();
           return;
         }
