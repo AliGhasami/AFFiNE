@@ -36,6 +36,7 @@ import { dragHandleWidget } from '@blocksuite/affine-widget-drag-handle';
 import { docRemoteSelectionWidget } from '@blocksuite/affine-widget-remote-selection';
 import { scrollAnchoringWidget } from '@blocksuite/affine-widget-scroll-anchoring';
 import { mahdaadMentionWidget } from '@blocksuite/mahdaad-widget-mention';
+import { mahdaadAIPanelWidget } from '@blocksuite/mahdaad-widget-ai-panel';
 //import { linkedDocWidget } from '@blocksuite/affine-widget-linked-doc';
 import { mahdaadObjectWidget } from '@blocksuite/mahdaad-widget-object-picker';
 //import { SlashMenuExtension } from '@blocksuite/affine-widget-slash-menu';
@@ -93,6 +94,7 @@ export const CommonSpecs: ExtensionType[] = [
   dragHandleWidget,
   mahdaadObjectWidget,
   mahdaadMentionWidget,
+  mahdaadAIPanelWidget,
   docRemoteSelectionWidget,
   viewportOverlayWidget,
   scrollAnchoringWidget,

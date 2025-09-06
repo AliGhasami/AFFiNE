@@ -12,6 +12,7 @@ import {
 } from '@blocksuite/affine-shared/services';
 import { nextTick } from '@blocksuite/global/utils';
 import { MoreVerticalIcon } from '@blocksuite/icons/lit';
+import { getMahdaadAIPanelWidget } from '@blocksuite/mahdaad-widget-ai-panel';
 import type {
   AutoUpdateOptions,
   ComputePositionConfig,
@@ -397,6 +398,35 @@ export function renderToolbar(
           selectedModels.forEach(model => {
             std.host.doc.updateBlock(model, { dir: 'ltr' });
           });
+          break;
+        case 'ai':
+          {
+            const aiPanel = getMahdaadAIPanelWidget(host);
+            debugger;
+
+            /* if (!aiPanel.config) return;
+            aiPanel.config.generateAnswer = this._generateAnswer;
+            aiPanel.config.inputCallback = text => {
+              if (!this._panelRoot) return;
+              this._panelRoot.style.visibility = text ? 'hidden' : 'visible';
+            };
+
+            const textSelection = this.host.selection.find(TextSelection);
+            const blockSelections = this.host.selection.filter(BlockSelection);
+            let lastBlockId: string | undefined;
+            if (textSelection) {
+              lastBlockId = textSelection.to?.blockId ?? textSelection.blockId;
+            } else if (blockSelections.length) {
+              lastBlockId = blockSelections[blockSelections.length - 1].blockId;
+            }
+            if (!lastBlockId) return;
+            const block = this.host.view.getBlock(lastBlockId);
+            if (!block) return;
+            aiPanel.setState('input', block);
+
+            setTimeout(() => this._openAIPanel(), 0);*/
+            debugger;
+          }
           break;
       }
     }}"

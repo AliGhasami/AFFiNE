@@ -9,6 +9,7 @@ import { effects as gfxCanvasTextEffects } from '@blocksuite/affine-gfx-text/eff
 import { effects as widgetEdgelessToolbarEffects } from '@blocksuite/affine-widget-edgeless-toolbar/effects';
 import { effects as widgetMobileToolbarEffects } from '@blocksuite/affine-widget-keyboard-toolbar/effects';
 import { effects as widgetMahdaadMentionEffects } from '@blocksuite/mahdaad-widget-mention/effects';
+import { effects as widgetMahdaadAiPanelEffects } from '@blocksuite/mahdaad-widget-ai-panel/effects';
 //import { effects as widgetLinkedDocEffects } from '@blocksuite/affine-widget-linked-doc/effects';
 import { effects as widgetMahdaadObjectPickerEffects } from '@blocksuite/mahdaad-widget-object-picker/effects';
 
@@ -70,6 +71,7 @@ export function effects() {
   widgetEdgelessToolbarEffects();
   widgetMahdaadObjectPickerEffects();
   widgetMahdaadMentionEffects();
+  widgetMahdaadAiPanelEffects();
 
   // Register components by category
   registerRootComponents();

@@ -55,6 +55,7 @@
     "@blocksuite/data-view": "workspace:*",
     "@blocksuite/global": "workspace:*",
     "@blocksuite/icons": "^2.2.10",
+    "@blocksuite/mahdaad-widget-ai-panel": "workspace:*",
     "@blocksuite/mahdaad-widget-mention": "workspace:*",
     "@blocksuite/mahdaad-widget-object-picker": "workspace:*",
     "@blocksuite/mahdaad-widget-slash-menu": "workspace:*",
