@@ -41,6 +41,7 @@ import orderBy from 'lodash-es/orderBy';
 import partition from 'lodash-es/partition';
 import toPairs from 'lodash-es/toPairs';
 import type { AffineTextAttributes } from '@blocksuite/affine-shared/types';
+import { BlockSelection, TextSelection } from '@blocksuite/affine/std';
 import {
   formatBlockCommand,
   formatNativeCommand,
@@ -402,17 +403,15 @@ export function renderToolbar(
         case 'ai':
           {
             const aiPanel = getMahdaadAIPanelWidget(host);
-            debugger;
-
-            /* if (!aiPanel.config) return;
-            aiPanel.config.generateAnswer = this._generateAnswer;
-            aiPanel.config.inputCallback = text => {
+            if (!aiPanel) return;
+            //aiPanel.config.generateAnswer = this._generateAnswer;
+            /*aiPanel.config.inputCallback = text => {
               if (!this._panelRoot) return;
               this._panelRoot.style.visibility = text ? 'hidden' : 'visible';
-            };
+            };*/
 
-            const textSelection = this.host.selection.find(TextSelection);
-            const blockSelections = this.host.selection.filter(BlockSelection);
+            const textSelection = host.selection.find(TextSelection);
+            const blockSelections = host.selection.filter(BlockSelection);
             let lastBlockId: string | undefined;
             if (textSelection) {
               lastBlockId = textSelection.to?.blockId ?? textSelection.blockId;
@@ -420,12 +419,12 @@ export function renderToolbar(
               lastBlockId = blockSelections[blockSelections.length - 1].blockId;
             }
             if (!lastBlockId) return;
-            const block = this.host.view.getBlock(lastBlockId);
+            const block = host.view.getBlock(lastBlockId);
             if (!block) return;
+            //console.log('211111', block);
             aiPanel.setState('input', block);
-
-            setTimeout(() => this._openAIPanel(), 0);*/
-            debugger;
+            //setTimeout(() => this._openAIPanel(), 0);
+            //debugger;
           }
           break;
       }

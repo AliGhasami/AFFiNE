@@ -1,6 +1,13 @@
 import type { RootBlockModel } from '@blocksuite/affine-model';
 
 import { WidgetComponent, WidgetViewExtension } from '@blocksuite/std';
+import {
+  DocModeProvider,
+  NotificationProvider,
+  ThemeProvider,
+  ToolbarFlag,
+  ToolbarRegistryIdentifier,
+} from '@blocksuite/affine/shared/services';
 /*
 import {
   //AFFINE_VIEWPORT_OVERLAY_WIDGET,
@@ -22,10 +29,6 @@ import { ColorScheme } from '@blocksuite/affine/model';
 
 import { unsafeCSSVar } from '@blocksuite/affine-shared/theme';
 import { darkCssVariables, lightCssVariables } from '@toeverything/theme';
-import {
-  DocModeProvider,
-  ThemeProvider,
-} from '@blocksuite/affine-shared/services';
 import { RANGE_SYNC_EXCLUDE_ATTR } from '@blocksuite/std/inline';
 import {
   getPageRootByElement,
@@ -45,8 +48,16 @@ import { GfxControllerIdentifier } from '@blocksuite/std/gfx';
 import { property, query } from 'lit/decorators.js';
 
 export class MahdaadAIPanelWidget extends WidgetComponent<RootBlockModel> {
-  static override styles = css`
-    :host {
+  /*static styles = css`
+    .title {
+      color: red;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  `;*/
+
+  /*static override styles = css`
+    .ai-panel {
       display: flex;
       outline: none;
       border-radius: var(--8, 8px);
@@ -103,7 +114,7 @@ export class MahdaadAIPanelWidget extends WidgetComponent<RootBlockModel> {
     :host([data-state='hidden']) {
       display: none;
     }
-  `;
+  `;*/
 
   private _abortController = new AbortController();
 
@@ -159,6 +170,10 @@ export class MahdaadAIPanelWidget extends WidgetComponent<RootBlockModel> {
       return;
     }
   };
+
+  override createRenderRoot() {
+    return this;
+  }
 
   private readonly _resetAbortController = () => {
     if (this.state === 'generating') {
@@ -357,12 +372,19 @@ export class MahdaadAIPanelWidget extends WidgetComponent<RootBlockModel> {
     this._stopAutoUpdate = autoUpdate(reference, this, () => {
       computePosition(reference, this, this._calcPositionOptions(reference))
         .then(({ x, y }) => {
+          this.style.position = 'absolute';
+          //this.style.zIndex = 'var(--affine-z-index-popover)';
           this.style.left = `${x}px`;
           this.style.top = `${y}px`;
-          setTimeout(() => {
+          this.style.width = `${reference.getBoundingClientRect().width}px`;
+          //this.style.minHeight = `56px`;
+          this.classList.add('mahdaad-ai-panel');
+          /* this.style.background =
+            "background: ${unsafeCSSVar('backgroundOverlayPanelColor')};";*/
+          /* setTimeout(() => {
             const input = this.shadowRoot?.querySelector('ai-panel-input');
             input?.textarea?.focus();
-          }, 0);
+          }, 0);*/
         })
         .catch(console.error);
     });
@@ -397,6 +419,7 @@ export class MahdaadAIPanelWidget extends WidgetComponent<RootBlockModel> {
     // block element in page editor
     if (getPageRootByElement(reference)) {
       return {
+        strategy: 'absolute',
         placement: 'bottom-start',
         middleware: [offset(8), shift(overflowOptions)],
       };
@@ -487,7 +510,11 @@ export class MahdaadAIPanelWidget extends WidgetComponent<RootBlockModel> {
       return nothing;
     }
 
-    if (!this.config) return nothing;
+    return html`<div>
+      <mahdaad-ai-panel-component></mahdaad-ai-panel-component>
+    </div>`;
+
+    /*if (!this.config) return nothing;
     const config = this.config;
 
     const theme = this.std.get(ThemeProvider).app$.value;
@@ -558,7 +585,7 @@ export class MahdaadAIPanelWidget extends WidgetComponent<RootBlockModel> {
       data-testid="ai-panel-container"
     >
       ${mainTemplate}
-    </div>`;
+    </div>`;*/
   }
 
   protected override willUpdate(changed: PropertyValues): void {
