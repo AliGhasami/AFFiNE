@@ -152,7 +152,7 @@ function buildPageResponseConfig<T extends keyof BlockSuitePresets.AIActions>(
       testId: 'answer-responses',
       items: [
         {
-          name: 'Insert below',
+          name: ' Insert below',
           testId: 'answer-insert-below',
           icon: InsertBelowIcon(),
           showWhen: () =>

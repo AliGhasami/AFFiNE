@@ -19,16 +19,13 @@ import {
   AFFINE_VIEWPORT_OVERLAY_WIDGET,
   type AffineViewportOverlayWidget,
 } from '../../../blocks/root/src/widgets/viewport-overlay/viewport-overlay.js';*/
-import { css, html, unsafeCSS, nothing, type PropertyValues } from 'lit';
+import { html, nothing, type PropertyValues } from 'lit';
 import { literal, unsafeStatic } from 'lit/static-html.js';
 import {
   MAHDAAD_AI_PANEL_WIDGET,
   //type MahdaadMentionContext,
 } from './config.js';
 import { ColorScheme } from '@blocksuite/affine/model';
-
-import { unsafeCSSVar } from '@blocksuite/affine-shared/theme';
-import { darkCssVariables, lightCssVariables } from '@toeverything/theme';
 import { RANGE_SYNC_EXCLUDE_ATTR } from '@blocksuite/std/inline';
 import {
   getPageRootByElement,
@@ -46,6 +43,7 @@ import {
 } from '@floating-ui/dom';
 import { GfxControllerIdentifier } from '@blocksuite/std/gfx';
 import { property, query } from 'lit/decorators.js';
+import { getSelectedTextContent, getSelection, insertBelow } from './utils';
 
 export class MahdaadAIPanelWidget extends WidgetComponent<RootBlockModel> {
   /*static styles = css`
@@ -505,13 +503,36 @@ export class MahdaadAIPanelWidget extends WidgetComponent<RootBlockModel> {
     this._stopAutoUpdate?.();
   }
 
+  async test() {
+    //debugger;
+    //const { selectedBlocks: blocks }
+    const markdown = await getSelectedTextContent(this.block.host, 'markdown');
+    console.log('1111111', markdown);
+    /*if (!blocks || blocks.length === 0) return;
+    console.log('1111111', blocks);*/
+  }
+
+  async insert(event) {
+    //debugger;
+    const answer = event.detail[0];
+    const selection = getSelection(this.block.host);
+    if (!answer || !selection) return;
+
+    const { lastBlock } = selection;
+    await insertBelow(this.block.host, answer, lastBlock);
+  }
+
   override render() {
     if (this.state === 'hidden') {
       return nothing;
     }
 
     return html`<div>
-      <mahdaad-ai-panel-component></mahdaad-ai-panel-component>
+      <mahdaad-ai-panel-component
+        .host=${this.host}
+        @insert=${this.insert}
+        @test=${this.test}
+      ></mahdaad-ai-panel-component>
     </div>`;
 
     /*if (!this.config) return nothing;

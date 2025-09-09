@@ -67,7 +67,10 @@ function processSnapshot(
  * Processes the text in the given snapshot if there is a text selection.
  * Only the selected portion of the snapshot will be processed.
  */
-function processTextInSnapshot(snapshot: SliceSnapshot, host: EditorHost) {
+export function processTextInSnapshot(
+  snapshot: SliceSnapshot,
+  host: EditorHost
+) {
   const { content } = snapshot;
   const text = host.selection.find(TextSelection);
   if (!content.length || !text) return;
