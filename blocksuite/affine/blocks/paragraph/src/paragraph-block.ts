@@ -273,6 +273,10 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
   }
 
   override renderBlock(): TemplateResult<1> {
+    if ((this.inlineEditor?.yTextLength ?? 0) > 0) {
+      this._displayPlaceholder.value = false;
+    }
+
     const temp = document.querySelector(
       `.editor-scroll-container:has([data-block-id='${this.doc.root?.id}'])`
     );
