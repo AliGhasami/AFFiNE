@@ -15,7 +15,9 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
         group: '0_mahdaad@8',
         action: ({ std, model }) => {
           const triggerKey = '@';
-          insertContent(std, model, triggerKey);
+          setTimeout(() => {
+            insertContent(std, model, triggerKey);
+          }, 50);
           const root = model.doc.root;
           if (!root) return;
           const mahdaadMentionWidget = std.view.getWidget(
@@ -51,9 +53,11 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
             const triggerKey = '$';
             insertContent(rootComponent.host, model, triggerKey);
           }*/
-          insertContent(std, model, REFERENCE_NODE, {
-            date: temp,
-          });
+          setTimeout(() => {
+            insertContent(std, model, REFERENCE_NODE, {
+              date: temp,
+            });
+          }, 50);
         },
       },
       {
@@ -79,13 +83,11 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
             id: uuidv4(),
           };
           window.focusedDateTime = temp.id;
-          /*{
-            const triggerKey = '$';
-            insertContent(rootComponent.host, model, triggerKey);
-          }*/
-          insertContent(std, model, REFERENCE_NODE, {
-            date: temp,
-          });
+          setTimeout(() => {
+            insertContent(std, model, REFERENCE_NODE, {
+              date: temp,
+            });
+          }, 50);
         },
       },
       /* {
