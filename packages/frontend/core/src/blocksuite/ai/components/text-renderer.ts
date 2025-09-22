@@ -1,4 +1,4 @@
-import { createReactComponentFromLit } from '@affine/component';
+//import { createReactComponentFromLit } from '@affine/component';
 import { getMarkdownAdapterExtensions } from '@blocksuite/affine/adapters';
 import {
   defaultImageProxyMiddleware,
@@ -35,7 +35,7 @@ import { property, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { keyed } from 'lit/directives/keyed.js';
 import { literal } from 'lit/static-html.js';
-import React from 'react';
+//import React from 'react';
 
 import { markDownToDoc } from '../../utils';
 import type {
@@ -222,6 +222,7 @@ export class TextRenderer extends WithDisposable(ShadowlessElement) {
   private _timer?: ReturnType<typeof setInterval> | null = null;
 
   private readonly _updateDoc = () => {
+    debugger;
     if (this._answers.length > 0) {
       const latestAnswer = this._answers.pop();
       this._answers = [];
@@ -387,10 +388,10 @@ export const createTextRenderer: (
   };
 };
 
-export const LitTextRenderer = createReactComponentFromLit({
+/*export const LitTextRenderer = createReactComponentFromLit({
   react: React,
   elementClass: TextRenderer,
-});
+});*/
 
 declare global {
   interface HTMLElementTagNameMap {
