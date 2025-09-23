@@ -222,7 +222,6 @@ export class TextRenderer extends WithDisposable(ShadowlessElement) {
   private _timer?: ReturnType<typeof setInterval> | null = null;
 
   private readonly _updateDoc = () => {
-    debugger;
     if (this._answers.length > 0) {
       const latestAnswer = this._answers.pop();
       this._answers = [];

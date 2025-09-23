@@ -145,6 +145,7 @@ export function autoUpdatePosition(
       (currentPlacement.includes('top') ? 0 : offsetTop + offsetBottom);*/
     toolbar.style.top = `${y}px`;
     toolbar.style.left = `${x}px`;
+    toolbar.style.zIndex = `999999`;
 
     if (middlewareData.hide) {
       if (toolbar.dataset.open) {
