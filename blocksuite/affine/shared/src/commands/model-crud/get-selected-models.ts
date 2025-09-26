@@ -54,7 +54,7 @@ export const getSelectedModelsCommand: Command<
       chain.pipe(getBlockSelectionsCommand),
       chain.pipe(getImageSelectionsCommand),
     ])
-    .pipe(getSelectedBlocksCommand, { types, mode })
+    .pipe(getSelectedBlocksCommand, { types, mode,roles:['hub','content'] })
     .pipe(ctx => {
       const { selectedBlocks = [] } = ctx;
       selectedModels.push(...selectedBlocks.map(el => el.model));
