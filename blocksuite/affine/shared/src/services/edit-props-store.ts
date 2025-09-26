@@ -43,6 +43,8 @@ const LocalPropsSchema = z.object({
   presentHideToolbar: z.boolean(),
 
   autoHideEmbedHTMLFullScreenToolbar: z.boolean(),
+  isFullEmptyDoc:z.boolean(),
+  enableAI:z.boolean()
 });
 
 type SessionProps = z.infer<typeof SessionPropsSchema>;
