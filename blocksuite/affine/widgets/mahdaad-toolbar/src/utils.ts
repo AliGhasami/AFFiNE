@@ -8,9 +8,9 @@ import {
   EditPropsStore,
   type ToolbarAction,
   type ToolbarActions,
-  type ToolbarContext,
-  type ToolbarPlacement,
-} from '@blocksuite/affine-shared/services';
+  type ToolbarContext, ToolbarFlag as Flag,
+  type ToolbarPlacement
+} from "@blocksuite/affine-shared/services";
 import { nextTick } from '@blocksuite/global/utils';
 import { MoreVerticalIcon } from '@blocksuite/icons/lit';
 import type {
@@ -44,9 +44,9 @@ import type { AffineTextAttributes } from '@blocksuite/affine-shared/types';
 import {
   formatBlockCommand,
   formatNativeCommand,
-  formatTextCommand,
-  textFormatConfigs,
-} from '@blocksuite/affine-inline-preset';
+  formatTextCommand, isTextStyleActive,
+  textFormatConfigs
+} from "@blocksuite/affine-inline-preset";
 import { updateBlockType } from '@blocksuite/affine-block-note';
 import {
   getBlockSelectionsCommand,
@@ -350,6 +350,28 @@ export function renderToolbar(
     .pipe(getSelectedModelsCommand, { types: ['text', 'block'] })
     .run();
 
+    let activeParagraphTool = 'text'
+    const activeInlineTools : string[]=[]
+
+    if (selectedModels.length == 1) {
+      //@ts-ignore
+      activeParagraphTool=  selectedModels[0].props.type ?? 'text';
+      if(selectedModels[0].props.dir){
+        activeInlineTools.push(selectedModels[0].props.dir)
+      }
+    }
+
+  const keys: Exclude<
+    keyof AffineTextAttributes,
+    'color' | 'background' | 'reference'
+  >[] = ['bold', 'italic', 'underline', 'strike', 'link'];
+  keys.forEach(key => {
+    const [result] = std.command.chain().pipe(isTextStyleActive, { key }).run()
+    if (result) {
+      activeInlineTools.push(key);
+    }
+  });
+
   const noteToolbar = html` <mahdaad-format-bar
     @changeParagraph="${(event: CustomEvent) => {
       const val = event.detail[0];
@@ -401,6 +423,7 @@ export function renderToolbar(
               user_change_direction: true,
             });
           });
+          context.flags.refresh(Flag.Text)
           break;
         case 'ltr':
           selectedModels.forEach(model => {
@@ -409,6 +432,7 @@ export function renderToolbar(
               user_change_direction: true,
             });
           });
+          context.flags.refresh(Flag.Text)
           break;
       }
     }}"
@@ -431,8 +455,8 @@ export function renderToolbar(
     }}"
     is-full-empty-Doc="${isFullEmptyDoc ?? true}"
     enable-ai="${enableAI}"
-    active-paragraph-tool="text"
-    active-inline-tools="[]"
+    active-paragraph-tool="${activeParagraphTool}"
+    active-inline-tools="${activeInlineTools}"
     is-inner=${selectedModels.length == 0}
   ></mahdaad-format-bar>`;
   const edgelessToolbar = join(
