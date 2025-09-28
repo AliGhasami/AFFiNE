@@ -122,6 +122,14 @@ export class ListBlockComponent extends CaptionedBlockComponent<ListBlockModel> 
   override connectedCallback() {
     super.connectedCallback();
 
+    if (!this.model.props.user_change_direction && this.model.text) {
+      setDirectionOnBlock(
+        this.model,
+        this.doc,
+        this.model.text.yText.toString().trim()
+      );
+    }
+
     this._inlineRangeProvider = getInlineRangeProvider(this);
 
     this.disposables.add(
@@ -161,14 +169,14 @@ export class ListBlockComponent extends CaptionedBlockComponent<ListBlockModel> 
     this._richTextElement?.updateComplete
       .then(() => {
         if (this.inlineEditor && !this.doc.readonly) {
-          setDirectionOnBlock(
+          /*setDirectionOnBlock(
             this.model,
             this.doc,
             this.inlineEditor?.yText.toString().trim()
-          );
+          );*/
           this.disposables.add(
             this.inlineEditor.slots.textChange.subscribe(() => {
-              if (this.inlineEditor) {
+              if (this.inlineEditor && !this.model.props.user_change_direction) {
                 setDirectionOnBlock(
                   this.model,
                   this.doc,

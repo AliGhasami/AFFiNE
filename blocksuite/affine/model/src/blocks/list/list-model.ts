@@ -17,12 +17,14 @@ export type ListProps = {
   collapsed: boolean;
   order: number | null;
   dir: null | 'rtl' | 'ltr';
+  user_change_direction:boolean
 } & BlockMeta;
 
 export const ListBlockSchema = defineBlockSchema({
   flavour: 'affine:list',
   props: internal =>
     ({
+      user_change_direction:false,
       type: 'bulleted',
       text: internal.Text(),
       checked: false,
