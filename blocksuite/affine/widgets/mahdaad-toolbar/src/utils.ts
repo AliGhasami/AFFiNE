@@ -4,12 +4,13 @@ import {
   renderToolbarSeparator,
 } from '@blocksuite/affine-components/toolbar';
 import {
-  ActionPlacement, EditPropsStore,
+  ActionPlacement,
+  EditPropsStore,
   type ToolbarAction,
   type ToolbarActions,
   type ToolbarContext,
   type ToolbarPlacement,
-} from '@blocksuite/affine-shared/services'
+} from '@blocksuite/affine-shared/services';
 import { nextTick } from '@blocksuite/global/utils';
 import { MoreVerticalIcon } from '@blocksuite/icons/lit';
 import type {
@@ -234,12 +235,10 @@ export function renderToolbar(
 ) {
   const hasSurfaceScope = flavour.includes('surface');
   const toolbarRegistry = context.toolbarRegistry;
-  const isFullEmptyDoc=context.std
+  const isFullEmptyDoc = context.std
     .get(EditPropsStore)
     .getStorage('isFullEmptyDoc');
-  const enableAI=context.std
-    .get(EditPropsStore)
-    .getStorage('enableAI');
+  const enableAI = context.std.get(EditPropsStore).getStorage('enableAI');
 
   const actions = [
     flavour,
@@ -397,12 +396,18 @@ export function renderToolbar(
           break;
         case 'rtl':
           selectedModels.forEach(model => {
-            std.host.doc.updateBlock(model, { dir: 'rtl' });
+            std.host.doc.updateBlock(model, {
+              dir: 'rtl',
+              user_change_direction: true,
+            });
           });
           break;
         case 'ltr':
           selectedModels.forEach(model => {
-            std.host.doc.updateBlock(model, { dir: 'ltr' });
+            std.host.doc.updateBlock(model, {
+              dir: 'ltr',
+              user_change_direction: true,
+            });
           });
           break;
       }

@@ -139,6 +139,14 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
 
   override connectedCallback() {
     super.connectedCallback();
+    if (!this.model.props.user_change_direction && this.model.text) {
+      setDirectionOnBlock(
+        this.model,
+        this.doc,
+        this.model.text.yText.toString().trim()
+      );
+    }
+
     this.handleEvent(
       'compositionStart',
       () => {
@@ -250,18 +258,21 @@ export class ParagraphBlockComponent extends CaptionedBlockComponent<ParagraphBl
       this.lastInlineEditor = this._richTextElement;
       setTimeout(() => {
         if (this.inlineEditor && !this.doc.readonly) {
-          setDirectionOnBlock(
+          /*setDirectionOnBlock(
             this.model,
             this.doc,
             this.inlineEditor?.yText.toString().trim()
-          );
+          );*/
           this.inlineEditor.disposables.add(
             this.inlineEditor.slots.textChange.subscribe(() => {
-              if (this.inlineEditor) {
+              if (
+                this.inlineEditor &&
+                !this.model.props.user_change_direction
+              ) {
                 setDirectionOnBlock(
                   this.model,
                   this.doc,
-                  this.inlineEditor?.yText.toString().trim()
+                  this.inlineEditor.yText.toString().trim()
                 );
               }
             })

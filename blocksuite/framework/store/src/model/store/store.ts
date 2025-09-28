@@ -810,15 +810,17 @@ export class Store {
    * Updates a block's properties or executes a callback in a transaction
    * @param modelOrId - The block model or block ID to update
    * @param callBackOrProps - Either a callback function to execute or properties to update
+   * @param allowChangeInReadonlyMode- Allow block updates even if the document is read-only
    * @throws {BlockSuiteError} When the block is not found or schema validation fails
    *
    * @category Block CRUD
    */
   updateBlock(
     modelOrId: BlockModel | string,
-    callBackOrProps: (() => void) | Partial<BlockProps>
+    callBackOrProps: (() => void) | Partial<BlockProps>,
+    allowChangeInReadonlyMode: boolean = false
   ) {
-    if (this.readonly) {
+    if (!allowChangeInReadonlyMode && this.readonly) {
       console.error('cannot modify data in readonly mode');
       return;
     }

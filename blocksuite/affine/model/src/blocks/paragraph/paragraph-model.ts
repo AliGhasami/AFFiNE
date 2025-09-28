@@ -21,7 +21,8 @@ export type ParagraphProps = {
   type: ParagraphType;
   text: Text;
   collapsed: boolean;
-  dir: null | 'rtl' | 'ltr'
+  dir: null | 'rtl' | 'ltr';
+  user_change_direction: boolean;
 } & BlockMeta;
 
 export const ParagraphBlockSchema = defineBlockSchema({
@@ -34,7 +35,8 @@ export const ParagraphBlockSchema = defineBlockSchema({
     'meta:createdBy': undefined,
     'meta:updatedAt': undefined,
     'meta:updatedBy': undefined,
-    dir:null,
+    dir: null,
+    user_change_direction: false,
   }),
   metadata: {
     version: 1,
@@ -48,7 +50,7 @@ export const ParagraphBlockSchema = defineBlockSchema({
       'affine:callout',
       'affine:transcription',
       'affine:mahdaad-callout',
-      'affine:mahdaad-multi-column'
+      'affine:mahdaad-multi-column',
     ],
   },
   toModel: () => new ParagraphBlockModel(),
