@@ -28,7 +28,8 @@ export function insertMultiColumn(
     'after'
   );
   for (let i = 0; i < count; i++) {
-    std.host.doc.addBlock('affine:paragraph', {}, result[0]);
+    std.host.doc.addBlock('affine:note', {}, result[0]);
+    //std.host.doc.addBlock('affine:paragraph', {}, result[0]);
     //const noteId = std.host.doc.addBlock('affine:note', {}, result[0]);
     //const paragraphId= std.doc.addBlock('affine:paragraph', {},noteId)
     /*if(i==0) {

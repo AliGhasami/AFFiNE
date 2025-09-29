@@ -1935,12 +1935,10 @@ export class DragEventWatcher {
         }
 
         const target = location.current.dropTargets[0];
-
         const point = new Point(
           location.current.input.clientX,
           location.current.input.clientY
         );
-
         const dragPayload = source.data;
         const dropPayload = target.data;
 
@@ -1965,15 +1963,24 @@ export class DragEventWatcher {
           //const target= dropResult?.type=='after' ? dropResult?.modelState.model :   this._std.doc.getPrev(dropResult?.modelState.model)
           //if(!target) return  null
           //if(!this.widget.verticalIndicatorDropBlockId) return null
-          const target = this._dropResult.modelState.element; //this.widget.doc.getBlock(this.widget.verticalIndicatorDropBlockId)
-          if (!target) return;
+          const drop_target = this._dropResult.modelState.element; //this.widget.doc.getBlock(this.widget.verticalIndicatorDropBlockId)
+          if (!drop_target) return;
           const isContainMultiColumn = !!this.draggingElements.find(
             item =>
               item.model.flavour == MahdaadMultiColumnBlockSchema.model.flavour
           );
+
+          /**
+           * prevent drop multi column inside multi column
+           */
+          if(checkParentIs(drop_target.model,'affine:mahdaad-multi-column') && isContainMultiColumn){
+            return
+          }
+
+
           //console.log("start",dropResult,);
           if (
-            target.model.flavour != MahdaadMultiColumnBlockSchema.model.flavour
+            drop_target.model.flavour != MahdaadMultiColumnBlockSchema.model.flavour
           ) {
             if (isContainMultiColumn) {
               if (
@@ -1983,13 +1990,13 @@ export class DragEventWatcher {
                 const multiColumnBlock = this.draggingElements[0];
                 const res = insertMultiColumn(
                   this.std,
-                  target.model,
+                  drop_target.model,
                   multiColumnBlock.model.children.length + 1
                 );
                 //console.log("this is res",res,dropResult);
                 if (res) {
                   this.host.doc.moveBlocks(
-                    [target.model],
+                    [drop_target.model],
                     res.model.children[0]
                   );
                   for (
@@ -2007,9 +2014,9 @@ export class DragEventWatcher {
               }
               return null;
             } else {
-              const res = insertMultiColumn(this.std, target.model, 2);
+              const res = insertMultiColumn(this.std, drop_target.model, 2);
               if (res) {
-                this.host.doc.moveBlocks([target.model], res.model.children[0]);
+                this.host.doc.moveBlocks([drop_target.model], res.model.children[0]);
                 const parent = res.model.children[1]; //.id
                 //index=0
                 this._dropToModel(snapshot, parent.id, 0).catch(console.error);
@@ -2020,13 +2027,13 @@ export class DragEventWatcher {
 
             if (
               isContainMultiColumn &&
-              target.model.children.length +
+              drop_target.model.children.length +
                 this.draggingElements[0].model.children.length <=
                 4
             ) {
               const multiColumnBlock = this.draggingElements[0];
               for (let i = 0; i < multiColumnBlock.model.children.length; i++) {
-                const res = addColumnToMultiColumn(this.std, target.model);
+                const res = addColumnToMultiColumn(this.std, drop_target.model);
                 if (res) {
                   this.host.doc.moveBlocks(
                     [...multiColumnBlock.model.children[i].children],
@@ -2043,7 +2050,7 @@ export class DragEventWatcher {
               this.host.doc.deleteBlock(multiColumnBlock.model);
               return null;
             } else {
-              const res = addColumnToMultiColumn(this.std, target.model); //dropResult.modelState.model
+              const res = addColumnToMultiColumn(this.std, drop_target.model); //dropResult.modelState.model
               if (res) {
                 const parent = res.children[res.children.length - 1]; //.id
                 //index=0
