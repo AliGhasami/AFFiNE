@@ -458,6 +458,9 @@ export function renderToolbar(
     active-paragraph-tool="${activeParagraphTool}"
     active-inline-tools="${activeInlineTools}"
     is-inner=${selectedModels.length == 0}
+    @close="${()=>{
+      context.reset();
+    }}"
   ></mahdaad-format-bar>`;
   const edgelessToolbar = join(
     renderActions(primaryActionGroup, context),
