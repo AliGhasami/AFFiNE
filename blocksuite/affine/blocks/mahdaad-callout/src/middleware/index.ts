@@ -56,7 +56,6 @@ export function calloutValidateChildren(
   payload: any,
   parent: string
 ) {
-  debugger;
   const block = doc.getBlock(parent);
   if (
     block &&

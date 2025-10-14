@@ -150,7 +150,6 @@ export class MahdaadLink extends SignalWatcher(
         @removeLink="${this._removeLink}"
         @generateWeblink="${this.generateWeblink}"
         @changeViewMode="${(event: CustomEvent) => {
-      //debugger;
       const mode = event.detail[0];
       switch (mode) {
         case 'card':
