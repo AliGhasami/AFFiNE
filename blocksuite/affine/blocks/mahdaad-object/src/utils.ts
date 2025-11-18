@@ -17,7 +17,7 @@ export function addSiblingObjectBlock(
     return;
   }
 
-  const isSizeExceeded = imageFiles.some(file => file.size > maxFileSize);
+  /*const isSizeExceeded = imageFiles.some(file => file.size > maxFileSize);
   if (isSizeExceeded) {
     toast(
       editorHost,
@@ -28,7 +28,7 @@ export function addSiblingObjectBlock(
       )}`
     );
     return;
-  }
+  }*/
 
   if (!window.$mahdaadEditor.files) {
     window.$mahdaadEditor.files = [];
